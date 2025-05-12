@@ -6,9 +6,9 @@
 
 @section('contenido')
     <!-- component -->
-<div class="min-h-full flex items-center py-10 justify-center w-full ">
+<div class=" flex items-center py-10 justify-center w-full">
     
-	<div class="bg-white shadow-green-800 shadow-2xl rounded-lg px-8 py-6 w-full md:w-1/3 mx-3">
+	<div class="bg-white shadow-green-800 shadow-2xl rounded-lg px-8 py-6 w-full sm:w-2/3 lg:w-1/3 xl:1/4  mx-3">
 
 		<h1 class="text-2xl font-bold text-center mb-4 ">Inicia Sesión</h1>
 		<form action="{{route('login')}}" method="POST" novalidate>

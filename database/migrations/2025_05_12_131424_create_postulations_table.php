@@ -13,14 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('stats', function (Blueprint $table) {
+        Schema::create('table_postulations', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo');
-            $table->enum('actividad', ['chat','taller','volin','volex']);
-            $table->enum('modalidad', ['online', 'presencial']);
-            $table->float('duracion');
-            $table->date('fecha');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -32,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stats');
+        Schema::dropIfExists('table_postulations');
     }
 };

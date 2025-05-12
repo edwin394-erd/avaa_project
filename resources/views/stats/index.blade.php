@@ -5,7 +5,14 @@
 @endsection
 
 @section('contenido')
-<div class="flex flex-wrap p-5">
+<div class="md:w-5/6 mx-auto p-10">
+
+    <h1 class="text-2xl font-bold text-gray-800 text-center">Tabla de Actividades</h1>
+    <h2 class="text-lg font-semibold text-gray-600 text-center">Aquí puedes agregar actividades y ver tus estadísticas</h2>
+    <hr class="my-4">
+    <br>
+
+<div class="flex flex-wrap p-0">
     <!-- Formulario para agregar actividad -->
     <div class="w-full lg:w-1/4 p-2">
       <div class="flex flex-col bg-white border shadow-xl shadow-green-600 rounded-xl p-5">
@@ -83,7 +90,7 @@
     <div class="w-full lg:w-3/4 p-2">
       <div class="flex flex-col bg-white border shadow-xl shadow-green-600 rounded-xl p-5">
         <div class="overflow-y-auto h-[510px]">
-          <table class="w-full text-sm text-left rtl:text-right text-black table-auto" id="myTable">
+          <table class="w-full text-sm text-left rtl:text-right text-black table-auto bg-white" id="myTable">
             <thead class="text-green-700 text-md uppercase">
               <tr>
                 <th scope="col" class="px-1 py-3">Titulo</th>
@@ -95,9 +102,26 @@
             </thead>
             <tbody>
               @forelse ($stats as $stat)
-                <tr class="bg-white border-b">
-                  <td class="px-1 py-4">{{ $stat->titulo }}</td>
-                  <td class="px-1 py-4">{{ $stat->actividad }}</td>
+                <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-green-100">
+                  <td class="px-1 py-4 ">{{ $stat->titulo }}</td>
+                  <td class="px-1 py-4">
+                    @switch($stat->actividad)
+                      @case('chat')
+                        Chat
+                        @break
+                      @case('taller')
+                        Taller de Formación
+                        @break
+                      @case('volin')
+                        Voluntariado Interno
+                        @break
+                      @case('volex')
+                        Voluntariado Externo
+                        @break
+                      @default
+                        {{ $stat->actividad }}
+                    @endswitch 
+                  </td>
                   <td class="px-1 py-4">{{ $stat->modalidad }}</td>
                   <td class="px-1 py-4">{{ $stat->duracion }}</td>
                   <td class="px-1 py-4">{{ $stat->fecha }}</td>
@@ -113,5 +137,5 @@
       </div>
     </div>
   </div>
-
+</div>
 @endsection

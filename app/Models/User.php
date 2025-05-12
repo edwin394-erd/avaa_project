@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'becario_id',
     ];
 
     /**
@@ -44,5 +45,9 @@ class User extends Authenticatable
 
     public function Stats(){
         return $this->hasMany(Stat::class);
+    }
+    public function Becario()
+    {
+        return $this->belongsTo(Becario::class);
     }
 }
