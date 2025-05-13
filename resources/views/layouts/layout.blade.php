@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <title>@yield('titulo-tab')</title>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 
 <body class="bg-green-100 h-screen flex flex-col">
@@ -102,10 +103,9 @@
   </div>
 </footer>
 
+@yield('scripts')
 <script src="{{ mix('js/app.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-<script></script>
 
 </body>
 </html>
