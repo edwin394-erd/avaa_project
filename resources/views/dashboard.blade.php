@@ -1,3 +1,4 @@
+
 @extends('layouts.layout')
 
 @section('titulo-tab')
@@ -77,7 +78,8 @@ Inicio
                     <div class="flex justify-between border-gray-200 border-b pb-3">
                         <dl>
                             <dt class="text-base font-normal text-gray-500 pb-1">Horas Totales</dt>
-                            <dd class="leading-none text-3xl font-bold text-gray-900">{{$total_volin + $total_volex + $total_taller + $total_chat}} Horas</dd>
+                            <dd class="leading-none text-3xl font-bold text-gray-900">
+                                {{$total_volin + $total_volex + $total_taller + $total_chat}} Horas</dd>
                         </dl>
                         <div>
                             <span
@@ -95,11 +97,14 @@ Inicio
                     <div class="grid grid-cols-2 py-3">
                         <dl>
                             <dt class="text-base font-normal text-gray-500 pb-1">Meta Anual</dt>
-                            <dd class="leading-none text-xl font-bold text-green-500">{{$meta_volin + $meta_volex + $meta_chat + $meta_taller}} Horas</dd>
+                            <dd class="leading-none text-xl font-bold text-green-500">
+                                {{$meta_volin + $meta_volex + $meta_chat + $meta_taller}} Horas</dd>
                         </dl>
                         <dl>
                             <dt class="text-base font-normal text-gray-500 pb-1">Restantes</dt>
-                            <dd class="leading-none text-xl font-bold text-red-600">{{($meta_volin + $meta_volex + $meta_chat + $meta_taller)-($total_volin + $total_volex + $total_taller + $total_chat)}} Horas</dd>
+                            <dd class="leading-none text-xl font-bold text-red-600">
+                                {{($meta_volin + $meta_volex + $meta_chat + $meta_taller)-($total_volin + $total_volex + $total_taller + $total_chat)}}
+                                Horas</dd>
                         </dl>
                     </div>
 
@@ -174,12 +179,19 @@ Inicio
 @endsection
 
 @section('scripts')
-  <script>
-  const total_anual = @json($total_por_mes);
-const total_volin = @json($total_volin_por_mes);
-const total_volex = @json($total_volex_por_mes);
-const total_taller = @json($total_taller_por_mes);
-const total_chat = @json($total_chat_por_mes);
+<script>
+const total_anual_por_mes = @json($total_por_mes);
+const total_volin_por_mes = @json($total_volin_por_mes);
+const total_volex_por_mes = @json($total_volex_por_mes);
+const total_taller_por_mes = @json($total_taller_por_mes);
+const total_chat_por_mes = @json($total_chat_por_mes);
+
+console.log("anual:" + total_anual_por_mes);
+console.log("volin:" + total_volin_por_mes);
+console.log("volex:" + total_volex_por_mes);
+console.log("taller:" + total_taller_por_mes);
+console.log("chat:" + total_chat_por_mes);
+
 
 // Obtener la fecha actual
 const currentDate = new Date();
@@ -191,15 +203,23 @@ function getLastSixMonthIndexes() {
         indexes.push((currentDate.getMonth() - i + 12) % 12);
     }
     return indexes;
+
+    
 }
 
 const lastSixMonthIndexes = getLastSixMonthIndexes();
+console.log("lastSixMonthIndexes:" + lastSixMonthIndexes);
 
 // Extraer los últimos 6 meses de cada actividad
-const horasUltimos6MesesVolin = lastSixMonthIndexes.map(index => total_volin[index] ?? 0);
-const horasUltimos6MesesVolex = lastSixMonthIndexes.map(index => total_volex[index] ?? 0);
-const horasUltimos6MesesTaller = lastSixMonthIndexes.map(index => total_taller[index] ?? 0);
-const horasUltimos6MesesChat = lastSixMonthIndexes.map(index => total_chat[index] ?? 0);
+const horasUltimos6MesesVolin = lastSixMonthIndexes.map(index => total_volin_por_mes[(index + 1) % 12] ?? 0);
+const horasUltimos6MesesVolex = lastSixMonthIndexes.map(index => total_volex_por_mes[(index + 1) % 12] ?? 0);
+const horasUltimos6MesesTaller = lastSixMonthIndexes.map(index => total_taller_por_mes[(index + 1) % 12] ?? 0);
+const horasUltimos6MesesChat = lastSixMonthIndexes.map(index => total_chat_por_mes[(index + 1) % 12] ?? 0);
+
+console.log("horasUltimos6MesesVolin:" + horasUltimos6MesesVolin);
+console.log("horasUltimos6MesesVolex:" + horasUltimos6MesesVolex);
+console.log("horasUltimos6MesesTaller:" + horasUltimos6MesesTaller);
+console.log("horasUltimos6MesesChat:" + horasUltimos6MesesChat);
 
 // Obtener los nombres de los últimos 6 meses
 function getLastSixMonths() {
@@ -207,11 +227,10 @@ function getLastSixMonths() {
     return lastSixMonthIndexes.map(index => months[index]);
 }
 
-const months = getLastSixMonths();  // Obtenemos los últimos 6 meses dinámicamente
+const months = getLastSixMonths(); // Obtenemos los últimos 6 meses dinámicamente
 
-const options = {
-    series: [
-        {
+const options2 = {
+    series: [{
             name: "Voluntariado Interno",
             color: "#31C48D",
             data: horasUltimos6MesesVolin,
@@ -233,53 +252,97 @@ const options = {
         }
     ],
     chart: {
-        sparkline: { enabled: false },
+        sparkline: {
+            enabled: false
+        },
         type: "bar",
         width: "100%",
         height: 400,
-        toolbar: { show: false },
+        toolbar: {
+            show: false
+        },
     },
     plotOptions: {
         bar: {
-            horizontal: true,
+            horizontal: false,
             columnWidth: "100%",
             borderRadiusApplication: "end",
             borderRadius: 6,
-            dataLabels: { position: "top" },
+            dataLabels: {
+                position: "top"
+            },
         },
     },
     legend: {
         show: true,
         position: "bottom",
+        horizontalAlign: "center",
+        floating: false,
+        fontSize: "14px",
+        fontFamily: "Inter, sans-serif",
+        fontWeight: 400,
+        width: "100%",
+        height: 40,
+        offsetX: 0,
+        offsetY: 0,
+
     },
     tooltip: {
-        shared: true,
-        intersect: false,
-        formatter: (value) => `${value} Hours`,
+    enabled: true,
+    shared: true,
+    intersect: false,
+    fillSeriesColor: false,
+    x: {
+        show: true,
+    },
+    y: {
+        formatter: function (value, { seriesIndex, w }) {
+            return `${w.config.series[seriesIndex].name}: ${value} Horas`;
+        }
+    },
     },
     xaxis: {
         categories: months,
-        labels: { show: true, style: { fontFamily: "Inter, sans-serif", cssClass: 'text-xs font-normal fill-gray-500' } },
-        axisTicks: { show: false },
-        axisBorder: { show: false },
+        labels: {
+            show: true,
+            style: {
+                fontFamily: "Inter, sans-serif",
+                cssClass: 'text-xs font-normal fill-gray-500'
+            }
+        },
+        axisTicks: {
+            show: false
+        },
+        axisBorder: {
+            show: false
+        },
     },
     yaxis: {
-        labels: { show: true, style: { fontFamily: "Inter, sans-serif", cssClass: 'text-xs font-normal fill-gray-500' } },
+        labels: {
+            show: true,
+            style: {
+                fontFamily: "Inter, sans-serif",
+                cssClass: 'text-xs font-normal fill-gray-500'
+            }
+        },
     },
     grid: {
         show: true,
         strokeDashArray: 4,
-        padding: { left: 2, right: 2, top: -20 },
+        padding: {
+            left: 2,
+            right: 2,
+            top: -20
+        },
     },
-    fill: { opacity: 1 },
+    fill: {
+        opacity: 1
+    },
 };
 
 if (document.getElementById("bar-chart") && typeof ApexCharts !== 'undefined') {
-    const chart = new ApexCharts(document.getElementById("bar-chart"), options);
+    const chart = new ApexCharts(document.getElementById("bar-chart"), options2);
     chart.render();
 }
-
-
 </script>
-
 @endsection
