@@ -1,4 +1,3 @@
-
 @extends('layouts.layout')
 
 @section('titulo-tab')
@@ -109,6 +108,21 @@ Inicio
                     </div>
 
                     <div id="bar-chart"></div>
+                    <div id="chart-legend" class="flex justify-center gap-4 mt-4">
+                    <span class=" text-sm flex items-center">
+                        <span class="w-4 h-4 bg-[#31C48D] inline-block rounded-full mr-2"></span> Volunatariado Interno
+                    </span>
+                    <span class=" text-sm flex items-center">
+                        <span class="w-4 h-4 bg-[#F05252] inline-block rounded-full mr-2"></span> Voluntariado Externo
+                    </span>
+                    <span class=" text-sm flex items-center">
+                        <span class="w-4 h-4 bg-[#ffd166] inline-block rounded-full mr-2"></span> Chats
+                    </span>
+                     <span class=" text-sm flex items-center">
+                        <span class="w-4 h-4 bg-[#0077b6] inline-block rounded-full mr-2"></span> Talleres
+                    </span>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -269,13 +283,13 @@ const options2 = {
             borderRadiusApplication: "end",
             borderRadius: 6,
             dataLabels: {
-                position: "top"
+            position: "top"
             },
         },
     },
     legend: {
         show: true,
-        position: "bottom",
+        position: "top",
         horizontalAlign: "center",
         floating: false,
         fontSize: "14px",
@@ -288,7 +302,7 @@ const options2 = {
 
     },
     tooltip: {
-    enabled: true,
+    enabled: false,
     shared: true,
     intersect: false,
     fillSeriesColor: false,
@@ -345,4 +359,5 @@ if (document.getElementById("bar-chart") && typeof ApexCharts !== 'undefined') {
     chart.render();
 }
 </script>
+
 @endsection
