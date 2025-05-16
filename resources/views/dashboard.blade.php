@@ -5,21 +5,42 @@ Inicio
 @endsection
 
 @section('contenido')
-<div class="md:w-5/6 mx-auto p-10 min-h-full">
+<div class="md:w-5/6 mx-auto py-10 px-0 md:px-10 min-h-full">
     <h1 class="text-2xl font-bold text-gray-800 text-center">Bienvenido, {{$nombre_becario}}</h1>
     <h2 class="text-lg font-semibold text-gray-600 text-center">Aquí tienes un resumen de tu progreso</h2>
     <hr class="my-4">
-    <br>
-
+    
     <!-- Tarjetas de progreso -->
-    <div class="flex flex-wrap p-2">
+    <div class="flex flex-wrap">
         @foreach ([
-        ['title' => 'Voluntariado Interno', 'total' => $total_volin, 'meta' => $meta_volin, 'percentage' =>
-        $porcen_volin],
-        ['title' => 'Voluntariado Externo', 'total' => $total_volex, 'meta' => $meta_volex, 'percentage' =>
-        $porcen_volex],
-        ['title' => 'Talleres', 'total' => $total_taller, 'meta' => $meta_taller, 'percentage' => $porcen_taller],
-        ['title' => 'Chat', 'total' => $total_chat, 'meta' => $meta_chat, 'percentage' => $porcen_chat],
+            [
+                'title' => 'Voluntariado Interno',
+                'total' => $total_volin,
+                'meta' => $meta_volin,
+                'percentage' => $porcen_volin,
+                'color' => 'text-green-600'
+            ],
+            [
+                'title' => 'Voluntariado Externo',
+                'total' => $total_volex,
+                'meta' => $meta_volex,
+                'percentage' => $porcen_volex,
+                'color' => 'text-red-600'
+            ],
+            [
+                'title' => 'Talleres',
+                'total' => $total_taller,
+                'meta' => $meta_taller,
+                'percentage' => $porcen_taller,
+                'color' => 'text-blue-600'
+            ],
+            [
+                'title' => 'Chats',
+                'total' => $total_chat,
+                'meta' => $meta_chat,
+                'percentage' => $porcen_chat,
+                'color' => 'text-yellow-600'
+            ],
         ] as $card)
         <div class="w-full sm:w-2/4 2xl:w-1/4 p-2">
             <div class="flex flex-col bg-white border shadow-lg shadow-green-600 rounded-xl">
@@ -27,27 +48,30 @@ Inicio
                     <h3 class="text-lg font-bold text-gray-800">{{ $card['title'] }}</h3>
                     <hr><br>
                     <div class="flex">
-                        <div class="w-2/5">
+                        <div class="w-3/5">
                             <div class="relative size-24 md:size-28">
-                                <svg class="size-full -rotate-90" viewBox="0 0 36 36"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-gray-200"
-                                        stroke-width="2"></circle>
-                                    <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-green-600"
-                                        stroke-width="2" stroke-dasharray="100"
-                                        stroke-dashoffset="{{ 100 - $card['percentage'] }}" stroke-linecap="round">
+                                <svg class="size-full -rotate-90" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-gray-200" stroke-width="4"></circle>
+                                    <circle
+                                        cx="18" cy="18" r="16" fill="none" class="stroke-current {{ $card['color'] }} progress-circle"
+                                        stroke-width="4"
+                                        stroke-dasharray="100"
+                                        stroke-dashoffset="100"
+                                        stroke-linecap="round"
+                                        style="animation: progressAnimation 1.5s forwards;"
+                                        data-final-offset="{{ 100 - $card['percentage'] }}">
                                     </circle>
                                 </svg>
                                 <div class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
                                     <span
-                                        class="text-center text-xl font-bold text-green-600">{{ $card['percentage'] }}%</span>
+                                        class="text-center text-xl font-bold {{ $card['color'] }}">{{ $card['percentage'] }}%</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="w-3/5">
-                            <h1 class="text-right text-2xl lg:text-3xl">{{ $card['total'] }} horas</h1>
-                            <h2 class="text-right text-lg lg:text-xl">Meta: {{ $card['meta'] }} horas</h2>
-                            <h2 class="text-right text-lg lg:text-xl text-yellow-900">Restante:
+                        <div class="w-3/5 flex flex-col justify-top">
+                            <h1 class="text-right text-xl lg:text-xl">{{ $card['total'] }} horas</h1>
+                            <h2 class="text-right text-md lg:text-md">Meta: {{ $card['meta'] }} horas</h2>
+                            <h2 class="text-right text-md lg:text-md text-yellow-900">Restante:
                                 {{ $card['meta'] - $card['total'] }} horas</h2>
                         </div>
                     </div>
@@ -67,21 +91,23 @@ Inicio
     </div>
     <!-- Fin de las tarjetas de progreso -->
 
-    <div class="flex flex-wrap p-2">
+    <div class="flex flex-wrap">
         <div class="w-full md:w-4/4 2xl:w-2/4 p-2">
             <div class="flex flex-col bg-white border shadow-lg shadow-green-600 rounded-xl">
                 <div class="p-4 md:p-5">
                     <h3 class="text-lg font-bold text-gray-800">Progreso General</h3>
                     <hr>
                     <br>
-                    <div class="flex justify-between border-gray-200 border-b pb-3">
+                    <div class="justify-between border-gray-200 border-b pb-3 text-center">
+                       
+        
                         <dl>
                             <dt class="text-base font-normal text-gray-500 pb-1">Horas Totales</dt>
                             <dd class="leading-none text-3xl font-bold text-gray-900">
                                 {{$total_volin + $total_volex + $total_taller + $total_chat}} Horas</dd>
                         </dl>
                         <div>
-                            <span
+                            <!-- <span
                                 class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md">
                                 <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 10 14">
@@ -89,17 +115,17 @@ Inicio
                                         stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
                                 </svg>
                                 Mes pasado 23.5%
-                            </span>
+                            </span> -->
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 py-3">
-                        <dl>
+                        <dl class="text-left">
                             <dt class="text-base font-normal text-gray-500 pb-1">Meta Anual</dt>
                             <dd class="leading-none text-xl font-bold text-green-500">
                                 {{$meta_volin + $meta_volex + $meta_chat + $meta_taller}} Horas</dd>
                         </dl>
-                        <dl>
+                        <dl class="text-right">
                             <dt class="text-base font-normal text-gray-500 pb-1">Restantes</dt>
                             <dd class="leading-none text-xl font-bold text-red-600">
                                 {{($meta_volin + $meta_volex + $meta_chat + $meta_taller)-($total_volin + $total_volex + $total_taller + $total_chat)}}
@@ -108,19 +134,20 @@ Inicio
                     </div>
 
                     <div id="bar-chart"></div>
-                    <div id="chart-legend" class="flex justify-center gap-4 mt-4">
-                    <span class=" text-sm flex items-center">
-                        <span class="w-4 h-4 bg-[#31C48D] inline-block rounded-full mr-2"></span> Volunatariado Interno
-                    </span>
-                    <span class=" text-sm flex items-center">
-                        <span class="w-4 h-4 bg-[#F05252] inline-block rounded-full mr-2"></span> Voluntariado Externo
-                    </span>
-                    <span class=" text-sm flex items-center">
-                        <span class="w-4 h-4 bg-[#ffd166] inline-block rounded-full mr-2"></span> Chats
-                    </span>
-                     <span class=" text-sm flex items-center">
-                        <span class="w-4 h-4 bg-[#0077b6] inline-block rounded-full mr-2"></span> Talleres
-                    </span>
+
+                    <div id="chart-legend" class="md:flex justify-center text-center gap-4 p-4">
+                        <div class=" text-sm flex text-center items-center md:justify-center mb-2 w-2/4 md:w-1/4 ">
+                            <span class="w-4 h-4 bg-[#31C48D] inline-block rounded-full mr-2 "></span> Volunatariado Interno
+                        </div>
+                        <div class=" text-sm flex text-center items-center md:justify-center mb-2 w-2/4 md:w-1/4 ">
+                            <span class="w-4  h-4 bg-[#F05252] inline-block rounded-full mr-2 "></span> Voluntariado Externo
+                        </div>
+                        <div class=" text-sm flex text-center items-center md:justify-center mb-2 w-2/4 md:w-1/4 ">
+                            <span class="w-4  h-4 bg-[#ffd166] inline-block rounded-full mr-2 "></span> Chats
+                        </div>
+                        <div class=" text-sm flex text-center items-center md:justify-center mb-2 w-2/4 md:w-1/4 ">
+                            <span class="w-4  h-4 bg-[#0077b6] inline-block rounded-full mr-2 "></span> Talleres
+                        </div>
                     </div>
 
                 </div>
@@ -263,7 +290,9 @@ const options2 = {
             name: "Talleres",
             color: "#0077b6",
             data: horasUltimos6MesesTaller,
-        }
+        },
+        
+
     ],
     chart: {
         sparkline: {
@@ -283,7 +312,8 @@ const options2 = {
             borderRadiusApplication: "end",
             borderRadius: 6,
             dataLabels: {
-            position: "top"
+            position: "top",
+            
             },
         },
     },
@@ -302,18 +332,18 @@ const options2 = {
 
     },
     tooltip: {
-    enabled: false,
-    shared: true,
-    intersect: false,
-    fillSeriesColor: false,
-    x: {
-        show: true,
-    },
-    y: {
-        formatter: function (value, { seriesIndex, w }) {
-            return `${w.config.series[seriesIndex].name}: ${value} Horas`;
-        }
-    },
+        enabled: false,
+        shared: true,
+        intersect: false,
+        fillSeriesColor: false,
+        x: {
+            show: true,
+        },
+        y: {
+            formatter: function (value, { seriesIndex, w }) {
+                return `${w.config.series[seriesIndex].name}: ${value} Horas`;
+            }
+        },
     },
     xaxis: {
         categories: months,
@@ -358,6 +388,13 @@ if (document.getElementById("bar-chart") && typeof ApexCharts !== 'undefined') {
     const chart = new ApexCharts(document.getElementById("bar-chart"), options2);
     chart.render();
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".progress-circle").forEach(circle => {
+    const finalOffset = circle.getAttribute("data-final-offset");
+    circle.style.setProperty("--final-offset", finalOffset);
+  });
+});
 </script>
 
 @endsection

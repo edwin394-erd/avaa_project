@@ -82,7 +82,7 @@ class HomeController extends Controller
         }
 
         //STATS
-        $stats= Stat::where('user_id', $user->id)->get();
+        $stats = Stat::where('user_id', $user->id)->orderBy('created_at');
 
         //PROGRESO TOTAL
         $progreso_total = ($porcen_volin + $porcen_volex + $porcen_taller + $porcen_chat) / 4;

@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 
     <title>@yield('titulo-tab')</title>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 </head>
 
-<body class="bg-green-100 h-screen flex flex-col">
+<body class="bg-blue-100 h-screen flex flex-col p-0">
 
 <!-- NAV BAR -->
     
@@ -94,7 +95,7 @@
 @endauth
 
 <!-- CONTENIDO -->
-<div class="flex-grow">
+<div class="flex-grow p-0">
     @yield('contenido')
 </div>
 

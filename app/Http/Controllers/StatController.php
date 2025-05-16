@@ -16,7 +16,7 @@ class StatController extends Controller
         $user=auth()->user();
         return view('stats.index')->with([
             'user' => $user,
-            'stats' => Stat::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5),
+            'stats' => Stat::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(8),
         ]);
     }
 
