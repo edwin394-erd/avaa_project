@@ -14,3 +14,28 @@
   animation-duration: 1.5s;
   animation-timing-function: ease-out;
 }
+
+/* Estilos para el dropzone */
+.dropzone {
+    display: flex !important;
+    flex-wrap: wrap;             /* Permite que las imágenes bajen a otra línea */
+    max-height: 90px;            /* Ajusta según tu diseño */
+    overflow-y: auto;            /* Scroll vertical si hay muchas filas */
+    gap: 4px;
+}
+
+.dropzone .dz-image,
+.dropzone .dz-image img {
+    width: 80px !important;
+    height: 80px !important;
+    object-fit: cover;
+    border-radius: 0;
+}
+
+.dropzone .dz-details {
+    display: none !important;
+}
+
+.dropzone .dz-size {
+    display: none !important;
+}

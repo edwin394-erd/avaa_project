@@ -21,6 +21,7 @@ return new class extends Migration
             $table->enum('modalidad', ['online', 'presencial']);
             $table->float('duracion');
             $table->date('fecha');
+            $table->enum('estado', ['pendiente', 'aprobado', 'rechazado'])->default('pendiente');
             $table->timestamps();
         });
     }

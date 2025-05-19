@@ -16,5 +16,11 @@ class Stat extends Model
         'duracion',
         'fecha',
         'user_id',
+        'estado'
     ];
+
+    public function evidencias()
+    {
+        return $this->hasMany(Evidencia::class);
+    }
 }

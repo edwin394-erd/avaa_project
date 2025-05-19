@@ -11,13 +11,14 @@ Tabla de Estadísticas
     <h2 class="text-lg font-semibold text-gray-600 text-center">Aquí puedes agregar actividades y ver tus estadísticas
     </h2>
     <hr class="my-4">
-   
+
 
     <div class="flex flex-wrap p-0 min-h-[650px]">
         <!-- Formulario para agregar actividad -->
         <div class="w-full lg:w-1/4 p-2 flex flex-col">
             <div class="flex flex-col bg-white border shadow-xl shadow-green-600 rounded-xl p-5 h-full">
                 <h1 class="text-2xl font-bold text-center mb-4">Agregar Actividad</h1>
+
                 <form action="{{ route('stat.store') }}" method="POST" novalidate class="flex flex-col flex-1">
                     @csrf
                     <div class="mb-4">
@@ -90,11 +91,28 @@ Tabla de Estadísticas
                             required value="{{ old('fecha') }}">
                     </div>
 
+                    <div class="mb-4">
+                        <input type="hidden" name="imagen" value="{{old('imagen')}}">
+                    </div>
+
+
+
                     <input type="hidden" name="user_id" value="{{ $user->id }}">
 
-                    <button type="submit"
-                        class="mt-auto w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-700 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Agregar</button>
                 </form>
+                 <form action="{{route('imagenes.store')}}" id="dropzone" enctype="multipart/form-data"
+                            class="dropzone border-dashed border-2 border-black w-full h-4 rounded flex flex-col justify-center items-center mb-4"
+                            method="POST">
+                            @csrf
+                            @error('imagen')
+                            <p class="bg-red-500 text-white my-2 rounded-lg text-sm p-2 text-center">{{$message}}</p>
+                            @enderror
+                </form>
+
+                <button type="submit" onclick="enviarFormularios()"
+                        class="mt-auto w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-700 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">{{ __('Agregar') }}
+                </button>
+
             </div>
         </div>
 
@@ -195,7 +213,7 @@ Tabla de Estadísticas
                     </div>
                 </div>
 
-                <div class="overflow-y-auto h-[510px]">
+                <div class="overflow-y-auto h-[580px]">
                     <table class="w-full text-sm text-left rtl:text-right text-black table-auto bg-white" id="myTable">
                         <thead class="text-green-700 text-md uppercase border-b border-gray-200">
                             <tr>
@@ -204,6 +222,10 @@ Tabla de Estadísticas
                                 <th scope="col" class="px-3 py-3">Modalidad</th>
                                 <th scope="col" class="px-3 py-3">Horas</th>
                                 <th scope="col" class="px-3 py-3">Fecha</th>
+                                <th scope="col" class="px-3 py-3">Ver evidencias</th>
+                                <th scope="col" class="px-3 py-3">Estatus</th>
+                                <th scope="col" class="px-3 py-3">Opciones</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -223,6 +245,23 @@ Tabla de Estadísticas
                                 <td class="px-3 py-4">{{ $stat->modalidad }}</td>
                                 <td class="px-3 py-4">{{ $stat->duracion }}</td>
                                 <td class="px-3 py-4">{{ $stat->fecha }}</td>
+                                <td class="px-3 py-4">
+                                    <button class="bg-green-900 rounded p-2 text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+                                        </svg>
+                                    </button>
+                                </td>
+                                <td class="px-3 py-4">
+                                    @if ($stat->estado == "pendiente")
+                                        <span class="bg-yellow-300 p-2 text-bold rounded ">PENDIENTE</span>
+                                    @elseif ($stat->estado == "rechazado")
+                                        <span class="bg-red-300 p-2 text-bold rounded ">RECHAZADO</span>
+                                    @else
+                                        <span class="bg-green-300 p-2 text-bold rounded ">APROBADO</span>
+                                    @endif
+                                </td>
                             </tr>
                             @empty
                             <tr>
@@ -233,17 +272,17 @@ Tabla de Estadísticas
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-4">
+                {{-- <div class="mt-4">
                     <p class="text-sm text-gray-700 text-center mt-2">Mostrando
-                       {{ $stats->lastItem() }} de {{ $stats->total() }} resultados
+                        {{ $stats->lastItem() }} de {{ $stats->total() }} resultados
                         (Página
                         {{ $stats->currentPage() }} de {{ $stats->lastPage() }})</p>
-                        <br>
-                      <p class="text-sm text-gray-700">
+                    <br>
+                    <p class="text-sm text-gray-700">
                         {{ $stats->links('pagination::tailwind') }}
-                     </p>
-     
-                </div>
+                    </p>
+
+                </div> --}}
             </div>
         </div>
     </div>
@@ -273,6 +312,12 @@ document.getElementById('table-search').addEventListener('keyup', function() {
         row.style.display = found ? '' : 'none';
     });
 });
+
+// Enviar ambos formularios con el btn_enviar
+function enviarFormularios() {
+    document.querySelector('form[action="{{ route('stat.store') }}"]').submit();
+}
+
 </script>
 
 

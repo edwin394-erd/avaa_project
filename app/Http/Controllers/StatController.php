@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stat;
+use App\Models\Evidencia;
 use Illuminate\Http\Request;
 
 class StatController extends Controller
@@ -16,7 +17,7 @@ class StatController extends Controller
         $user=auth()->user();
         return view('stats.index')->with([
             'user' => $user,
-            'stats' => Stat::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(8),
+            'stats' => Stat::where('user_id', $user->id)->orderBy('created_at', 'desc')->get(),
         ]);
     }
 
@@ -26,8 +27,9 @@ class StatController extends Controller
     }
 
     public function store(Request $request){
-        $this->validate($request,[
 
+        $this->validate($request,[
+          
             'titulo' => 'required|max:30',
             'actividad' => 'required|min:1',
             'modalidad' => 'required|min:1',
@@ -36,15 +38,27 @@ class StatController extends Controller
         ]);
 
 
-        Stat::create([
+        $stat = Stat::create([
             'titulo' => $request->titulo,
             'actividad' => $request->actividad,
             'modalidad' => $request->modalidad,
             'duracion' => $request->duracion,
             'fecha' => $request->fecha,
             'user_id' => auth()->user()->id,
-   
         ]);
+
+        // si el request trae imagenes
+        if ($request->filled('imagen')) {
+        $imagenes = json_decode($request->imagen, true);
+        if (is_array($imagenes)) {
+            foreach ($imagenes as $nombreImagen) {
+                Evidencia::create([
+                    'stats_id' => $stat->id,
+                    'ruta_imagen' => 'uploads/' . $nombreImagen,
+                ]);
+            }
+        }
+    }
 
         return redirect()->route('home')->with('msg_registroExitoso', 'Registro exitoso, ya puedes iniciar sesión');
 

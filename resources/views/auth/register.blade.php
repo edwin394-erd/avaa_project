@@ -16,7 +16,7 @@
             @csrf
             <div class="mb-4">
 				<label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nombre</label>
-				<input type="name" name="name" class="shadow-sm rounded-md w-full px-3 py-2 border focus:outline-none focus:ring-green-500 focus:border-green-500 @error('name') border-red-700 @enderror" placeholder="Tu nombre" required value="{{old('name')}}">
+				<input type="text" name="name" class="shadow-sm rounded-md w-full px-3 py-2 border focus:outline-none focus:ring-green-500 focus:border-green-500 @error('name') border-red-700 @enderror" placeholder="Tu nombre" required  value="{{old('name')}}">
                 @error('name')
                     <p class=" text-red-600 my-2 rounded-lg text-sm py-0 px-1 text-left">{{$message}}</p>
                 @enderror

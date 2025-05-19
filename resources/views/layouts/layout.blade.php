@@ -4,18 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
     <title>@yield('titulo-tab')</title>
+    <link rel="stylesheet" href="https://unpkg.com/dropzone/dist/dropzone.css">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="icon" href="{{ asset('icono.png') }}" type="image/png" />
+
 
 </head>
 
 <body class="bg-blue-100 h-screen flex flex-col p-0">
 
 <!-- NAV BAR -->
-    
+
 @guest
 <nav class="border-gray-200 bg-green-800 shadow-2xl" >
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -37,7 +40,7 @@
         <li>
           <a href="{{route('register')}}" class="block py-2 px-3  rounded  md:border-0 md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent">Registrarse</a>
         </li>
-       
+
       </ul>
     </div>
   </div>
@@ -57,10 +60,10 @@
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
         </svg>
     </button>
-    
+
     <div class="hidden w-full md:block md:w-auto" id="navbar-default">
       <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-green-800 border-gray-700">
-        
+
         <!-- Navbar para usuarios admin -->
         @if(auth()->user()->role == 'admin')
           <li>
@@ -68,6 +71,9 @@
           </li>
           <li>
             <a href="{{route('home')}}" class="block py-2 px-3 rounded md:border-0 md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent">Ver Estadísticas</a>
+          </li>
+          <li>
+            <a href="{{route('stats.index')}}" class="block py-2 px-3 rounded md:border-0 md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent">Gestionar Usuarios</a>
           </li>
         @else
           <!-- Navbar para usuarios normales -->
@@ -107,7 +113,9 @@
 </footer>
 
 @yield('scripts')
-<script src="{{ mix('js/app.js') }}"></script>
+<script src="{{ mix('js/app.js') }}" defer></script>
+<scrip src="{{ asset('js/app.js') }}" defer></script>
+
 
 
 </body>
