@@ -119,82 +119,46 @@ Tabla de Estadísticas
         <!-- Tabla de estadísticas -->
         <div class="w-full xl:w-3/4 p-2 flex flex-col">
             <div class="flex flex-col bg-white border shadow-xl shadow-green-600 rounded-xl p-5 h-full">
-                <div
-                    class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
-                    <div>
-                        <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio"
+                <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+                        <div>
+                             {{-- filtrar por fecha --}}
+                        <button
+                            type="button"
+                            id="abrir-modal-filtrar-fecha"
                             class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5"
-                            type="button">
-                            <svg class="w-3 h-3 text-gray-500 me-3" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
-                            </svg>
-                            Ultimos 30 Días
-                            <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 4 4 4-4" />
-                            </svg>
+                            onclick="document.getElementById('modal-filtrar-fecha').classList.remove('hidden')"
+                        >
+                            Filtrar por fecha
                         </button>
-                        <!-- Dropdown menu -->
-                        <div id="dropdownRadio"
-                            class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-sm"
-                            style="position: absolute;">
-                            <ul class="p-3 space-y-1 text-sm text-gray-700" aria-labelledby="dropdownRadioButton">
-                                <li>
-                                    <div class="flex items-center p-2 rounded-sm hover:bg-gray-100">
-                                        <input id="filter-radio-example-1" type="radio" value="last_day"
-                                            name="filter-radio"
-                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2">
-                                        <label for="filter-radio-example-1"
-                                            class="w-full ms-2 text-sm font-medium text-gray-900 rounded-sm">Ayer</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="flex items-center p-2 rounded-sm hover:bg-gray-100">
-                                        <input checked id="filter-radio-example-2" type="radio" value="last_7_days"
-                                            name="filter-radio"
-                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2">
-                                        <label for="filter-radio-example-2"
-                                            class="w-full ms-2 text-sm font-medium text-gray-900 rounded-sm">Ultimos 7
-                                            días
-                                        </label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="flex items-center p-2 rounded-sm hover:bg-gray-100">
-                                        <input id="filter-radio-example-3" type="radio" value="last_30_days"
-                                            name="filter-radio"
-                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2">
-                                        <label for="filter-radio-example-3"
-                                            class="w-full ms-2 text-sm font-medium text-gray-900 rounded-sm">Ultimos 30
-                                            días
-                                        </label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="flex items-center p-2 rounded-sm hover:bg-gray-100">
-                                        <input id="filter-radio-example-4" type="radio" value="last_month"
-                                            name="filter-radio"
-                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2">
-                                        <label for="filter-radio-example-4"
-                                            class="w-full ms-2 text-sm font-medium text-gray-900 rounded-sm">Mes pasado
-                                        </label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="flex items-center p-2 rounded-sm hover:bg-gray-100">
-                                        <input id="filter-radio-example-5" type="radio" value="last_year"
-                                            name="filter-radio"
-                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2">
-                                        <label for="filter-radio-example-5"
-                                            class="w-full ms-2 text-sm font-medium text-gray-900 rounded-sm">Año pasado
-                                        </label>
-                                    </div>
-                                </li>
-                            </ul>
+
+                        <button
+                            type="button"
+                            id="btn-ver-todo"
+                            class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 ml-2"
+                        >
+                            Ver todo
+                        </button>
                         </div>
+
+
+                        <div id="modal-filtrar-fecha" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                        <div class="bg-white rounded-lg p-6 max-w-sm w-full relative">
+                            <h2 class="text-lg font-bold mb-4 text-center">Filtrar actividades por fecha</h2>
+                            <button type="button" id="cerrar-modal-filtrar-fecha" class="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl">&times;</button>
+                            <form id="form-filtrar-fecha" class="flex flex-col gap-4">
+                                <div>
+                                    <label for="fecha-inicio" class="block text-sm font-medium text-gray-700 mb-1">Fecha de inicio</label>
+                                    <input type="date" id="fecha-inicio" name="fecha_inicio" class="w-full border rounded px-3 py-2" max="{{ now()->toDateString() }}" required>
+                                </div>
+                                <div>
+                                    <label for="fecha-fin" class="block text-sm font-medium text-gray-700 mb-1">Fecha de fin</label>
+                                    <input type="date" id="fecha-fin" name="fecha_fin" class="w-full border rounded px-3 py-2" max="{{ now()->toDateString() }}" required>
+                                </div>
+                                <button type="submit" class="bg-green-700 hover:bg-green-800 text-white font-medium rounded px-4 py-2 mt-2">Aplicar filtro</button>
+                            </form>
+
+                    </div>
+
                     </div>
 
                     <label for="table-search" class="sr-only">Buscar</label>
@@ -217,14 +181,14 @@ Tabla de Estadísticas
                     <table class="w-full text-sm text-left rtl:text-right text-black table-auto bg-white" id="myTable">
                         <thead class="text-green-700 text-md uppercase border-b border-gray-200">
                             <tr>
-                                <th scope="col" class="px-3 py-3">Titulo</th>
-                                <th scope="col" class="px-3 py-3">Actividad</th>
-                                <th scope="col" class="px-3 py-3">Modalidad</th>
-                                <th scope="col" class="px-3 py-3">Horas</th>
-                                <th scope="col" class="px-3 py-3">Fecha</th>
-                                <th scope="col" class="px-3 py-3">Ver evidencias</th>
-                                <th scope="col" class="px-3 py-3">Estatus</th>
-                                <th scope="col" class="px-3 py-3">Opciones</th>
+                                <th scope="col" class="px-3 py-3 text-center">Titulo</th>
+                                <th scope="col" class="px-3 py-3 text-center">Actividad</th>
+                                <th scope="col" class="px-3 py-3 text-center">Modalidad</th>
+                                <th scope="col" class="px-3 py-3 text-center">Horas</th>
+                                <th scope="col" class="px-3 py-3 text-center">Fecha</th>
+                                <th scope="col" class="px-3 py-3 text-center">Ver evidencias</th>
+                                <th scope="col" class="px-3 py-3 text-center">Estatus</th>
+                                <th scope="col" class="px-3 py-3 "> Opciones</th>
 
                             </tr>
                         </thead>
@@ -232,8 +196,8 @@ Tabla de Estadísticas
                             @forelse ($stats as $stat)
                             <tr
                                 class="bg-white border-b border-gray-200 transition duration-300 ease-in-out hover:bg-gray-300">
-                                <td class="px-3 py-4">{{ $stat->titulo }}</td>
-                                <td class="px-3 py-4">
+                                <td class="px-3 py-4 text-center" text-center>{{ $stat->titulo }}</td>
+                                <td class="px-3 py-4 text-center">
                                     @switch($stat->actividad)
                                     @case('chat') Chat @break
                                     @case('taller') Taller de Formación @break
@@ -242,15 +206,15 @@ Tabla de Estadísticas
                                     @default {{ $stat->actividad }}
                                     @endswitch
                                 </td>
-                                <td class="px-3 py-4">
+                                <td class="px-3 py-4 text-center">
                                     @switch($stat->modalidad)
                                         @case('presencial') Presencial @break
                                         @case('Online') Online @break
                                         @default {{$stat->actividad}}
                                     @endswitch
                                 </td>
-                                <td class="px-3 py-4">{{ $stat->duracion }}</td>
-                                <td class="px-3 py-4">{{ $stat->fecha }}</td>
+                                <td class="px-3 py-4 text-center">{{ $stat->duracion }}</td>
+                                <td class="px-3 py-4 text-center">{{ $stat->fecha }}</td>
                                 <td class="px-3 py-4 text-center">
                                     <button
                                         class="bg-green-900 rounded p-2 text-white ver-evidencias-btn"
@@ -259,7 +223,7 @@ Tabla de Estadísticas
                                         Ver evidencias
                                     </button>
                                 </td>
-                                <td class="px-3 py-4">
+                                <td class="px-3 py-4 text-center">
                                     @if ($stat->estado == "pendiente")
                                         <span class="bg-yellow-300 p-2 text-bold rounded ">PENDIENTE</span>
                                     @elseif ($stat->estado == "rechazado")
@@ -268,12 +232,10 @@ Tabla de Estadísticas
                                         <span class="bg-green-300 p-2 text-bold rounded ">APROBADO</span>
                                     @endif
                                 </td>
-                                <td class="px-3 py-4">
+                                <td class="px-3 py-4 text-center">
                                  @if($stat->anulado == "NO")
                                     <button
-                                        data-modal-target="popup-modal"
-                                        data-modal-toggle="popup-modal"
-                                        type="button"
+                                        onclick="abrirModal('modal-anular-{{ $stat->id }}')"
                                         @if($stat->estado != "pendiente")
                                             disabled
                                             class="block text-white bg-red-700 opacity-50 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -285,9 +247,7 @@ Tabla de Estadísticas
                                     </button>
                                 @elseif ($stat->anulado == "SI")
                                     <button
-                                        data-modal-target="popup-modal-restaurar"
-                                        data-modal-toggle="popup-modal-restaurar"
-                                        type="button"
+                                        onclick="abrirModal('modal-restaurar-{{ $stat->id }}')"
                                         @if($stat->estado != "pendiente")
                                             disabled
                                             class="block text-white bg-gray-700 opacity-50 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -303,57 +263,62 @@ Tabla de Estadísticas
 
                             </tr>
 
-                            <div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                <div class="relative p-4 w-full max-w-md max-h-full">
-                                    <div class="relative bg-white rounded-lg shadow-sm">
-                                        <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="popup-modal">
-                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                                            </svg>
-                                            <span class="sr-only">Cerrar</span>
+                         <!-- Modal ANULAR -->
+                        <div id="modal-anular-{{ $stat->id }}" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                            <div class="bg-white rounded-lg p-6 max-w-sm w-full relative">
+                                <h2 class="text-lg font-bold mb-4 text-center">Confirmar anulación</h2>
+                                <hr><br><br>
+                                <button type="button" onclick="cerrarModal('modal-anular-{{ $stat->id }}')" class="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl">&times;</button>
+                                <div class="flex flex-col items-center">
+                                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                    </svg>
+                                    <h3 class="mb-5 text-lg font-normal text-gray-500">¿Estás seguro de que quieres anular esta actividad?</h3>
+                                    <hr><br>
+                                    <div>
+                                     <form action="{{ route('stat.anular', $stat) }}" method="POST" class="w-full flex flex-col items-center">
+                                        @csrf
+                                        <button type="submit" class="bg-red-700 hover:bg-red-800 text-white font-medium rounded px-4 py-2 mt-2 mx-3">
+                                            Sí, estoy seguro
                                         </button>
-                                        <div class="p-4 md:p-5 text-center">
-                                            <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                            </svg>
-                                            <h3 class="mb-5 text-lg font-normal text-gray-500">¿Estas seguro de que quieres anular esta actividad?</h3>
-                                            <form action="{{ route('stat.anular', $stat) }}" method="POST">
-                                            @csrf
-                                                <button data-modal-hide="popup-modal" type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                                                    Si, estoy seguro.
-                                                </button>
-                                            </form>
-                                            <button data-modal-hide="popup-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">No, cancelar</button>
-                                        </div>
-                                    </div>
+                                    </form>
+                                    <button type="button" onclick="cerrarModal('modal-anular-{{ $stat->id }}')" class="py-2.5 px-5 mt-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 mx-3">
+                                        No, cancelar
+                                    </button>
+                                </div>
+
                                 </div>
                             </div>
+                        </div>
 
-                            <div id="popup-modal-restaurar" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                <div class="relative p-4 w-full max-w-md max-h-full">
-                                    <div class="relative bg-white rounded-lg shadow-sm">
-                                        <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="popup-modal">
-                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                                            </svg>
-                                            <span class="sr-only">Cerrar</span>
+                        <!-- Modal RESTAURAR -->
+                        <div id="modal-restaurar-{{ $stat->id }}" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                            <div class="bg-white rounded-lg p-6 max-w-sm w-full relative">
+                                <h2 class="text-lg font-bold mb-4 text-center">Confirmar restauración</h2>
+                                <hr><br><br>
+                                <button type="button" onclick="cerrarModal('modal-restaurar-{{ $stat->id }}')" class="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl">&times;</button>
+                                <div class="flex flex-col items-center">
+                                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                    </svg>
+                                    <h3 class="mb-5 text-lg font-normal text-gray-500">¿Estás seguro de que quieres restaurar esta actividad?</h3>
+                                    <hr><br>
+                                    <div>
+                                        <form action="{{ route('stat.restaurar', $stat) }}" method="POST" class="w-full flex flex-col items-center">
+                                        @csrf
+                                            <button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white font-medium rounded px-4 py-2 mt-2 mx-3">
+                                                Sí, estoy seguro
+                                            </button>
+                                        </form>
+                                        <button type="button" onclick="cerrarModal('modal-restaurar-{{ $stat->id }}')" class="py-2.5 px-5 mt-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 mx-3">
+                                            No, cancelar
                                         </button>
-                                        <div class="p-4 md:p-5 text-center">
-                                            <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                            </svg>
-                                            <h3 class="mb-5 text-lg font-normal text-gray-500">¿Estas seguro de que quieres restaurar esta actividad?</h3>
-                                            <form action="{{ route('stat.restaurar', $stat) }}" method="POST">
-                                                @csrf
-                                                <button data-modal-hide="popup-modal" type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                                                    Si, estoy seguro.
-                                                </button>
-                                            </form>
-
-                                            <button data-modal-hide="popup-modal-restaurar" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">No, cancelar</button>
-                                        </div>
                                     </div>
+
                                 </div>
+                            </div>
+                        </div>
+
                             </div>
                             @empty
                             <tr>
@@ -392,15 +357,16 @@ Tabla de Estadísticas
         </div>
     </div>
 </div>
+
+<!-- Modal para imagen ampliada -->
+<div id="modal-img-ampliada" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-[9999] hidden">
+    <img id="img-ampliada" src="" alt="Evidencia ampliada" class="max-h-[90vh] max-w-[90vw] rounded shadow-lg border-4 border-white">
+    <button onclick="cerrarModalImgAmpliada()" class="absolute top-4 right-6 text-white text-4xl font-bold">&times;</button>
+</div>
 @endsection
 
 @section('scripts')
 <script>
-// Mostrar/ocultar dropdown (Flowbite style)
-document.getElementById('dropdownRadioButton').addEventListener('click', function() {
-    const dropdown = document.getElementById('dropdownRadio');
-    dropdown.classList.toggle('hidden');
-});
 
 
 document.getElementById('table-search').addEventListener('keyup', function() {
@@ -450,7 +416,87 @@ function cerrarModalEvidencias() {
     document.getElementById('modal-evidencias').classList.add('hidden');
 }
 </script>
+<script>
+const abrirBtn = document.getElementById('abrir-modal-filtrar-fecha');
+if (abrirBtn) {
+    abrirBtn.addEventListener('click', function() {
+        document.getElementById('modal-filtrar-fecha').classList.remove('hidden');
+        document.getElementById('form-filtrar-fecha').reset();
+        const hoy = new Date().toISOString().split('T')[0];
+        document.getElementById('fecha-inicio').setAttribute('max', hoy);
+        document.getElementById('fecha-fin').setAttribute('max', hoy);
+    });
+}
 
+document.addEventListener('DOMContentLoaded', function() {
+    const cerrarBtn = document.getElementById('cerrar-modal-filtrar-fecha');
+    if (cerrarBtn) {
+        cerrarBtn.addEventListener('click', function() {
+            document.getElementById('modal-filtrar-fecha').classList.add('hidden');
+        });
+    }
+});
+document.getElementById('form-filtrar-fecha').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const inicio = document.getElementById('fecha-inicio').value;
+    const fin = document.getElementById('fecha-fin').value;
+    if (!inicio || !fin || inicio > fin) {
+        alert('Selecciona un rango de fechas válido.');
+        return;
+    }
+    // Filtrar filas de la tabla
+    const rows = document.querySelectorAll('#myTable tbody tr');
+    rows.forEach(row => {
+        const fechaTd = row.querySelector('td:nth-child(5)');
+        if (!fechaTd) return;
+        const fecha = fechaTd.textContent.trim();
+        if (fecha >= inicio && fecha <= fin) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+    document.getElementById('modal-filtrar-fecha').classList.add('hidden');
+});
+</script>
 
+<script>
+function abrirModal(id) {
+    document.getElementById(id).style.display = 'flex';
+}
+function cerrarModal(id) {
+    document.getElementById(id).style.display = 'none';
+}
+
+// Mostrar imagen ampliada al hacer click
+document.getElementById('contenedor-evidencias').addEventListener('click', function(e) {
+    if (e.target.tagName === 'IMG') {
+        document.getElementById('img-ampliada').src = e.target.src;
+        document.getElementById('modal-img-ampliada').classList.remove('hidden');
+    }
+});
+
+function cerrarModalImgAmpliada() {
+    document.getElementById('modal-img-ampliada').classList.add('hidden');
+    document.getElementById('img-ampliada').src = '';
+}
+
+document.getElementById('modal-img-ampliada').addEventListener('click', function(e) {
+    if (e.target === this) {
+        cerrarModalImgAmpliada();
+    }
+});
+</script>
+
+ <script>
+document.getElementById('btn-ver-todo').addEventListener('click', function() {
+    // Mostrar todas las filas de la tabla
+    document.querySelectorAll('#myTable tbody tr').forEach(row => {
+        row.style.display = '';
+    });
+    // Limpiar el filtro de búsqueda
+    document.getElementById('table-search').value = '';
+});
+</script>
 
 @endsection

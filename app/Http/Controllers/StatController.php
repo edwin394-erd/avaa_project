@@ -22,9 +22,12 @@ class StatController extends Controller
     }
     public function anular(Stat $stat)
     {
-        $stat->anulado = 'SI';
-        $stat->save();
-        return back()->with('success', 'Actividad anulada');
+        if ($stat->estado === 'pendiente') {
+            $stat->anulado = 'SI';
+            $stat->save();
+            return back()->with('success', 'Actividad anulada');
+        }
+        return back()->with('error', 'Solo se pueden anular actividades en estado pendiente');
     }
 
     public function restaurar(Stat $stat)

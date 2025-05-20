@@ -1,12 +1,15 @@
 require('./bootstrap');
+import Dropzone from "dropzone";
 import 'flowbite';
 import ApexCharts from 'apexcharts'
-import Dropzone from "dropzone";
+
 Dropzone.autoDiscover = false;
-if(document.getElementById("dropzone")) {
+
+const dropzoneElement = document.querySelector(".dropzone");
+if (dropzoneElement && !dropzoneElement.dropzone) {
     let imagenesSubidas = [];
 
-    const dropzone = new Dropzone(".dropzone", {
+    const dropzone = new Dropzone(dropzoneElement, {
         dictDefaultMessage: "Sube tus evidencias aqui",
         acceptedFiles: ".png,.jpg,.jpeg,.gif",
         addRemoveLinks: true,
@@ -24,19 +27,16 @@ if(document.getElementById("dropzone")) {
     });
 
     dropzone.on('success', function(file, response){
-        // Si tu backend responde con { imagenes: [...] }
         if (response.imagenes) {
             imagenesSubidas = imagenesSubidas.concat(response.imagenes);
         } else if (response.imagen) {
             imagenesSubidas.push(response.imagen);
         }
         document.querySelector('[name="imagen"]').value = JSON.stringify(imagenesSubidas);
-        // Guarda el nombre en el file para poder borrarlo después
         file.nombreImagen = response.imagenes ? response.imagenes[0] : response.imagen;
     });
 
     dropzone.on('removedfile', function(file) {
-        // Elimina el nombre de la imagen asociada a este file
         if (file.nombreImagen) {
             imagenesSubidas = imagenesSubidas.filter(img => img !== file.nombreImagen);
             document.querySelector('[name="imagen"]').value = JSON.stringify(imagenesSubidas);
@@ -47,4 +47,3 @@ if(document.getElementById("dropzone")) {
         console.log(message);
     });
 }
-
