@@ -1,6 +1,6 @@
 require('./bootstrap');
 import 'flowbite';
-import ApexCharts from 'apexcharts' 
+import ApexCharts from 'apexcharts'
 import Dropzone from "dropzone";
 Dropzone.autoDiscover = false;
 if(document.getElementById("dropzone")) {
@@ -16,7 +16,6 @@ if(document.getElementById("dropzone")) {
         dictCancelUploadConfirmation: "¿Estas seguro de quieres cancelar la subida de esta imagen?",
         parallelUploads: 5,
         maxFiles: 5,
-        uploadMultiple: true,
         maxFilesize: 2, // MB
 
         init: function(){

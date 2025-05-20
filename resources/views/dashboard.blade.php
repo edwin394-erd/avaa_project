@@ -9,7 +9,7 @@ Inicio
     <h1 class="text-2xl font-bold text-gray-800 text-center">Bienvenido, {{$nombre_becario}}</h1>
     <h2 class="text-lg font-semibold text-gray-600 text-center">Aquí tienes un resumen de tu progreso</h2>
     <hr class="my-4">
-    
+
     <!-- Tarjetas de progreso -->
     <div class="flex flex-wrap">
         @foreach ([
@@ -28,18 +28,18 @@ Inicio
                 'color' => 'text-red-600'
             ],
             [
+                'title' => 'Chats',
+                'total' => $total_chat,
+                'meta' => $meta_chat,
+                'percentage' => $porcen_chat,
+                'color' => 'text-orange-500'
+            ],
+            [
                 'title' => 'Talleres',
                 'total' => $total_taller,
                 'meta' => $meta_taller,
                 'percentage' => $porcen_taller,
                 'color' => 'text-blue-600'
-            ],
-            [
-                'title' => 'Chats',
-                'total' => $total_chat,
-                'meta' => $meta_chat,
-                'percentage' => $porcen_chat,
-                'color' => 'text-yellow-600'
             ],
         ] as $card)
         <div class="w-full sm:w-2/4 2xl:w-1/4 p-2">
@@ -99,8 +99,8 @@ Inicio
                     <hr>
                     <br>
                     <div class="justify-between border-gray-200 border-b pb-3 text-center">
-                       
-        
+
+
                         <dl>
                             <dt class="text-base font-normal text-gray-500 pb-1">Horas Totales</dt>
                             <dd class="leading-none text-3xl font-bold text-gray-900">
@@ -137,16 +137,16 @@ Inicio
 
                     <div id="chart-legend" class="md:flex justify-center text-center gap-4 p-4">
                         <div class=" text-sm flex text-center items-center md:justify-center mb-2 w-2/4 md:w-1/4 ">
-                            <span class="w-4 h-4 bg-[#31C48D] inline-block rounded-full mr-2 "></span> Volunatariado Interno
+                            <span class="w-4 h-4 bg-[#16A34A] inline-block rounded-full mr-2 "></span> Volunatariado Interno
                         </div>
                         <div class=" text-sm flex text-center items-center md:justify-center mb-2 w-2/4 md:w-1/4 ">
-                            <span class="w-4  h-4 bg-[#F05252] inline-block rounded-full mr-2 "></span> Voluntariado Externo
+                            <span class="w-4  h-4 bg-[#DC2626] inline-block rounded-full mr-2 "></span> Voluntariado Externo
                         </div>
                         <div class=" text-sm flex text-center items-center md:justify-center mb-2 w-2/4 md:w-1/4 ">
-                            <span class="w-4  h-4 bg-[#ffd166] inline-block rounded-full mr-2 "></span> Chats
+                            <span class="w-4  h-4 bg-[#F97316] inline-block rounded-full mr-2 "></span> Chats
                         </div>
                         <div class=" text-sm flex text-center items-center md:justify-center mb-2 w-2/4 md:w-1/4 ">
-                            <span class="w-4  h-4 bg-[#0077b6] inline-block rounded-full mr-2 "></span> Talleres
+                            <span class="w-4  h-4 bg-[#2563EB] inline-block rounded-full mr-2 "></span> Talleres
                         </div>
                     </div>
 
@@ -245,7 +245,7 @@ function getLastSixMonthIndexes() {
     }
     return indexes;
 
-    
+
 }
 
 const lastSixMonthIndexes = getLastSixMonthIndexes();
@@ -273,25 +273,25 @@ const months = getLastSixMonths(); // Obtenemos los últimos 6 meses dinámicame
 const options2 = {
     series: [{
             name: "Voluntariado Interno",
-            color: "#31C48D",
+            color: "#16A34A",
             data: horasUltimos6MesesVolin,
         },
         {
             name: "Voluntariado Externo",
-            color: "#F05252",
+            color: "#dc2626",
             data: horasUltimos6MesesVolex,
         },
         {
             name: "Chat",
-            color: "#ffd166",
+            color: "#f97316",
             data: horasUltimos6MesesChat,
         },
         {
             name: "Talleres",
-            color: "#0077b6",
+            color: "#2563EB",
             data: horasUltimos6MesesTaller,
         },
-        
+
 
     ],
     chart: {
@@ -313,7 +313,7 @@ const options2 = {
             borderRadius: 6,
             dataLabels: {
             position: "top",
-            
+
             },
         },
     },

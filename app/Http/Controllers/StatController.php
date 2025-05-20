@@ -10,26 +10,34 @@ class StatController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
-        
+
     }
 
     public function index(Request $request){
         $user=auth()->user();
         return view('stats.index')->with([
             'user' => $user,
-            'stats' => Stat::where('user_id', $user->id)->orderBy('created_at', 'desc')->get(),
+            'stats' => Stat::with('evidencias')->where('user_id', $user->id)->orderBy('created_at', 'desc')->get(),
         ]);
     }
-
-    public function create(){
-        $user=auth()->user();
-        return view('stats.create')->with('user', $user);
+    public function anular(Stat $stat)
+    {
+        $stat->anulado = 'SI';
+        $stat->save();
+        return back()->with('success', 'Actividad anulada');
     }
 
+    public function restaurar(Stat $stat)
+    {
+
+        $stat->anulado = 'NO';
+        $stat->save();
+        return back()->with('success', 'Actividad restaurada');
+    }
     public function store(Request $request){
 
         $this->validate($request,[
-          
+
             'titulo' => 'required|max:30',
             'actividad' => 'required|min:1',
             'modalidad' => 'required|min:1',
@@ -64,5 +72,5 @@ class StatController extends Controller
 
     }
 
-   
+
 }

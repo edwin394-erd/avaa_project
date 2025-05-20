@@ -15,7 +15,10 @@
 
 </head>
 
-<body class="bg-blue-100 h-screen flex flex-col p-0">
+{{-- <body class="bg-blue-100 h-screen flex flex-col p-0" style="background-image: url('{{ asset('imgs/avaa.jpg') }}'); background-size: cover; background-repeat: no-repeat; background-position: center;"> --}}
+<body class="bg-green-200 h-screen flex flex-col p-0">
+
+
 
 <!-- NAV BAR -->
 
@@ -114,7 +117,7 @@
 
 @yield('scripts')
 <script src="{{ mix('js/app.js') }}" defer></script>
-<scrip src="{{ asset('js/app.js') }}" defer></script>
+<script src="{{ asset('js/app.js') }}" defer></script>
 
 
 

@@ -21,6 +21,6 @@ class Stat extends Model
 
     public function evidencias()
     {
-        return $this->hasMany(Evidencia::class);
+        return $this->hasMany(Evidencia::class, 'stats_id');
     }
 }

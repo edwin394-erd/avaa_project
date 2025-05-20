@@ -22,6 +22,7 @@ return new class extends Migration
             $table->float('duracion');
             $table->date('fecha');
             $table->enum('estado', ['pendiente', 'aprobado', 'rechazado'])->default('pendiente');
+            $table->enum('anulado', ['SI','NO'])->default('NO');
             $table->timestamps();
         });
     }
