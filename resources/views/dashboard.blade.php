@@ -93,32 +93,20 @@ Inicio
 
     <div class="flex flex-wrap">
         <div class="w-full md:w-4/4 2xl:w-2/4 p-2">
-            <div class="flex flex-col bg-white border shadow-lg shadow-green-600 rounded-xl">
-                <div class="p-4 md:p-5">
+            <div class="flex flex-col bg-white border shadow-lg shadow-green-600 rounded-xl h-full min-h-[600px]">
+                <div class="p-4 md:p-5 flex flex-col h-full">
                     <h3 class="text-lg font-bold text-gray-800">Progreso General</h3>
                     <hr>
                     <br>
                     <div class="justify-between border-gray-200 border-b pb-3 text-center">
-
-
                         <dl>
                             <dt class="text-base font-normal text-gray-500 pb-1">Horas Totales</dt>
                             <dd class="leading-none text-3xl font-bold text-gray-900">
                                 {{$total_volin + $total_volex + $total_taller + $total_chat}} Horas</dd>
                         </dl>
                         <div>
-                            <!-- <span
-                                class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md">
-                                <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 10 14">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
-                                </svg>
-                                Mes pasado 23.5%
-                            </span> -->
                         </div>
                     </div>
-
                     <div class="grid grid-cols-2 py-3">
                         <dl class="text-left">
                             <dt class="text-base font-normal text-gray-500 pb-1">Meta Anual</dt>
@@ -132,9 +120,7 @@ Inicio
                                 Horas</dd>
                         </dl>
                     </div>
-
                     <div id="bar-chart"></div>
-
                     <div id="chart-legend" class="md:flex justify-center text-center gap-4 p-4">
                         <div class=" text-sm flex text-center items-center md:justify-center mb-2 w-2/4 md:w-1/4 ">
                             <span class="w-4 h-4 bg-[#16A34A] inline-block rounded-full mr-2 "></span> Volunatariado Interno
@@ -149,20 +135,19 @@ Inicio
                             <span class="w-4  h-4 bg-[#2563EB] inline-block rounded-full mr-2 "></span> Talleres
                         </div>
                     </div>
-
+                    <div class="flex-grow"></div>
                 </div>
             </div>
         </div>
 
         <div class="w-full md:w-4/4 2xl:w-2/4 p-2">
-            <div class="flex flex-col bg-white border shadow-lg shadow-green-600 rounded-xl">
-                <div class="p-4 md:p-5">
+            <div class="flex flex-col bg-white border shadow-lg shadow-green-600 rounded-xl h-full min-h-[600px]">
+                <div class="p-4 md:p-5 flex flex-col h-full">
                     <h3 class="text-lg font-bold text-gray-800">Actividades Próximas</h3>
                     <hr>
                     <br>
-
                     <!-- Lista de actividades -->
-                    <div class="space-y-4">
+                    <div class="space-y-4 flex-grow">
                         <div
                             class="flex items-center justify-between bg-gray-50 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
                             <div class="flex flex-col">
@@ -175,7 +160,6 @@ Inicio
                                 <span class="block text-sm text-yellow-600 mt-1">Pendiente</span>
                             </div>
                         </div>
-
                         <div
                             class="flex items-center justify-between bg-gray-50 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
                             <div class="flex flex-col">
@@ -188,7 +172,6 @@ Inicio
                                 <span class="block text-sm text-green-600 mt-1">En Progreso</span>
                             </div>
                         </div>
-
                         <div
                             class="flex items-center justify-between bg-gray-50 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
                             <div class="flex flex-col">
@@ -201,16 +184,16 @@ Inicio
                                 <span class="block text-sm text-red-600 mt-1">Completada</span>
                             </div>
                         </div>
-
                     </div>
-
                     <!-- Si no hay actividades -->
                     <div class="text-center text-gray-600 mt-4">
                         <p>No tienes actividades próximas.</p>
                     </div>
+                    <div class="flex-grow"></div>
                 </div>
             </div>
         </div>
+    </div>
 
     </div>
 

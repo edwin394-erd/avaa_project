@@ -87,7 +87,7 @@
             <a href="{{route('stats.index')}}" class="block py-2 px-3 rounded md:border-0 md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent">Gestionar Estadísticas</a>
           </li>
           <li>
-            <a href="{{route('test')}}" class="block py-2 px-3 rounded md:border-0 md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent">Perfil</a>
+            <a href="{{route('perfil.index')}}" class="block py-2 px-3 rounded md:border-0 md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent">Perfil</a>
           </li>
         @endif
 

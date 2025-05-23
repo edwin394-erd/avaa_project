@@ -8,6 +8,7 @@ use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\EvidenciaController;
+use App\Http\Controllers\PerfilController;
 
 
 /*
@@ -20,10 +21,6 @@ use App\Http\Controllers\EvidenciaController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/test', function () {
-    return view('test');
-})->name('test');
 
 Route::get('/',[HomeController::class, 'index'])->name('home');
 Route::get('/register',[RegisterController::class, 'index'])->name('register');
@@ -44,6 +41,8 @@ Route::get('/tabla-actividades',[StatController::class, 'index'])->name('stats.i
 Route::post('/imagenes',[ImagenController::class, 'store'])->name('imagenes.store');
 
 Route::post('/Evidencias',[EvidenciaController::class, 'store'])->name('evidencia.store');
+
+Route::get('/Perfil',[PerfilController::class, 'index'])->name('perfil.index');
 
 
 
