@@ -4,6 +4,10 @@
     REGISTER
 @endsection
 
+@section('body-style')
+    style="background-image: url('{{ asset('imgs/verdeclaro.jpg') }}'); background-size: cover; background-repeat: no-repeat; background-position: center;"
+@endsection
+
 @section('contenido')
     <!-- component -->
 <div class=" flex items-center py-10 justify-center w-full ">
