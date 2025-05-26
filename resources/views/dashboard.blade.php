@@ -9,8 +9,21 @@ Inicio
 
 @section('contenido')
 <div class="2xl:w-5/6 mx-auto py-5 px-0 md:px-10 min-h-full">
-    <h1 class="text-lg 2xl:text-2xl font-bold text-gray-800 text-center">Bienvenido, {{$nombre_becario}}</h1>
-    <h2 class="text-md 2xl:text-lg font-semibold text-gray-600 text-center">Aquí tienes un resumen de tu progreso</h2>
+    @php
+        // Hora de Venezuela (UTC-4)
+        $horaVenezuela = \Carbon\Carbon::now('America/Caracas')->hour;
+        if ($horaVenezuela >= 6 && $horaVenezuela < 12) {
+            $saludo = 'Buenos días';
+        } elseif ($horaVenezuela >= 12 && $horaVenezuela < 19) {
+            $saludo = 'Buenas tardes';
+        } else {
+            $saludo = 'Buenas noches';
+        }
+    @endphp
+    <h1 class="text-lg 2xl:text-2xl font-bold text-gray-800 text-center">
+        {{ $saludo }}, {{$nombre_becario}} &#9995;
+    </h1>
+    <h2 class="text-md 2xl:text-lg font-semibold text-gray-600 text-center">Aquí tienes un resumen de tu progreso &#x1F4C8; </h2>
     <hr class="my-4">
 
     <!-- Tarjetas de progreso -->
@@ -23,6 +36,7 @@ Inicio
                 'percentage' => $porcen_volin,
                 'color' => 'text-[#28a745]',
                 'bgcolor' => 'bg-[#e3f7e7]',
+                'icono' => 'icon-volin.png',
             ],
             [
                 'title' => 'Voluntariado Externo',
@@ -31,6 +45,7 @@ Inicio
                 'percentage' => $porcen_volex,
                 'color' => 'text-[#dc3545]',
                 'bgcolor' => 'bg-[#f9e5e7]',
+                'icono' => 'icon-volex.png',
             ],
             [
                 'title' => 'Chats',
@@ -39,6 +54,7 @@ Inicio
                 'percentage' => $porcen_chat,
                 'color' => 'text-[#fd7e14]',
                 'bgcolor' => 'bg-[#fcf2ea]',
+                'icono' => 'icon-chat.png',
             ],
             [
                 'title' => 'Talleres',
@@ -47,13 +63,19 @@ Inicio
                 'percentage' => $porcen_taller,
                 'color' => 'text-[#007bff]',
                 'bgcolor' => 'bg-[#e0eaff]',
+                'icono' => 'icon-taller.png',
             ],
         ] as $card)
         <div class="w-full sm:w-2/4 lg:w-1/4 p-1">
             <div class="flex flex-col bg-white border shadow-lg shadow-gray-300 border border-gray-200 rounded-xl hover:shadow-xl transition-shadow duration-300">
                 <div class="pb-0 pt-4 px-0">
                     <div class="px-4">
-                          <h3 class="text-lg font-bold text-gray-800">{{ $card['title'] }}</h3>
+                        <div class="flex items-center text">
+                            <img src="{{ asset('imgs/' . $card['icono']) }}" alt="{{ $card['title'] }} icono" class="w-12 h-12">
+                            <h3 class="{{ $card['color'] }} text-lg font-bold ml-2">{{ $card['title'] }}</h3>
+                        </div>
+
+
                     <hr><br>
                     <div class="flex">
                         <div class="w-3/5">
@@ -95,7 +117,7 @@ Inicio
                         </svg>
                     </a>
                     </div>
-                   
+
                 </div>
             </div>
         </div>
@@ -107,7 +129,10 @@ Inicio
         <div class="w-full md:w-4/4 lg:w-2/4 p-1">
             <div class="flex flex-col bg-white border shadow-lg shadow-gray-300 borber border-gray-200 rounded-xl h-full min-h-[600px]">
                 <div class="p-4 md:p-5 flex flex-col h-full">
-                    <h3 class="text-lg font-bold text-gray-800">Actividades Próximas</h3>
+                    <div class="flex items-center text">
+                        <img src="{{ asset('imgs/icon-actprox.png') }}" alt="icono" class="w-12 h-12">
+                        <h3 class="text-lg font-bold text-gray-800 ml-2">Actividades Próximas</h3>
+                    </div>
                     <hr>
                     <br>
                     <!-- Lista de actividades -->
@@ -161,13 +186,16 @@ Inicio
         <div class="w-full md:w-4/4 lg:w-2/4 p-1">
             <div class="flex flex-col bg-white border shadow-lg shadow-gray-300 borber border-gray-200 rounded-xl h-full min-h-[600px]">
                 <div class="p-4 md:p-5 flex flex-col h-full">
-                    <h3 class="text-lg font-bold text-gray-800">Progreso General</h3>
+                     <div class="flex items-center text">
+                        <img src="{{ asset('imgs/icon-progen.png') }}" alt="icono" class="w-12 h-12">
+                        <h3 class="text-lg font-bold text-gray-800 ml-2">Progreso General</h3>
+                    </div>
                     <hr>
                     <br>
                     <div class="justify-between border-gray-200 border-b pb-3 text-center">
                         <dl>
                             <dt class="text-base font-normal text-gray-500 pb-1">Horas Totales</dt>
-                            <dd class="leading-none text-3xl font-bold text-gray-900">
+                            <dd class="leading-none text-3xl font-bold text-gray-800">
                                 {{$total_volin + $total_volex + $total_taller + $total_chat}} Horas</dd>
                         </dl>
                         <div>
@@ -206,7 +234,7 @@ Inicio
             </div>
         </div>
 
-        
+
     </div>
 
     </div>
@@ -277,7 +305,7 @@ console.log("horasUltimos6MesesTaller:" + horasUltimos6MesesTaller);
 console.log("horasUltimos6MesesChat:" + horasUltimos6MesesChat);
 
 // Alternar sombreado de fondo para cada mes
-const barColors = months.map((_, i) => i % 2 === 0 ? "#F3F4F6" : "#FFFFFF"); // gris claro y blanco
+const barColors = months.map((_, i) => i % 2 === 0 ? "#E5E7EB" : "#FFFFFF"); // gris claro y blanco
 
 const options2 = {
     series: [{
@@ -311,6 +339,14 @@ const options2 = {
         toolbar: {
             show: false
         },
+        events: {
+            mounted: function(chartContext, config) {
+                addBarHoverEffect();
+            },
+            updated: function(chartContext, config) {
+                addBarHoverEffect();
+            }
+        }
     },
     plotOptions: {
         bar: {

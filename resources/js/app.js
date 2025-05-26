@@ -10,7 +10,7 @@ if (dropzoneElement && !dropzoneElement.dropzone) {
     let imagenesSubidas = [];
 
     const dropzone = new Dropzone(dropzoneElement, {
-        dictDefaultMessage: "Sube tus evidencias aqui",
+        dictDefaultMessage: "Sube tus evidencias aqui (5 máx.)",
         acceptedFiles: ".png,.jpg,.jpeg,.gif",
         addRemoveLinks: true,
         dictRemoveFile: "Borrar archivo",
@@ -45,5 +45,12 @@ if (dropzoneElement && !dropzoneElement.dropzone) {
 
     dropzone.on('error', function(file, message){
         console.log(message);
+    });
+
+    dropzone.on('addedfile', function(file) {
+        if (this.files.length > 5) {
+            this.removeFile(file);
+            alert('No puedes agregar más de 5 imágenes.');
+        }
     });
 }

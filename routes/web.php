@@ -21,7 +21,9 @@ use App\Http\Controllers\PerfilController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/test', function () {
+    return view('test');
+});
 Route::get('/',[HomeController::class, 'index'])->name('home');
 Route::get('/register',[RegisterController::class, 'index'])->name('register');
 Route::post('/register',[RegisterController::class, 'store']);
@@ -42,7 +44,11 @@ Route::post('/imagenes',[ImagenController::class, 'store'])->name('imagenes.stor
 
 Route::post('/Evidencias',[EvidenciaController::class, 'store'])->name('evidencia.store');
 
-Route::get('/Perfil',[PerfilController::class, 'index'])->name('perfil.index');
+Route::get('/Perfil/datos-personales',[PerfilController::class, 'datosindex'])->name('datos.index');
+
+Route::get('/Perfil/configuracion-usuario',[PerfilController::class, 'configindex'])->name('configuser.index');
+Route::post('/Perfil/configuracion-usuario', [PerfilController::class, 'update'])->name('configuser.update');
+
 
 
 

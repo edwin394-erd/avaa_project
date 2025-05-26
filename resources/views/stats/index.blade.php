@@ -16,7 +16,8 @@ Tabla de Estadísticas
         <!-- Formulario para agregar actividad -->
         <div class="w-full xl:w-1/4 p-0 flex flex-col">
             <div class="flex flex-col bg-white border shadow-xl shadow-gray-100 rounded-l-xl p-4 h-full">
-                <h1 class="text-lg 2xl:text-2xl font-bold text-gray-700 text-center mb-4">Agregar Actividad</h1>
+                <h1 class="text-lg 2xl:text-xl font-bold text-gray-700 text-center mb-4">Agregar Actividad</h1>
+                <hr class="mb-2">
 
                 <form action="{{ route('stat.store') }}" method="POST" novalidate class="flex flex-col flex-1">
                     @csrf
@@ -75,8 +76,11 @@ Tabla de Estadísticas
                         </div>
                         <input type="text" name="duracion"
                             class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 @error('duracion') border-red-700 @enderror"
-                            placeholder="Ejemplo: 1.5" required value="{{ old('duracion') }}">
-                    </div>
+                            placeholder="Ejemplo: 1.5" required value="{{ old('duracion') }}"
+                            pattern="^\d*\.?\d*$"
+                            inputmode="decimal"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                        </div>
 
                     <div class="mb-2">
                         <div class="flex">
@@ -100,7 +104,7 @@ Tabla de Estadísticas
 
                 </form>
                  <form action="{{route('imagenes.store')}}" id="dropzone" enctype="multipart/form-data"
-                            class="dropzone border-dashed border-2 border-black w-full h-4 rounded flex flex-col justify-center items-center mb-4"
+                            class="dropzone border-dashed border-2 border-slate-500 w-full h-4 rounded flex flex-col justify-center items-center mb-4"
                             method="POST">
                             @csrf
                             @error('imagen')
@@ -109,7 +113,7 @@ Tabla de Estadísticas
                 </form>
 
                 <button type="submit" onclick="enviarFormularios()"
-                        class="mt-auto w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-700 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">{{ __('Agregar') }}
+                        class="mt-auto w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Agregar
                 </button>
 
             </div>
@@ -153,7 +157,7 @@ Tabla de Estadísticas
                                     <label for="fecha-fin" class="block text-sm font-medium text-gray-700 mb-1">Fecha de fin</label>
                                     <input type="date" id="fecha-fin" name="fecha_fin" class="w-full border rounded px-3 py-2" max="{{ now()->toDateString() }}" required>
                                 </div>
-                                <button type="submit" class="bg-green-700 hover:bg-green-800 text-white font-medium rounded px-4 py-2 mt-2">Aplicar filtro</button>
+                                <button type="submit" class="bg-slate-800 hover:bg-slate-700 text-white font-medium rounded px-4 py-2 mt-2">Aplicar filtro</button>
                             </form>
 
                     </div>
@@ -178,7 +182,7 @@ Tabla de Estadísticas
 
                 <div class="overflow-y-auto h-[580px]">
                     <table class="w-full text-sm text-left rtl:text-right text-black table-auto bg-white" id="myTable">
-                        <thead class="text-green-700 text-md uppercase border-b border-gray-200">
+                        <thead class="text-gray-700 text-md uppercase border-b border-gray-200">
                             <tr>
                                 <th scope="col" class="px-3 py-3 text-center">Titulo</th>
                                 <th scope="col" class="px-3 py-3 text-center">Actividad</th>
@@ -194,7 +198,7 @@ Tabla de Estadísticas
                         <tbody>
                             @forelse ($stats as $stat)
                             <tr
-                                class="bg-white text-sm border-b border-gray-200 transition duration-300 ease-in-out hover:bg-gray-100 text-sm">
+                                class="bg-white text-sm border-b border-gray-200 transition duration-300 ease-in-out hover:bg-blue-100 text-sm">
                                 <td class="px-3 py-4 text-center" text-center>{{ $stat->titulo }}</td>
                                 <td class="px-3 py-4 text-center">
                                     @switch($stat->actividad)
@@ -215,7 +219,7 @@ Tabla de Estadísticas
                                 <td class="px-3 py-4 text-center">{{ $stat->duracion }}</td>
                                 <td class="px-3 py-4 text-center">{{ $stat->fecha }}</td>
                                 <td class="px-3 py-4 text-center">
-                                   
+
                                     <button
                                         class=" rounded p-2 text-white ver-evidencias-btn "
                                         data-evidencias='@json($stat->evidencias->pluck("ruta_imagen"))'
@@ -228,7 +232,7 @@ Tabla de Estadísticas
                                                     <style>
                                                         .a {
                                                             fill: none;
-                                                            stroke: hsl(200, 68%, 21%);
+                                                            stroke: hsl(125, 68%, 21%);
                                                             stroke-linecap: round;
                                                             stroke-linejoin: round;
                                                             stroke-width: 3.5; /* Aumenta el grosor aquí */
@@ -243,7 +247,7 @@ Tabla de Estadísticas
                                     </button>
                                 </td>
                                 <td class="px-3 py-4 text-center">
-                                    
+
                                     @if($stat->anulado == "SI")
                                      <span class="bg-gray-300 p-2 text-bold rounded ">ANULADO</span>
                                     @elseif ($stat->estado == "pendiente")
@@ -251,7 +255,7 @@ Tabla de Estadísticas
                                     @elseif ($stat->estado == "rechazado")
                                         <span class="bg-red-300 p-2 text-bold rounded ">RECHAZADO</span>
                                     @else
-                                        <span class="bg-green-300 p-2 text-bold rounded ">APROBADO</span>
+                                        <span class="bg-green-200 p-2 text-bold rounded ">APROBADO</span>
                                     @endif
                                 </td>
                                 <td class="px-3 py-4 text-center">
@@ -265,7 +269,7 @@ Tabla de Estadísticas
                                              class="block text-white  focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                                         @endif
                                     >
-                                        <svg width="30px" height="30px" viewBox="0 0 24 24" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" fill="#e00000" stroke="#e00000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><defs><style>.cls-1{fill:none;stroke:#ad1212;stroke-miterlimit:10;stroke-width:1.91px;}</style></defs><circle class="cls-1" cx="12" cy="12" r="10.5"></circle><line class="cls-1" x1="19.64" y1="4.36" x2="4.36" y2="19.64"></line></g></svg>
+                                        <svg width="30px" height="30px" viewBox="0 0 24 24" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" fill="#e00000" stroke="#e00000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><defs><style>.cls-1{fill:none;stroke:#da3232;stroke-miterlimit:10;stroke-width:1.91px;}</style></defs><circle class="cls-1" cx="12" cy="12" r="10.5"></circle><line class="cls-1" x1="19.64" y1="4.36" x2="4.36" y2="19.64"></line></g></svg>
                                     </button>
                                 @elseif ($stat->anulado == "SI")
                                     <button
@@ -332,7 +336,7 @@ Tabla de Estadísticas
                             <div class="bg-white rounded-lg p-6 max-w-sm w-full relative">
                                 <h2 class="text-lg font-bold mb-4 text-center">Confirmar anulación</h2>
                                 <h2 class="text-sm mb-4 text-center"> Actividad: {{$stat->titulo}} ({{ $stat->fecha }})</h2>
-                                <hr><br><br>
+                                <hr><br>
                                 <button type="button" onclick="cerrarModal('modal-anular-{{ $stat->id }}')" class="absolute top-2 right-2 text-gray-500 hover:text-black text-lg 2xl:text-2xl">&times;</button>
                                 <div class="flex flex-col items-center">
                                     <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -361,7 +365,7 @@ Tabla de Estadísticas
                             <div class="bg-white rounded-lg p-6 max-w-sm w-full relative">
                                 <h2 class="text-lg font-bold mb-4 text-center">Confirmar restauración</h2>
                                  <h2 class="text-sm mb-4 text-center"> Actividad: {{$stat->titulo}} ({{ $stat->fecha }})</h2>
-                                <hr><br><br>
+                                <hr><br>
                                 <button type="button" onclick="cerrarModal('modal-restaurar-{{ $stat->id }}')" class="absolute top-2 right-2 text-gray-500 hover:text-black text-lg 2xl:text-2xl">&times;</button>
                                 <div class="flex flex-col items-center">
                                     <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -413,12 +417,12 @@ Tabla de Estadísticas
 
 <!-- Modal para evidencias -->
 <div id="modal-evidencias" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-lg p-6 max-w-lg w-full relative min-h-96 flex flex-col items-center">
+    <div class="bg-white rounded-lg p-6 max-w-lg w-full relative min-h-80 flex flex-col items-center">
         <div class="w-full text-center">
             <h2 class="text-lg font-bold mb-4">Evidencias</h2>
              <h2 class="text-sm mb-4 text-center"> Actividad: {{$stat->titulo}} ({{ $stat->fecha }})</h2>
         </div>
-        <button onclick="cerrarModalEvidencias()" class="absolute top-2 right-2 text-gray-500 hover:text-black">&times;</button>
+        <button onclick="cerrarModalEvidencias()" class="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl">&times;</button>
         <div class="flex-1 flex items-center justify-center w-full">
             <div id="contenedor-evidencias" class="flex flex-wrap gap-2 justify-center items-center w-full"></div>
         </div>
@@ -434,7 +438,6 @@ Tabla de Estadísticas
 
 @section('scripts')
 <script>
-
 
 document.getElementById('table-search').addEventListener('keyup', function() {
     const search = this.value.toLowerCase();
@@ -456,7 +459,7 @@ function enviarFormularios() {
     document.querySelector('form[action="{{ route('stat.store') }}"]').submit();
 }
 
-// Mostrar evidencias en el modal
+// Mostrar evidencias en el modal con animación
 document.querySelectorAll('.ver-evidencias-btn').forEach(btn => {
     btn.addEventListener('click', function() {
         const evidencias = JSON.parse(this.dataset.evidencias);
@@ -475,19 +478,48 @@ document.querySelectorAll('.ver-evidencias-btn').forEach(btn => {
                 contenedor.appendChild(img);
             });
         }
-        document.getElementById('modal-evidencias').classList.remove('hidden');
+        const modal = document.getElementById('modal-evidencias');
+        modal.style.display = 'flex';
+        modal.classList.add('transition', 'duration-200', 'ease-out');
+        modal.style.opacity = 0;
+        const content = modal.querySelector('div.bg-white');
+        if (content) {
+            content.style.transform = 'scale(0.95)';
+            content.style.opacity = 0;
+            content.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+        }
+        setTimeout(() => {
+            modal.style.opacity = 1;
+            if (content) {
+                content.style.transform = 'scale(1)';
+                content.style.opacity = 1;
+            }
+        }, 10);
     });
 });
 
 function cerrarModalEvidencias() {
-    document.getElementById('modal-evidencias').classList.add('hidden');
+    const modal = document.getElementById('modal-evidencias');
+    const content = modal.querySelector('div.bg-white');
+    if (content) {
+        content.style.transform = 'scale(0.95)';
+        content.style.opacity = 0;
+    }
+    modal.style.opacity = 0;
+    setTimeout(() => {
+        modal.style.display = 'none';
+        if (content) {
+            content.style.transform = '';
+            content.style.opacity = '';
+        }
+    }, 200);
 }
 </script>
 <script>
 const abrirBtn = document.getElementById('abrir-modal-filtrar-fecha');
 if (abrirBtn) {
     abrirBtn.addEventListener('click', function() {
-        document.getElementById('modal-filtrar-fecha').classList.remove('hidden');
+        abrirModal('modal-filtrar-fecha');
         document.getElementById('form-filtrar-fecha').reset();
         const hoy = new Date().toISOString().split('T')[0];
         document.getElementById('fecha-inicio').setAttribute('max', hoy);
@@ -499,7 +531,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cerrarBtn = document.getElementById('cerrar-modal-filtrar-fecha');
     if (cerrarBtn) {
         cerrarBtn.addEventListener('click', function() {
-            document.getElementById('modal-filtrar-fecha').classList.add('hidden');
+            cerrarModal('modal-filtrar-fecha');
         });
     }
 });
@@ -523,29 +555,61 @@ document.getElementById('form-filtrar-fecha').addEventListener('submit', functio
             row.style.display = 'none';
         }
     });
-    document.getElementById('modal-filtrar-fecha').classList.add('hidden');
+    cerrarModal('modal-filtrar-fecha');
 });
 </script>
 
 <script>
 function abrirModal(id) {
-    document.getElementById(id).style.display = 'flex';
+    const modal = document.getElementById(id);
+    modal.style.display = 'flex';
+    modal.classList.add('transition', 'duration-200', 'ease-out');
+    modal.style.opacity = 0;
+    // Animar solo el contenido, no el fondo
+    const content = modal.querySelector('div.bg-white');
+    if (content) {
+        content.style.transform = 'scale(0.95)';
+        content.style.opacity = 0;
+        content.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+    }
+    setTimeout(() => {
+        modal.style.opacity = 1;
+        if (content) {
+            content.style.transform = 'scale(1)';
+            content.style.opacity = 1;
+        }
+    }, 10);
 }
 function cerrarModal(id) {
-    document.getElementById(id).style.display = 'none';
+    const modal = document.getElementById(id);
+    const content = modal.querySelector('div.bg-white');
+    if (content) {
+        content.style.transform = 'scale(0.95)';
+        content.style.opacity = 0;
+    }
+    modal.style.opacity = 0;
+    setTimeout(() => {
+        modal.style.display = 'none';
+        if (content) {
+            content.style.transform = '';
+            content.style.opacity = '';
+        }
+    }, 200);
 }
 
 // Mostrar imagen ampliada al hacer click
 document.getElementById('contenedor-evidencias').addEventListener('click', function(e) {
     if (e.target.tagName === 'IMG') {
         document.getElementById('img-ampliada').src = e.target.src;
-        document.getElementById('modal-img-ampliada').classList.remove('hidden');
+        abrirModal('modal-img-ampliada');
     }
 });
 
 function cerrarModalImgAmpliada() {
-    document.getElementById('modal-img-ampliada').classList.add('hidden');
-    document.getElementById('img-ampliada').src = '';
+    cerrarModal('modal-img-ampliada');
+    setTimeout(() => {
+        document.getElementById('img-ampliada').src = '';
+    }, 200);
 }
 
 document.getElementById('modal-img-ampliada').addEventListener('click', function(e) {

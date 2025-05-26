@@ -8,21 +8,21 @@ use Carbon\Carbon;
 
 class HomeController extends Controller
 {
-       
+
 
     public function __construct(){
         $this->middleware('auth');
-        
+
     }
     public function index(){
         $startOfYear = Carbon::now()->startOfYear();  // Primer día del año (01-01)
         $endOfYear = Carbon::now()->endOfYear();  // Último día del año (31-12)
 
         $user = auth()->user();
- 
+
         if ($user->role == 'admin') {
             return view('admin_dashboard');
-            
+
         } else {
         $meta_volin= $user->becario->meta_volin;
         $meta_volex= $user->becario->meta_volex;
@@ -31,11 +31,12 @@ class HomeController extends Controller
         $nombre_becario= $user->becario->nombre;
         $cedula_becario= $user->becario->cedula;
 
-     
+
 
         //VOLUNTARIADO INTERNO
         $stats_volin = Stat::where('user_id', $user->id)
             ->where('actividad', 'volin')
+            ->where('anulado', 'NO')
             ->where('fecha', '>=', $startOfYear)
             ->get();
         $total_volin = $stats_volin->sum('duracion'); //TOTAL HORAS
@@ -48,6 +49,7 @@ class HomeController extends Controller
         //VOLUNTARIADO EXTERNO
         $stats_volex = Stat::where('user_id', $user->id)
             ->where('actividad', 'volex')
+            ->where('anulado', 'NO')
             ->where('fecha', '>=', $startOfYear)
             ->get();
         $total_volex = $stats_volex->sum('duracion'); //TOTAL HORAS
@@ -60,6 +62,7 @@ class HomeController extends Controller
         //TALLER
         $stats_taller = Stat::where('user_id', $user->id)
             ->where('actividad', 'taller')
+            ->where('anulado', 'NO')
             ->where('fecha', '>=', $startOfYear)
             ->get();
         $total_taller = $stats_taller->sum('duracion'); //TOTAL HORAS
@@ -72,6 +75,7 @@ class HomeController extends Controller
         //CHAT
         $stats_chat = Stat::where('user_id', $user->id)
             ->where('actividad', 'chat')
+            ->where('anulado', 'NO')
             ->where('fecha', '>=', $startOfYear)
             ->get();
         $total_chat = $stats_chat->sum('duracion'); //TOTAL HORAS
@@ -82,7 +86,10 @@ class HomeController extends Controller
         }
 
         //STATS
-        $stats = Stat::where('user_id', $user->id)->orderBy('created_at');
+        $stats = Stat::where('user_id', $user->id)
+            ->where('anulado', 'NO')
+            ->orderBy('created_at')
+            ->get();
 
         //PROGRESO TOTAL
         $progreso_total = ($porcen_volin + $porcen_volex + $porcen_taller + $porcen_chat) / 4;
@@ -93,24 +100,25 @@ class HomeController extends Controller
         //stats con campo fecha de enero a diciembre
        // Consulta optimizada para obtener los datos de los últimos 12 meses
        // Obtener el inicio y el fin del año actual
-        
 
-       
+
+
         $stats_anual = Stat::where('user_id', $user->id)
+            ->where('anulado', 'NO')
             ->whereBetween('fecha', [$startOfYear, $endOfYear])
             ->selectRaw('
-                MONTH(fecha) as month, 
-                SUM(duracion) as total_duracion,
-                SUM(CASE WHEN actividad = "volin" THEN duracion ELSE 0 END) as total_volin_duracion,
-                SUM(CASE WHEN actividad = "volex" THEN duracion ELSE 0 END) as total_volex_duracion,
-                SUM(CASE WHEN actividad = "taller" THEN duracion ELSE 0 END) as total_taller_duracion,
-                SUM(CASE WHEN actividad = "chat" THEN duracion ELSE 0 END) as total_chat_duracion
+            MONTH(fecha) as month,
+            SUM(duracion) as total_duracion,
+            SUM(CASE WHEN actividad = "volin" THEN duracion ELSE 0 END) as total_volin_duracion,
+            SUM(CASE WHEN actividad = "volex" THEN duracion ELSE 0 END) as total_volex_duracion,
+            SUM(CASE WHEN actividad = "taller" THEN duracion ELSE 0 END) as total_taller_duracion,
+            SUM(CASE WHEN actividad = "chat" THEN duracion ELSE 0 END) as total_chat_duracion
             ')
             ->groupBy('month')
             ->get()
-            ->keyBy('month'); // Agrupa por mes para acceso rápido
+            ->keyBy('month');
 
-        
+
 
         // Crear arrays vacíos con valores predeterminados de 0
         $total_por_mes = array_fill(0, 11, 0);
@@ -128,8 +136,8 @@ class HomeController extends Controller
             $total_chat_por_mes[$mes] = $datos->total_chat_duracion ?? 0;
         }
 
-       
- 
+
+
             return view('dashboard')->with([
                 'user' => $user,
                 'progreso_total' => $progreso_total,
@@ -157,11 +165,11 @@ class HomeController extends Controller
                 'total_taller_por_mes' => $total_taller_por_mes,
                 'total_chat_por_mes' => $total_chat_por_mes,
             ]);
-        } 
-       
+        }
 
-                                    
+
+
     }
 
-    
+
 }
