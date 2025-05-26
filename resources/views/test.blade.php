@@ -10,7 +10,7 @@ AVAA - Test
 
 @section('contenido')
 <!-- Contenedor de notificaciones -->
-<div id="notificationsContainer" class="fixed bottom-6 right-4 flex flex-col-reverse space-y-2 space-y-reverse z-50 w-full max-w-md md:w-auto md:max-w-md md:items-end items-center px-2 md:px-0"></div>
+<div id="notificationsContainer" class="fixed bottom-6 right-1/2 translate-x-1/2 md:right-4 md:translate-x-0 flex flex-col-reverse space-y-2 space-y-reverse z-50 w-full max-w-md md:w-auto md:max-w-md md:items-end items-center px-2 md:px-0"></div>
 
 <!-- Botón para mostrar la notificación -->
 <button id="showNotificationBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition mb-4">
