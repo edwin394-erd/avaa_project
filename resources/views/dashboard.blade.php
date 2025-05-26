@@ -3,11 +3,14 @@
 @section('titulo-tab')
 Inicio
 @endsection
+{{-- @section('body-style')
+    style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{{ asset('imgs/avaa.jpg') }}'); background-size: cover; background-repeat: no-repeat; background-position: center;"
+@endsection --}}
 
 @section('contenido')
-<div class="md:w-5/6 mx-auto py-10 px-0 md:px-10 min-h-full">
-    <h1 class="text-2xl font-bold text-gray-800 text-center">Bienvenido, {{$nombre_becario}}</h1>
-    <h2 class="text-lg font-semibold text-gray-600 text-center">Aquí tienes un resumen de tu progreso</h2>
+<div class="2xl:w-5/6 mx-auto py-5 px-0 md:px-10 min-h-full">
+    <h1 class="text-lg 2xl:text-2xl font-bold text-gray-800 text-center">Bienvenido, {{$nombre_becario}}</h1>
+    <h2 class="text-md 2xl:text-lg font-semibold text-gray-600 text-center">Aquí tienes un resumen de tu progreso</h2>
     <hr class="my-4">
 
     <!-- Tarjetas de progreso -->
@@ -18,34 +21,39 @@ Inicio
                 'total' => $total_volin,
                 'meta' => $meta_volin,
                 'percentage' => $porcen_volin,
-                'color' => 'text-green-600'
+                'color' => 'text-[#28a745]',
+                'bgcolor' => 'bg-[#e3f7e7]',
             ],
             [
                 'title' => 'Voluntariado Externo',
                 'total' => $total_volex,
                 'meta' => $meta_volex,
                 'percentage' => $porcen_volex,
-                'color' => 'text-red-600'
+                'color' => 'text-[#dc3545]',
+                'bgcolor' => 'bg-[#f9e5e7]',
             ],
             [
                 'title' => 'Chats',
                 'total' => $total_chat,
                 'meta' => $meta_chat,
                 'percentage' => $porcen_chat,
-                'color' => 'text-orange-500'
+                'color' => 'text-[#fd7e14]',
+                'bgcolor' => 'bg-[#fcf2ea]',
             ],
             [
                 'title' => 'Talleres',
                 'total' => $total_taller,
                 'meta' => $meta_taller,
                 'percentage' => $porcen_taller,
-                'color' => 'text-blue-600'
+                'color' => 'text-[#007bff]',
+                'bgcolor' => 'bg-[#e0eaff]',
             ],
         ] as $card)
-        <div class="w-full sm:w-2/4 2xl:w-1/4 p-2">
-            <div class="flex flex-col bg-white border shadow-lg shadow-green-600 rounded-xl">
-                <div class="p-4 md:p-5">
-                    <h3 class="text-lg font-bold text-gray-800">{{ $card['title'] }}</h3>
+        <div class="w-full sm:w-2/4 lg:w-1/4 p-1">
+            <div class="flex flex-col bg-white border shadow-lg shadow-gray-300 border border-gray-200 rounded-xl hover:shadow-xl transition-shadow duration-300">
+                <div class="pb-0 pt-4 px-0">
+                    <div class="px-4">
+                          <h3 class="text-lg font-bold text-gray-800">{{ $card['title'] }}</h3>
                     <hr><br>
                     <div class="flex">
                         <div class="w-3/5">
@@ -58,7 +66,6 @@ Inicio
                                         stroke-dasharray="100"
                                         stroke-dashoffset="100"
                                         stroke-linecap="round"
-                                        style="animation: progressAnimation 1.5s forwards;"
                                         data-final-offset="{{ 100 - $card['percentage'] }}">
                                     </circle>
                                 </svg>
@@ -75,7 +82,10 @@ Inicio
                                 {{ $card['meta'] - $card['total'] }} horas</h2>
                         </div>
                     </div>
-                    <a class="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-green-600 decoration-2 hover:text-blue-700 hover:underline focus:underline focus:outline-none focus:text-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                    <br>
+                    </div>
+                    <div class="text-center pb-4 {{ $card['bgcolor'] }} rounded-b-xl">
+                         <a class="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent decoration-2 hover:text-blue-700 hover:underline focus:underline focus:outline-none focus:text-blue-700 disabled:opacity-50 disabled:pointer-events-none text-center items-center {{ $card['color'] }}"
                         href="#">
                         Ver detalle
                         <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -84,6 +94,8 @@ Inicio
                             <path d="m9 18 6-6-6-6"></path>
                         </svg>
                     </a>
+                    </div>
+                   
                 </div>
             </div>
         </div>
@@ -92,56 +104,8 @@ Inicio
     <!-- Fin de las tarjetas de progreso -->
 
     <div class="flex flex-wrap">
-        <div class="w-full md:w-4/4 2xl:w-2/4 p-2">
-            <div class="flex flex-col bg-white border shadow-lg shadow-green-600 rounded-xl h-full min-h-[600px]">
-                <div class="p-4 md:p-5 flex flex-col h-full">
-                    <h3 class="text-lg font-bold text-gray-800">Progreso General</h3>
-                    <hr>
-                    <br>
-                    <div class="justify-between border-gray-200 border-b pb-3 text-center">
-                        <dl>
-                            <dt class="text-base font-normal text-gray-500 pb-1">Horas Totales</dt>
-                            <dd class="leading-none text-3xl font-bold text-gray-900">
-                                {{$total_volin + $total_volex + $total_taller + $total_chat}} Horas</dd>
-                        </dl>
-                        <div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 py-3">
-                        <dl class="text-left">
-                            <dt class="text-base font-normal text-gray-500 pb-1">Meta Anual</dt>
-                            <dd class="leading-none text-xl font-bold text-green-500">
-                                {{$meta_volin + $meta_volex + $meta_chat + $meta_taller}} Horas</dd>
-                        </dl>
-                        <dl class="text-right">
-                            <dt class="text-base font-normal text-gray-500 pb-1">Restantes</dt>
-                            <dd class="leading-none text-xl font-bold text-red-600">
-                                {{($meta_volin + $meta_volex + $meta_chat + $meta_taller)-($total_volin + $total_volex + $total_taller + $total_chat)}}
-                                Horas</dd>
-                        </dl>
-                    </div>
-                    <div id="bar-chart"></div>
-                    <div id="chart-legend" class="md:flex justify-center text-center gap-4 p-4">
-                        <div class=" text-sm flex text-center items-center md:justify-center mb-2 w-2/4 md:w-1/4 ">
-                            <span class="w-4 h-4 bg-[#16A34A] inline-block rounded-full mr-2 "></span> Volunatariado Interno
-                        </div>
-                        <div class=" text-sm flex text-center items-center md:justify-center mb-2 w-2/4 md:w-1/4 ">
-                            <span class="w-4  h-4 bg-[#DC2626] inline-block rounded-full mr-2 "></span> Voluntariado Externo
-                        </div>
-                        <div class=" text-sm flex text-center items-center md:justify-center mb-2 w-2/4 md:w-1/4 ">
-                            <span class="w-4  h-4 bg-[#F97316] inline-block rounded-full mr-2 "></span> Chats
-                        </div>
-                        <div class=" text-sm flex text-center items-center md:justify-center mb-2 w-2/4 md:w-1/4 ">
-                            <span class="w-4  h-4 bg-[#2563EB] inline-block rounded-full mr-2 "></span> Talleres
-                        </div>
-                    </div>
-                    <div class="flex-grow"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="w-full md:w-4/4 2xl:w-2/4 p-2">
-            <div class="flex flex-col bg-white border shadow-lg shadow-green-600 rounded-xl h-full min-h-[600px]">
+        <div class="w-full md:w-4/4 lg:w-2/4 p-1">
+            <div class="flex flex-col bg-white border shadow-lg shadow-gray-300 borber border-gray-200 rounded-xl h-full min-h-[600px]">
                 <div class="p-4 md:p-5 flex flex-col h-full">
                     <h3 class="text-lg font-bold text-gray-800">Actividades Próximas</h3>
                     <hr>
@@ -193,6 +157,56 @@ Inicio
                 </div>
             </div>
         </div>
+
+        <div class="w-full md:w-4/4 lg:w-2/4 p-1">
+            <div class="flex flex-col bg-white border shadow-lg shadow-gray-300 borber border-gray-200 rounded-xl h-full min-h-[600px]">
+                <div class="p-4 md:p-5 flex flex-col h-full">
+                    <h3 class="text-lg font-bold text-gray-800">Progreso General</h3>
+                    <hr>
+                    <br>
+                    <div class="justify-between border-gray-200 border-b pb-3 text-center">
+                        <dl>
+                            <dt class="text-base font-normal text-gray-500 pb-1">Horas Totales</dt>
+                            <dd class="leading-none text-3xl font-bold text-gray-900">
+                                {{$total_volin + $total_volex + $total_taller + $total_chat}} Horas</dd>
+                        </dl>
+                        <div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 py-3">
+                        <dl class="text-left">
+                            <dt class="text-base font-normal text-gray-500 pb-1">Meta Anual</dt>
+                            <dd class="leading-none text-xl font-bold text-green-500">
+                                {{$meta_volin + $meta_volex + $meta_chat + $meta_taller}} Horas</dd>
+                        </dl>
+                        <dl class="text-right">
+                            <dt class="text-base font-normal text-gray-500 pb-1">Restantes</dt>
+                            <dd class="leading-none text-xl font-bold text-red-600">
+                                {{($meta_volin + $meta_volex + $meta_chat + $meta_taller)-($total_volin + $total_volex + $total_taller + $total_chat)}}
+                                Horas</dd>
+                        </dl>
+                    </div>
+                    <div id="bar-chart"></div>
+                    <div id="chart-legend" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 p-4 lg:justify-center lg:text-center">
+                        <div class="text-sm flex items-center lg:justify-center justify-start mb-2">
+                            <span class="w-4 h-4 bg-[#16A34A] inline-block rounded-full mr-2"></span> Voluntariado Interno
+                        </div>
+                        <div class="text-sm flex items-center lg:justify-center justify-start mb-2">
+                            <span class="w-4 h-4 bg-[#DC2626] inline-block rounded-full mr-2"></span> Voluntariado Externo
+                        </div>
+                        <div class="text-sm flex items-center lg:justify-center justify-start mb-2">
+                            <span class="w-4 h-4 bg-[#F97316] inline-block rounded-full mr-2"></span> Chats
+                        </div>
+                        <div class="text-sm flex items-center lg:justify-center justify-start mb-2">
+                            <span class="w-4 h-4 bg-[#2563EB] inline-block rounded-full mr-2"></span> Talleres
+                        </div>
+                    </div>
+                    <div class="flex-grow"></div>
+                </div>
+            </div>
+        </div>
+
+        
     </div>
 
     </div>
@@ -216,7 +230,6 @@ console.log("volex:" + total_volex_por_mes);
 console.log("taller:" + total_taller_por_mes);
 console.log("chat:" + total_chat_por_mes);
 
-
 // Obtener la fecha actual
 const currentDate = new Date();
 
@@ -227,23 +240,16 @@ function getLastSixMonthIndexes() {
         indexes.push((currentDate.getMonth() - i + 12) % 12);
     }
     return indexes;
-
-
 }
 
 const lastSixMonthIndexes = getLastSixMonthIndexes();
 console.log("lastSixMonthIndexes:" + lastSixMonthIndexes);
 
 // Extraer los últimos 6 meses de cada actividad
-const horasUltimos6MesesVolin = lastSixMonthIndexes.map(index => total_volin_por_mes[(index + 1) % 12] ?? 0);
-const horasUltimos6MesesVolex = lastSixMonthIndexes.map(index => total_volex_por_mes[(index + 1) % 12] ?? 0);
-const horasUltimos6MesesTaller = lastSixMonthIndexes.map(index => total_taller_por_mes[(index + 1) % 12] ?? 0);
-const horasUltimos6MesesChat = lastSixMonthIndexes.map(index => total_chat_por_mes[(index + 1) % 12] ?? 0);
-
-console.log("horasUltimos6MesesVolin:" + horasUltimos6MesesVolin);
-console.log("horasUltimos6MesesVolex:" + horasUltimos6MesesVolex);
-console.log("horasUltimos6MesesTaller:" + horasUltimos6MesesTaller);
-console.log("horasUltimos6MesesChat:" + horasUltimos6MesesChat);
+let horasUltimos6MesesVolin = lastSixMonthIndexes.map(index => total_volin_por_mes[(index + 1) % 12] ?? 0);
+let horasUltimos6MesesVolex = lastSixMonthIndexes.map(index => total_volex_por_mes[(index + 1) % 12] ?? 0);
+let horasUltimos6MesesTaller = lastSixMonthIndexes.map(index => total_taller_por_mes[(index + 1) % 12] ?? 0);
+let horasUltimos6MesesChat = lastSixMonthIndexes.map(index => total_chat_por_mes[(index + 1) % 12] ?? 0);
 
 // Obtener los nombres de los últimos 6 meses
 function getLastSixMonths() {
@@ -251,7 +257,27 @@ function getLastSixMonths() {
     return lastSixMonthIndexes.map(index => months[index]);
 }
 
-const months = getLastSixMonths(); // Obtenemos los últimos 6 meses dinámicamente
+let months = getLastSixMonths(); // Obtenemos los últimos 6 meses dinámicamente
+
+// Detectar si el gráfico será horizontal
+const isHorizontal = window.innerWidth < 640;
+
+// Si es horizontal, invertir el orden de los datos y los meses
+if (isHorizontal) {
+    months = months.slice().reverse();
+    horasUltimos6MesesVolin = horasUltimos6MesesVolin.slice().reverse();
+    horasUltimos6MesesVolex = horasUltimos6MesesVolex.slice().reverse();
+    horasUltimos6MesesTaller = horasUltimos6MesesTaller.slice().reverse();
+    horasUltimos6MesesChat = horasUltimos6MesesChat.slice().reverse();
+}
+
+console.log("horasUltimos6MesesVolin:" + horasUltimos6MesesVolin);
+console.log("horasUltimos6MesesVolex:" + horasUltimos6MesesVolex);
+console.log("horasUltimos6MesesTaller:" + horasUltimos6MesesTaller);
+console.log("horasUltimos6MesesChat:" + horasUltimos6MesesChat);
+
+// Alternar sombreado de fondo para cada mes
+const barColors = months.map((_, i) => i % 2 === 0 ? "#F3F4F6" : "#FFFFFF"); // gris claro y blanco
 
 const options2 = {
     series: [{
@@ -274,8 +300,6 @@ const options2 = {
             color: "#2563EB",
             data: horasUltimos6MesesTaller,
         },
-
-
     ],
     chart: {
         sparkline: {
@@ -283,20 +307,19 @@ const options2 = {
         },
         type: "bar",
         width: "100%",
-        height: 400,
+        height: window.innerWidth >= 640 ? 300 : 800,
         toolbar: {
             show: false
         },
     },
     plotOptions: {
         bar: {
-            horizontal: false,
+            horizontal: isHorizontal,
             columnWidth: "100%",
             borderRadiusApplication: "end",
             borderRadius: 6,
             dataLabels: {
-            position: "top",
-
+                position: window.innerWidth >= 640 ? "top" : "center",
             },
         },
     },
@@ -312,7 +335,6 @@ const options2 = {
         height: 40,
         offsetX: 0,
         offsetY: 0,
-
     },
     tooltip: {
         enabled: false,
@@ -361,6 +383,12 @@ const options2 = {
             right: 2,
             top: -20
         },
+        row: {
+            colors: isHorizontal ? barColors : undefined, // para barras horizontales
+        },
+        column: {
+            colors: !isHorizontal ? barColors : undefined, // para barras verticales
+        },
     },
     fill: {
         opacity: 1
@@ -376,6 +404,12 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".progress-circle").forEach(circle => {
     const finalOffset = circle.getAttribute("data-final-offset");
     circle.style.setProperty("--final-offset", finalOffset);
+    // Quita la animación si existe
+    circle.style.animation = "none";
+    // Fuerza el reflow
+    void circle.offsetWidth;
+    // Ahora aplica la animación
+    circle.style.animation = "progressAnimation 1.5s forwards";
   });
 });
 </script>

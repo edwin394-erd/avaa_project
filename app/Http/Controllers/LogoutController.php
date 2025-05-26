@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 
 class LogoutController extends Controller
 {
-    public function Store(){
-
-        auth()->logout();
-        return redirect(route('login'));
-   }
+   public function Store(Request $request)
+{
+    auth()->logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect()->route('login');
+}
 }

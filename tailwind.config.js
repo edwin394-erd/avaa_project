@@ -12,4 +12,8 @@ export default {
   plugins: [
      require('flowbite/plugin'),
   ],
+  safelist: [
+    'progress-circle',
+    'progressAnimation'
+  ],
 }
