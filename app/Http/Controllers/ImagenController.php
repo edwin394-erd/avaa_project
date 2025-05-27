@@ -22,7 +22,10 @@ class ImagenController extends Controller
         if (is_array($imagenes)) {
             foreach ($imagenes as $imagen) {
                 $nombreImagen = Str::uuid() . "." . $imagen->getClientOriginalExtension();
-                $imagenServidor = $manager->read($imagen)->cover(1000, 1000);
+                $imagenServidor = $manager->read($imagen)->resize(1000, 1000, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
                 $imagenServidor->save(public_path('uploads') . '/' . $nombreImagen);
                 $nombres[] = $nombreImagen;
             }

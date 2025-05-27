@@ -33,12 +33,12 @@ Route::post('/Logout',[LogoutController::class, 'store'])->name('logout');
 Route::get('/login',[LoginController::class, 'index'])->name('login');
 Route::post('/login',[LoginController::class, 'store']);
 
-Route::get('/actividades',[StatController::class, 'create'])->name('stat.create');
 Route::post('/actividades/crear',[StatController::class, 'store'])->name('stat.store');
 Route::post('/actividades/{stat}/anular', [StatController::class, 'anular'])->name('stat.anular');
 Route::post('/actividades/{stat}/restaurar', [StatController::class, 'restaurar'])->name('stat.restaurar');
 
 Route::get('/tabla-actividades',[StatController::class, 'index'])->name('stats.index');
+Route::get('/actividades/{modalidad}/', [StatController::class, 'modalidadindex'])->name('modalidad.index');
 
 Route::post('/imagenes',[ImagenController::class, 'store'])->name('imagenes.store');
 
@@ -48,6 +48,8 @@ Route::get('/Perfil/datos-personales',[PerfilController::class, 'datosindex'])->
 
 Route::get('/Perfil/configuracion-usuario',[PerfilController::class, 'configindex'])->name('configuser.index');
 Route::post('/Perfil/configuracion-usuario', [PerfilController::class, 'update'])->name('configuser.update');
+
+
 
 
 

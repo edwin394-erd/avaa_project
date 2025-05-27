@@ -14,7 +14,7 @@ class PerfilController extends Controller
 
     }
     public function configindex(){
-            return view('perfil.configuser');
+            return view('perfil.configuser', ['email' => Auth::user()->email]);
 
 
     }
@@ -47,6 +47,7 @@ class PerfilController extends Controller
         $user->save();
 
         return back()->with('success', 'Datos actualizados correctamente.');
+
     }
 }
 

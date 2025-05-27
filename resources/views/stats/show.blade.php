@@ -1,16 +1,58 @@
+{{-- filepath: c:\Users\DELL\Downloads\TESIS\avaa_project\resources\views\stats\show.blade.php --}}
 @extends('layouts.layout')
 
 @section('titulo-tab')
-Tabla de Estadísticas
+ @php
+    switch($modalidad) {
+        case "volin":
+            $n_actividad = "Voluntariado Interno";
+            $color = "text-[#28a745]";
+            $bgcolor = "bg-[#e3f7e7]";
+            $icono = "icon-volin.png";
+            break;
+        case "volex":
+            $n_actividad = "Voluntariado Externo";
+            $color = "text-[#dc3545]";
+            $bgcolor = "bg-[#f9e5e7]";
+            $icono = "icon-volex.png";
+            break;
+        case "chat":
+            $n_actividad = "Chat";
+            $color = "text-[#fd7e14]";
+            $bgcolor = "bg-[#fcf2ea]";
+            $icono = "icon-chat.png";
+            break;
+        case "taller":
+            $n_actividad = "Taller";
+            $color = "text-[#007bff]";
+            $bgcolor = "bg-[#e0eaff]";
+            $icono = "icon-taller.png";
+            break;
+        default:
+            $n_actividad = "Detalle";
+            $color = "text-gray-700";
+            $bgcolor = "bg-gray-100";
+            $icono = "icono-default.png";
+            break;
+    }
+@endphp
 @endsection
 
 @section('contenido')
-<div class="2xl:w-5/6 mx-auto py-5 px-0 md:px-10">
 
-    <h1 class="text-lg 2xl:text-2xl font-bold text-gray-800 text-center">Tabla de Actividades</h1>
-    <h2 class="text-md 2xl:text-lg font-semibold text-gray-600 text-center">Aquí puedes agregar actividades y ver tus estadísticas</h2>
-    <hr class="my-4">
+    <div class="2xl:w-5/6 mx-auto py-5 px-0 md:px-10">
+         <div class="flex flex-wrap p-0">
+        <!-- Formulario para agregar actividad -->
+        <div class="w-full p-0 flex flex-col mb-4 xl:mb-0">
+            <div class="flex flex-col bg-white border shadow-xl shadow-gray-100 rounded-xl p-4 h-full">
+                <div class="flex items-center space-x-3">
+                    <img src="{{ asset('imgs/' . $icono)}}" alt="icono" class="w-12 h-12">
+                    <h1 class="text-lg 2xl:text-xl font-bold {{ $color }} mb-0 flex items-center"> {{ $n_actividad }}</h1>
+                </div>
 
+            </div>
+        </div>
+    </div>
 
     <div class="flex flex-wrap p-0 min-h-[650px]">
         <!-- Formulario para agregar actividad -->
@@ -33,23 +75,7 @@ Tabla de Estadísticas
                             placeholder="Titulo de la Actividad" required value="{{ old('titulo') }}">
                     </div>
 
-                    <div class="mb-2">
-                        <div class="flex">
-                            <label for="actividad"
-                                class="block text-sm font-medium text-gray-700 mb-2">Actividad</label>
-                            @error('actividad')
-                            <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                            @enderror
-                        </div>
-                        <select name="actividad"
-                            class="text-sm shadow-sm rounded-md bg-white w-full px-3 py-2 border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 @error('actividad') border-red-700 @enderror">
-                            <option value="">Seleccione</option>
-                            <option value="chat">Chat</option>
-                            <option value="taller">Taller de Formación</option>
-                            <option value="volin">Voluntariado Interno</option>
-                            <option value="volex">Voluntariado Externo</option>
-                        </select>
-                    </div>
+                    <input type="hidden" name="modalidad" value="{{ $modalidad }}">
 
                     <div class="mb-2">
                         <div class="flex">
@@ -185,7 +211,6 @@ Tabla de Estadísticas
                         <thead class="text-gray-700 text-md uppercase border-b border-gray-200">
                             <tr>
                                 <th scope="col" class="px-3 py-3 text-center">Titulo</th>
-                                <th scope="col" class="px-3 py-3 text-center">Actividad</th>
                                 <th scope="col" class="px-3 py-3 text-center">Fecha</th>
                                 <th scope="col" class="px-3 py-3 text-center">Modalidad</th>
                                 <th scope="col" class="px-3 py-3 text-center">Duración</th>
@@ -200,15 +225,6 @@ Tabla de Estadísticas
                             <tr
                                 class="bg-white text-sm border-b border-gray-200 transition duration-300 ease-in-out hover:bg-blue-100 text-sm">
                                 <td class="px-3 py-4 text-center" text-center>{{ $stat->titulo }}</td>
-                                <td class="px-3 py-4 text-center">
-                                    @switch($stat->actividad)
-                                    @case('chat') Chat @break
-                                    @case('taller') Taller de Formación @break
-                                    @case('volin') Voluntariado Interno @break
-                                    @case('volex') Voluntariado Externo @break
-                                    @default {{ $stat->actividad }}
-                                    @endswitch
-                                </td>
                                 <td class="px-3 py-4 text-center">{{ \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') }}</td>
                                 <td class="px-3 py-4 text-center">
                                     @switch($stat->modalidad)
@@ -643,3 +659,4 @@ document.getElementById('btn-ver-todo').addEventListener('click', function() {
 </script>
 
 @endsection
+

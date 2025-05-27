@@ -10,11 +10,11 @@ class LoginController extends Controller
     public function index(){
         if (auth()->check()) {
             return redirect(route('home'));
-            
+
         } else {
             return view('auth.login');
         }
-    
+
     }
 
     public function store(Request $request){
@@ -25,7 +25,7 @@ class LoginController extends Controller
         ]);
 
         if(!auth()->attempt($request->only('email','password'),$request->remember)){
-            return back()->with('msg_error', 'Email o Contraseña Incorrectos');
+            return back()->with('error', 'Email o contraseña incorrectos');
         }
 
         return redirect(route('home'));

@@ -20,6 +20,19 @@ class StatController extends Controller
             'stats' => Stat::with('evidencias')->where('user_id', $user->id)->orderBy('created_at', 'desc')->get(),
         ]);
     }
+
+    public function modalidadindex(String $modalidad){
+        $user = auth()->user();
+        return view('stats.show')->with([
+            'user' => $user,
+            'modalidad' => $modalidad,
+            'stats' => Stat::with('evidencias')
+            ->where('user_id', $user->id)
+            ->where('actividad', $modalidad)
+            ->orderBy('created_at', 'desc')
+            ->get(),
+        ]);
+    }
     public function anular(Stat $stat)
     {
         if ($stat->estado === 'pendiente') {
@@ -71,7 +84,7 @@ class StatController extends Controller
         }
     }
 
-        return redirect()->route('home')->with('msg_registroExitoso', 'Registro exitoso, ya puedes iniciar sesión');
+        return redirect()->route('stats.index')->with('success', 'La actividad se ha registrado exitosamente');
 
     }
 

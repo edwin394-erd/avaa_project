@@ -37,6 +37,7 @@ Inicio
                 'color' => 'text-[#28a745]',
                 'bgcolor' => 'bg-[#e3f7e7]',
                 'icono' => 'icon-volin.png',
+                'name' => 'volin',
             ],
             [
                 'title' => 'Voluntariado Externo',
@@ -46,6 +47,7 @@ Inicio
                 'color' => 'text-[#dc3545]',
                 'bgcolor' => 'bg-[#f9e5e7]',
                 'icono' => 'icon-volex.png',
+                'name' => 'volex',
             ],
             [
                 'title' => 'Chats',
@@ -55,6 +57,7 @@ Inicio
                 'color' => 'text-[#fd7e14]',
                 'bgcolor' => 'bg-[#fcf2ea]',
                 'icono' => 'icon-chat.png',
+                'name' => 'chat',
             ],
             [
                 'title' => 'Talleres',
@@ -64,13 +67,14 @@ Inicio
                 'color' => 'text-[#007bff]',
                 'bgcolor' => 'bg-[#e0eaff]',
                 'icono' => 'icon-taller.png',
+                'name' => 'taller',
             ],
         ] as $card)
         <div class="w-full sm:w-2/4 lg:w-1/4 p-1">
             <div class="flex flex-col bg-white border shadow-lg shadow-gray-300 border border-gray-200 rounded-xl hover:shadow-xl transition-shadow duration-300">
                 <div class="pb-0 pt-4 px-0">
                     <div class="px-4">
-                        <div class="flex items-center text">
+                        <div class="flex items-center">
                             <img src="{{ asset('imgs/' . $card['icono']) }}" alt="{{ $card['title'] }} icono" class="w-12 h-12">
                             <h3 class="{{ $card['color'] }} text-lg font-bold ml-2">{{ $card['title'] }}</h3>
                         </div>
@@ -97,18 +101,21 @@ Inicio
                                 </div>
                             </div>
                         </div>
-                        <div class="w-3/5 flex flex-col justify-top">
-                            <h1 class="text-right text-xl lg:text-xl">{{ $card['total'] }} horas</h1>
-                            <h2 class="text-right text-md lg:text-md">Meta: {{ $card['meta'] }} horas</h2>
-                            <h2 class="text-right text-md lg:text-md text-yellow-900">Restante:
-                                {{ $card['meta'] - $card['total'] }} horas</h2>
+                        <div class="w-3/5 flex flex-col justify-center items-end space-y-1">
+                            <span class="text-2xl font-bold text-gray-800">{{ $card['total'] }} horas<span class="text-base font-semibold text-gray-500"></span></span>
+                            <span class="text-sm text-gray-600">Meta: <span class="font-semibold text-green-600">{{ $card['meta'] }}</span> horas</span>
+                            <span class="text-sm text-gray-600">Restante:
+                                <span class="font-semibold {{ ($card['meta'] - $card['total']) > 0 ? 'text-yellow-600' : 'text-green-900' }}">
+                                    {{ $card['meta'] - $card['total'] }}
+                                </span> horas
+                            </span>
                         </div>
                     </div>
                     <br>
                     </div>
                     <div class="text-center pb-4 {{ $card['bgcolor'] }} rounded-b-xl">
-                         <a class="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent decoration-2 hover:text-blue-700 hover:underline focus:underline focus:outline-none focus:text-blue-700 disabled:opacity-50 disabled:pointer-events-none text-center items-center {{ $card['color'] }}"
-                        href="#">
+                         <a class="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent decoration-2 hover:text-slate-700 hover:underline focus:underline focus:outline-none focus:text-blue-700 disabled:opacity-50 disabled:pointer-events-none text-center items-center {{ $card['color'] }}"
+                        href="{{ route('modalidad.index', ['modalidad' => $card['name'] ]) }}">
                         Ver detalle
                         <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
