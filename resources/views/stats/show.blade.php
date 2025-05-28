@@ -2,37 +2,51 @@
 @extends('layouts.layout')
 
 @section('titulo-tab')
- @php
+@php
     switch($modalidad) {
         case "volin":
             $n_actividad = "Voluntariado Interno";
             $color = "text-[#28a745]";
             $bgcolor = "bg-[#e3f7e7]";
+            $bgcolor2 = "bg-[#28a745]";
             $icono = "icon-volin.png";
+            $meta = $meta_volin ?? 0;
+            $hover = "hover:bg-[#d4f0d4]";
             break;
         case "volex":
             $n_actividad = "Voluntariado Externo";
             $color = "text-[#dc3545]";
             $bgcolor = "bg-[#f9e5e7]";
+            $bgcolor2 = "bg-[#dc3545]";
             $icono = "icon-volex.png";
+            $meta = $meta_volex ?? 0;
+            $hover = "hover:bg-[#f2d4d6]";
             break;
         case "chat":
-            $n_actividad = "Chat";
+            $n_actividad = "Chats";
             $color = "text-[#fd7e14]";
             $bgcolor = "bg-[#fcf2ea]";
+            $bgcolor2 = "bg-[#fd7e14]";
             $icono = "icon-chat.png";
+            $meta = $meta_chat ?? 0;
+            $hover = "hover:bg-[#f8e6d9]";
             break;
         case "taller":
-            $n_actividad = "Taller";
+            $n_actividad = "Talleres";
             $color = "text-[#007bff]";
             $bgcolor = "bg-[#e0eaff]";
+            $bgcolor2 = "bg-[#007bff]";
             $icono = "icon-taller.png";
+            $meta = $meta_taller ?? 0;
+            $hover = "hover:bg-[#d1e0f5]";
             break;
         default:
             $n_actividad = "Detalle";
             $color = "text-gray-700";
             $bgcolor = "bg-gray-100";
+            $bgcolor2 = "bg-gray-700";
             $icono = "icono-default.png";
+            $meta = "Meta no definida";
             break;
     }
 @endphp
@@ -40,23 +54,11 @@
 
 @section('contenido')
 
-    <div class="2xl:w-5/6 mx-auto py-5 px-0 md:px-10">
-         <div class="flex flex-wrap p-0">
-        <!-- Formulario para agregar actividad -->
-        <div class="w-full p-0 flex flex-col mb-4 xl:mb-0">
-            <div class="flex flex-col bg-white border shadow-xl shadow-gray-100 rounded-xl p-4 h-full">
-                <div class="flex items-center space-x-3">
-                    <img src="{{ asset('imgs/' . $icono)}}" alt="icono" class="w-12 h-12">
-                    <h1 class="text-lg 2xl:text-xl font-bold {{ $color }} mb-0 flex items-center"> {{ $n_actividad }}</h1>
-                </div>
+    <div class="2xl:w-6/6 mx-auto py-5 px-0 md:px-5">
 
-            </div>
-        </div>
-    </div>
-
-    <div class="flex flex-wrap p-0 min-h-[650px]">
+    <div class="flex flex-wrap p-0 min-h-[calc(90vh-4rem)]">
         <!-- Formulario para agregar actividad -->
-        <div class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0">
+        {{-- <div class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0">
             <div class="flex flex-col bg-white border shadow-xl shadow-gray-100 rounded-l-xl p-4 h-full">
                 <h1 class="text-lg 2xl:text-xl font-bold text-gray-700 text-center mb-4">Agregar Actividad</h1>
                 <hr class="mb-2">
@@ -143,18 +145,69 @@
                 </button>
 
             </div>
+        </div> --}}
+
+        <div class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0">
+            <div class="flex flex-col bg-white border shadow-xl shadow-gray-100 rounded-l-xl p-4 h-full">
+                 <div class="flex items-center space-x-3 mb-3 text-center">
+                    <img src="{{ asset('imgs/' . $icono)}}" alt="icono" class="w-12 h-12">
+                    <h1 class="text-lg 2xl:text-xl font-bold {{ $color }} mb-0 flex items-center"> {{ $n_actividad }}</h1>
+                 </div>
+                @php
+                    // Puedes ajustar el total objetivo aquí
+                    $totalRealizadas = $stats_realizado->count();
+                    $totalHoras = $stats_realizado->sum('duracion');
+                    $porcentaje = $meta > 0 ? min(100, round(($totalHoras / $meta) * 100)) : 0;
+                @endphp
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600 text-sm">Total actividades realizadas:</span>
+                        <span class="font-bold text-lg">{{ $stats->count() }}</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600 text-sm">Total horas realizadas:</span>
+                        <span class="font-bold text-lg">{{ $totalHoras }}h</span>
+                    </div>
+
+                    <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                        <div
+                            class="h-4 rounded-full {{ $bgcolor2 }} transition-all duration-700 ease-in-out"
+                            style="width: 0%"
+                            id="barra-progreso"
+                        ></div>
+                    </div>
+                    <div class="text-right text-xs text-gray-700 mt-1">
+                        Progreso: <span class="font-semibold">{{ $porcentaje }}%</span>
+                    </div>
+                    <div class="text-right text-xs text-gray-500 mt-1">
+                        <span>Meta: {{ $meta }} horas</span>
+                    </div>
+            </div>
+            <br>
+            <hr>
+            <div class="flex items-center text">
+                <img src="{{ asset('imgs/icon-progen.png') }}" alt="icono" class="w-12 h-12">
+                <h3 class="text-lg font-bold text-gray-800 ml-2">Estadisticas mensuales</h3>
+
+             </div>
+              <br>
+             <div id="bar-chart"></div>
         </div>
+    </div>
 
         <!-- Tabla de estadísticas -->
         <div class="w-full xl:w-3/4 p-0 flex flex-col">
             <div class="flex flex-col bg-white border shadow-xl shadow-gray-100 xl:rounded-r-xl p-5 h-full">
+                 {{-- <div class="flex items-center space-x-3 mb-3">
+                    <h1 class="text-lg 2xl:text-xl font-bold mb-0 text-gray-700 flex items-center">Tabla de {{ $n_actividad }}</h1>
+                 </div> --}}
                 <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
                         <div>
                              {{-- filtrar por fecha --}}
                         <button
                             type="button"
                             id="abrir-modal-filtrar-fecha"
-                            class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5"
+                            class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5"
                             onclick="document.getElementById('modal-filtrar-fecha').classList.remove('hidden')"
                         >
                             Filtrar por fecha
@@ -163,9 +216,18 @@
                         <button
                             type="button"
                             id="btn-ver-todo"
-                            class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 ml-2"
+                            class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2"
                         >
+
                             Ver todo
+                        </button>
+
+                        <button
+                            type="button"
+                            id="btn-generar-reporte"
+                            class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2"
+                        >
+                           Generar reporte
                         </button>
                         </div>
 
@@ -206,7 +268,7 @@
                     </div>
                 </div>
 
-                <div class="overflow-y-auto h-[580px]">
+                <div class="overflow-y-auto h-[calc(75vh-4rem)]">
                     <table class="w-full text-sm text-left rtl:text-right text-black table-auto bg-white" id="myTable">
                         <thead class="text-gray-700 text-md uppercase border-b border-gray-200">
                             <tr>
@@ -223,7 +285,7 @@
                         <tbody>
                             @forelse ($stats as $stat)
                             <tr
-                                class="bg-white text-sm border-b border-gray-200 transition duration-300 ease-in-out hover:bg-blue-100 text-sm">
+                                class="bg-white text-sm border-b border-gray-200 transition duration-300 ease-in-out {{ $hover }} text-sm">
                                 <td class="px-3 py-4 text-center" text-center>{{ $stat->titulo }}</td>
                                 <td class="px-3 py-4 text-center">{{ \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') }}</td>
                                 <td class="px-3 py-4 text-center">
@@ -407,6 +469,26 @@
                         </div>
 
                             </div>
+
+                            <!-- Modal para evidencias -->
+                            <div id="modal-evidencias" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                                <div class="bg-white rounded-lg p-6 max-w-lg w-full relative min-h-80 flex flex-col items-center">
+                                    <div class="w-full text-center">
+                                        <h2 class="text-lg font-bold mb-4">Evidencias</h2>
+                                        <h2 class="text-sm mb-4 text-center"> Actividad: {{$stat->titulo}} ({{ \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') }})</h2>
+                                    </div>
+                                    <button onclick="cerrarModalEvidencias()" class="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl">&times;</button>
+                                    <div class="flex-1 flex items-center justify-center w-full">
+                                        <div id="contenedor-evidencias" class="flex flex-wrap gap-2 justify-center items-center w-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal para imagen ampliada -->
+                            <div id="modal-img-ampliada" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-[9999] hidden">
+                                <img id="img-ampliada" src="" alt="Evidencia ampliada" class="max-h-[90vh] max-w-[90vw] rounded shadow-lg border-4 border-white">
+                                <button onclick="cerrarModalImgAmpliada()" class="absolute top-4 right-6 text-white text-4xl font-bold">&times;</button>
+                            </div>
                             @empty
                             <tr>
                                 <td colspan="8" class="p-10 text-center uppercase text-gray-500 align-middle">No tienes
@@ -432,25 +514,6 @@
     </div>
 </div>
 
-<!-- Modal para evidencias -->
-<div id="modal-evidencias" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-lg p-6 max-w-lg w-full relative min-h-80 flex flex-col items-center">
-        <div class="w-full text-center">
-            <h2 class="text-lg font-bold mb-4">Evidencias</h2>
-             <h2 class="text-sm mb-4 text-center"> Actividad: {{$stat->titulo}} ({{ \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') }})</h2>
-        </div>
-        <button onclick="cerrarModalEvidencias()" class="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl">&times;</button>
-        <div class="flex-1 flex items-center justify-center w-full">
-            <div id="contenedor-evidencias" class="flex flex-wrap gap-2 justify-center items-center w-full"></div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal para imagen ampliada -->
-<div id="modal-img-ampliada" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-[9999] hidden">
-    <img id="img-ampliada" src="" alt="Evidencia ampliada" class="max-h-[90vh] max-w-[90vw] rounded shadow-lg border-4 border-white">
-    <button onclick="cerrarModalImgAmpliada()" class="absolute top-4 right-6 text-white text-4xl font-bold">&times;</button>
-</div>
 @endsection
 
 @section('scripts')
@@ -656,6 +719,255 @@ document.getElementById('btn-ver-todo').addEventListener('click', function() {
                 // Si no, envía el formulario principal
                 document.querySelector('form[action="{{ route('stat.store') }}"]').submit();
             });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const barra = document.getElementById('barra-progreso');
+    if (barra) {
+        // Guarda el valor final
+        const porcentaje = '{{ $porcentaje }}';
+        // Inicializa la barra en 0% sin transición
+        barra.style.transition = 'none';
+        barra.style.width = '0%';
+        // Fuerza el reflow para que el navegador registre el cambio a 0%
+        barra.offsetHeight; // trigger reflow
+        // Usa setTimeout para animar al valor real
+        setTimeout(() => {
+            barra.style.transition = 'width 1s cubic-bezier(0.4,0,0.2,1)';
+            barra.style.width = porcentaje + '%';
+        }, 100);
+    }
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+let dataPorMes;
+switch ("{{ $modalidad }}") {
+    case "volin":
+        dataPorMes = @json($total_volin_por_mes);
+        break;
+    case "volex":
+        dataPorMes = @json($total_volex_por_mes);
+        break;
+    case "taller":
+        dataPorMes = @json($total_taller_por_mes);
+        break;
+    case "chat":
+        dataPorMes = @json($total_chat_por_mes);
+        break;
+    default:
+}
+console.log("dataPorMes:", dataPorMes);
+
+// Obtener la fecha actual
+const currentDate = new Date();
+
+// Función para obtener los índices de los últimos 6 meses
+function getLastSixMonthIndexes() {
+    const indexes = [];
+    for (let i = 5; i >= 0; i--) {
+        indexes.push((currentDate.getMonth() - i + 12) % 12);
+    }
+    return indexes;
+}
+
+const lastSixMonthIndexes = getLastSixMonthIndexes();
+console.log("lastSixMonthIndexes:" + lastSixMonthIndexes);
+
+// Extraer los últimos 6 meses de la actividad seleccionada según $modalidad
+let horasUltimos6Meses = lastSixMonthIndexes.map(index => dataPorMes[(index + 1) % 12] ?? 0);
+
+// Obtener los nombres de los últimos 6 meses
+function getLastSixMonths() {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return lastSixMonthIndexes.map(index => months[index]);
+}
+
+let months = getLastSixMonths(); // Obtenemos los últimos 6 meses dinámicamente
+
+// Detectar si el gráfico será horizontal
+const isHorizontal = window.innerWidth < 640;
+
+// Si es horizontal, invertir el orden de los datos y los meses
+if (isHorizontal) {
+    months = months.slice().reverse();
+    horasUltimos6Meses = horasUltimos6Meses.slice().reverse();
+}
+
+// Alternar sombreado de fondo para cada mes
+const barColors = months.map((_, i) => i % 2 === 0 ? "#E5E7EB" : "#FFFFFF"); // gris claro y blanco
+
+const colorMap = {
+    volin: "#16A34A",
+    volex: "#dc2626",
+    chat: "#f97316",
+    taller: "#2563EB"
+};
+
+const nombreMap = {
+    volin: "Voluntariado Interno",
+    volex: "Voluntariado Externo",
+    chat: "Chat",
+    taller: "Talleres"
+};
+
+const options2 = {
+    series: [{
+        name: nombreMap["{{ $modalidad }}"] ?? "Actividad",
+        color: colorMap["{{ $modalidad }}"] ?? "#2563EB",
+        data: horasUltimos6Meses,
+    }],
+    chart: {
+        sparkline: { enabled: false },
+        type: "bar",
+        width: "100%",
+        height: window.innerWidth >= 640 ? 400 : 300,
+        toolbar: { show: false }
+    },
+    plotOptions: {
+        bar: {
+            horizontal: isHorizontal,
+            columnWidth: "80%",
+            borderRadiusApplication: "end",
+            borderRadius: 6,
+            dataLabels: {
+                position: window.innerWidth >= 640 ? "top" : "center",
+            },
+        },
+    },
+    legend: { show: false },
+    tooltip: {
+        enabled: true,
+        shared: true,
+        intersect: false,
+        fillSeriesColor: false,
+        x: { show: true },
+        y: {
+            formatter: function (value) {
+                return `${nombreMap["{{ $modalidad }}"] ?? "Actividad"}: ${value} Horas`;
+            }
+        },
+    },
+    xaxis: {
+        categories: months,
+        labels: {
+            show: true,
+            style: {
+                fontFamily: "Inter, sans-serif",
+                cssClass: 'text-xs font-normal fill-gray-500'
+            }
+        },
+        axisTicks: { show: false },
+        axisBorder: { show: false },
+    },
+    yaxis: {
+        labels: {
+            show: true,
+            style: {
+                fontFamily: "Inter, sans-serif",
+                cssClass: 'text-xs font-normal fill-gray-500'
+            }
+        },
+    },
+    grid: {
+        show: true,
+        strokeDashArray: 4,
+        padding: { left: 2, right: 2, top: -20 },
+        row: { colors: isHorizontal ? barColors : undefined },
+        column: { colors: !isHorizontal ? barColors : undefined },
+    },
+    fill: { opacity: 1 }
+};
+
+if (document.getElementById("bar-chart") && typeof ApexCharts !== 'undefined') {
+    const chart = new ApexCharts(document.getElementById("bar-chart"), options2);
+    chart.render();
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script>
+document.getElementById('btn-generar-reporte').addEventListener('click', function() {
+    // Obtener logo (ajusta la ruta si es necesario)
+    let modalidad = "{{ $n_actividad }}";
+    let becario ="{{ $user->becario->nombre }}";;
+    const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
+    const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+
+    // Cargar logo como base64 y luego generar el PDF
+    toDataURL(logoUrl, function(logoBase64) {
+        // Logo
+        // Logo
+        doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
+
+        // Título principal
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Reporte de '+ modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+
+        // Datos del becario y fecha
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Becario: ' + becario, 10, 32);
+        doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
+
+        // Línea divisoria
+        doc.setDrawColor(200, 200, 200);
+        doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
+
+        // Obtener datos de la tabla
+        const rows = [];
+        document.querySelectorAll('#myTable tbody tr').forEach(tr => {
+            if (tr.style.display === 'none') return; // Solo filas visibles
+            const cells = tr.querySelectorAll('td');
+            if (cells.length) {
+                rows.push([
+                    cells[0].innerText.trim(), // Titulo
+                    cells[1].innerText.trim(), // Fecha
+                    cells[2].innerText.trim(), // Modalidad
+                    cells[3].innerText.trim(), // Duración
+                    cells[5].innerText.trim(), // Estatus
+                ]);
+            }
+        });
+
+        // Encabezados
+        const headers = [['Título', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
+
+        // Tabla
+        doc.autoTable({
+            head: headers,
+            body: rows,
+            startY: 50,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [30, 41, 59] }, // bg-slate-800
+            alternateRowStyles: { fillColor: [243, 244, 246] }, // bg-gray-100
+        });
+
+        doc.save('Reporte_Actividades_' + becario + '_' + new Date().toLocaleString() + '.pdf');
+
+    });
+
+    // Función para convertir imagen a base64
+    function toDataURL(url, callback) {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+            const reader = new FileReader();
+            reader.onloadend = function() {
+                callback(reader.result);
+            }
+            reader.readAsDataURL(xhr.response);
+        };
+        xhr.onerror = function() {
+            alert('No se pudo cargar el logo para el reporte. El PDF se generará sin logo.');
+            callback('');
+        };
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.send();
+    }
+});
 </script>
 
 @endsection

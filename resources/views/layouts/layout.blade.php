@@ -65,7 +65,7 @@
 
 @auth
 <nav class="border-gray-200 bg-slate-800">
-  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto min-h-15 py-2 px-1">
+  <div class=" flex flex-wrap items-center justify-between mx-auto min-h-15 py-2 sm:px-10">
     <div class="flex items-center flex-shrink-0">
       <a href="{{route('home')}}" class="flex items-center space-x-1 rtl:space-x-reverse ms-2">
         <img src="{{ asset('imgs/AVAA_LOGO.png') }}" class="w-24" alt="avaa Logo" />

@@ -1,7 +1,7 @@
 @extends('layouts.auth-layout')
 
 @section('titulo-tab')
-    LOGIN
+    Iniciar Sesión
 @endsection
 
 @section('body-style')
@@ -11,7 +11,7 @@
 @section('contenido')
     <!-- component -->
 <div class="h-screen flex flex-col items-center justify-center py-10 w-full ">
-	<div class="mb-10 bg-white shadow-green-900 shadow-2xl rounded-lg px-8 py-6 w-full sm:w-2/3 lg:w-1/3 xl:1/4 mx-3 mt-0 md:mt-20">
+	<div class="mb-10 bg-white shadow-green-900 shadow-2xl rounded-lg px-8 py-6 w-full sm:w-2/3 lg:w-1/3 xl:1/4 mx-3 mt-0 md:mt-20 -translate-y-10">
 
 		<img src="{{ asset('imgs/avaalogo_color.png') }}" class="w-40 mx-auto mb-4" alt="avaa Logo" />
 		<h1 class="text-gray-700 text-2xl font-bold text-center mb-4 ">Inicia Sesión</h1>

@@ -8,7 +8,7 @@ Inicio
 @endsection --}}
 
 @section('contenido')
-<div class="2xl:w-5/6 mx-auto py-5 px-0 md:px-10 min-h-full">
+<div class="2xl:w-6/6 mx-auto py-5 px-0 md:px-5 min-h-full">
     @php
         // Hora de Venezuela (UTC-4)
         $horaVenezuela = \Carbon\Carbon::now('America/Caracas')->hour;
@@ -20,11 +20,10 @@ Inicio
             $saludo = 'Buenas noches';
         }
     @endphp
-    <h1 class="text-lg 2xl:text-2xl font-bold text-gray-800 text-center">
+    <h1 class="text-lg 2xl:text-xl font-bold text-gray-700 text-left px-2 mb-2">
         {{ $saludo }}, {{$nombre_becario}} &#9995;
     </h1>
-    <h2 class="text-md 2xl:text-lg font-semibold text-gray-600 text-center">Aquí tienes un resumen de tu progreso &#x1F4C8; </h2>
-    <hr class="my-4">
+    {{-- <h2 class="text-md 2xl:text-lg font-semibold text-gray-600 text-center">Aquí tienes un resumen de tu progreso &#x1F4C8; </h2> --}}
 
     <!-- Tarjetas de progreso -->
     <div class="flex flex-wrap">
@@ -81,8 +80,8 @@ Inicio
 
 
                     <hr><br>
-                    <div class="flex">
-                        <div class="w-3/5">
+                    <div class="flex px-0">
+                        <div class="w-2/5">
                             <div class="relative size-24 md:size-28">
                                 <svg class="size-full -rotate-90" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-gray-200" stroke-width="4"></circle>
@@ -199,7 +198,7 @@ Inicio
                     </div>
                     <hr>
                     <br>
-                    <div class="justify-between border-gray-200 border-b pb-3 text-center">
+                    <div class="justify-between border-gray-200 pb-3 text-center">
                         <dl>
                             <dt class="text-base font-normal text-gray-500 pb-1">Horas Totales</dt>
                             <dd class="leading-none text-3xl font-bold text-gray-800">
@@ -358,7 +357,7 @@ const options2 = {
     plotOptions: {
         bar: {
             horizontal: isHorizontal,
-            columnWidth: "100%",
+            columnWidth: "90%",
             borderRadiusApplication: "end",
             borderRadius: 6,
             dataLabels: {

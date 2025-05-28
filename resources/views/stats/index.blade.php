@@ -5,14 +5,14 @@ Tabla de Estadísticas
 @endsection
 
 @section('contenido')
-<div class="2xl:w-5/6 mx-auto py-5 px-0 md:px-10">
+<div class="2xl:w-6/6 mx-auto py-5 px-0 md:px-5">
 
-    <h1 class="text-lg 2xl:text-2xl font-bold text-gray-800 text-center">Tabla de Actividades</h1>
+    {{-- <h1 class="text-lg 2xl:text-2xl font-bold text-gray-800 text-center">Tabla de Actividades</h1>
     <h2 class="text-md 2xl:text-lg font-semibold text-gray-600 text-center">Aquí puedes agregar actividades y ver tus estadísticas</h2>
-    <hr class="my-4">
+    <hr class="my-4"> --}}
 
 
-    <div class="flex flex-wrap p-0 min-h-[650px]">
+    <div class="flex flex-wrap p-0 min-h-[calc(90vh-4rem)]">
         <!-- Formulario para agregar actividad -->
         <div class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0">
             <div class="flex flex-col bg-white border shadow-xl shadow-gray-100 rounded-l-xl p-4 h-full">
@@ -104,12 +104,9 @@ Tabla de Estadísticas
 
                 </form>
                  <form action="{{route('imagenes.store')}}" id="dropzone" enctype="multipart/form-data"
-                            class="dropzone border-dashed border-2 border-slate-500 w-full h-4 rounded flex flex-col justify-center items-center mb-4"
+                            class="dropzone border-dashed border-2 border-slate-400 w-full h-4 rounded flex flex-col justify-center items-center mb-4"
                             method="POST">
                             @csrf
-                            @error('imagen')
-                            <p class="bg-red-500 text-white my-2 rounded-lg text-sm p-2 text-center">{{$message}}</p>
-                            @enderror
                 </form>
 
                 <button type="submit" onclick="enviarFormularios()"
@@ -128,7 +125,7 @@ Tabla de Estadísticas
                         <button
                             type="button"
                             id="abrir-modal-filtrar-fecha"
-                            class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5"
+                            class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5"md:
                             onclick="document.getElementById('modal-filtrar-fecha').classList.remove('hidden')"
                         >
                             Filtrar por fecha
@@ -137,25 +134,33 @@ Tabla de Estadísticas
                         <button
                             type="button"
                             id="btn-ver-todo"
-                            class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 ml-2"
+                            class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2"
                         >
                             Ver todo
+                        </button>
+
+                         <button
+                            type="button"
+                            id="btn-generar-reporte"
+                            class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2"
+                        >
+                           Generar reporte
                         </button>
                         </div>
 
 
                         <div id="modal-filtrar-fecha" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
                         <div class="bg-white rounded-lg p-6 max-w-sm w-full relative">
-                            <h2 class="text-lg font-bold mb-4 text-center">Filtrar actividades por fecha</h2>
+                            <h2 class="text-lg text-gray-700 font-bold mb-4 text-center">Filtrar actividades por fecha</h2>
                             <button type="button" id="cerrar-modal-filtrar-fecha" class="absolute top-2 right-2 text-gray-500 hover:text-black text-lg 2xl:text-2xl">&times;</button>
                             <form id="form-filtrar-fecha" class="flex flex-col gap-4">
                                 <div>
                                     <label for="fecha-inicio" class="block text-sm font-medium text-gray-700 mb-1">Fecha de inicio</label>
-                                    <input type="date" id="fecha-inicio" name="fecha_inicio" class="w-full border rounded px-3 py-2" max="{{ now()->toDateString() }}" required>
+                                    <input type="date" id="fecha-inicio" name="fecha_inicio" class="w-full border border-gray-400 rounded px-3 py-2" max="{{ now()->toDateString() }}" required>
                                 </div>
                                 <div>
                                     <label for="fecha-fin" class="block text-sm font-medium text-gray-700 mb-1">Fecha de fin</label>
-                                    <input type="date" id="fecha-fin" name="fecha_fin" class="w-full border rounded px-3 py-2" max="{{ now()->toDateString() }}" required>
+                                    <input type="date" id="fecha-fin" name="fecha_fin" class="w-full border border-gray-400 rounded px-3 py-2" max="{{ now()->toDateString() }}" required>
                                 </div>
                                 <button type="submit" class="bg-slate-800 hover:bg-slate-700 text-white font-medium rounded px-4 py-2 mt-2">Aplicar filtro</button>
                             </form>
@@ -180,7 +185,7 @@ Tabla de Estadísticas
                     </div>
                 </div>
 
-                <div class="overflow-y-auto h-[580px]">
+                <div class="overflow-y-auto h-[calc(75vh-4rem)]">
                     <table class="w-full text-sm text-left rtl:text-right text-black table-auto bg-white" id="myTable">
                         <thead class="text-gray-700 text-md uppercase border-b border-gray-200">
                             <tr>
@@ -391,6 +396,26 @@ Tabla de Estadísticas
                         </div>
 
                             </div>
+                            <!-- Modal para evidencias -->
+                            <div id="modal-evidencias" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                                <div class="bg-white rounded-lg p-6 max-w-lg w-full relative min-h-80 flex flex-col items-center">
+                                    <div class="w-full text-center">
+                                        <h2 class="text-lg font-bold mb-4">Evidencias</h2>
+                                        <h2 class="text-sm mb-4 text-center"> Actividad: {{$stat->titulo}} ({{ \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') }})</h2>
+                                    </div>
+                                    <button onclick="cerrarModalEvidencias()" class="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl">&times;</button>
+                                    <div class="flex-1 flex items-center justify-center w-full">
+                                        <div id="contenedor-evidencias" class="flex flex-wrap gap-2 justify-center items-center w-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal para imagen ampliada -->
+                            <div id="modal-img-ampliada" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-[9999] hidden">
+                                <img id="img-ampliada" src="" alt="Evidencia ampliada" class="max-h-[90vh] max-w-[90vw] rounded shadow-lg border-4 border-white">
+                                <button onclick="cerrarModalImgAmpliada()" class="absolute top-4 right-6 text-white text-4xl font-bold">&times;</button>
+                            </div>
+
                             @empty
                             <tr>
                                 <td colspan="8" class="p-10 text-center uppercase text-gray-500 align-middle">No tienes
@@ -416,25 +441,7 @@ Tabla de Estadísticas
     </div>
 </div>
 
-<!-- Modal para evidencias -->
-<div id="modal-evidencias" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-lg p-6 max-w-lg w-full relative min-h-80 flex flex-col items-center">
-        <div class="w-full text-center">
-            <h2 class="text-lg font-bold mb-4">Evidencias</h2>
-             <h2 class="text-sm mb-4 text-center"> Actividad: {{$stat->titulo}} ({{ \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') }})</h2>
-        </div>
-        <button onclick="cerrarModalEvidencias()" class="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl">&times;</button>
-        <div class="flex-1 flex items-center justify-center w-full">
-            <div id="contenedor-evidencias" class="flex flex-wrap gap-2 justify-center items-center w-full"></div>
-        </div>
-    </div>
-</div>
 
-<!-- Modal para imagen ampliada -->
-<div id="modal-img-ampliada" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-[9999] hidden">
-    <img id="img-ampliada" src="" alt="Evidencia ampliada" class="max-h-[90vh] max-w-[90vw] rounded shadow-lg border-4 border-white">
-    <button onclick="cerrarModalImgAmpliada()" class="absolute top-4 right-6 text-white text-4xl font-bold">&times;</button>
-</div>
 @endsection
 
 @section('scripts')
@@ -640,6 +647,89 @@ document.getElementById('btn-ver-todo').addEventListener('click', function() {
                 // Si no, envía el formulario principal
                 document.querySelector('form[action="{{ route('stat.store') }}"]').submit();
             });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script>
+document.getElementById('btn-generar-reporte').addEventListener('click', function() {
+    // Obtener logo (ajusta la ruta si es necesario)
+    let becario ="{{ $user->becario->nombre }}";;
+    const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
+    const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+
+    // Cargar logo como base64 y luego generar el PDF
+    toDataURL(logoUrl, function(logoBase64) {
+        // Logo
+        // Logo
+        doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
+
+        // Título principal
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Reporte de Actividades', doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+
+        // Datos del becario y fecha
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Becario: ' + becario, 10, 32);
+        doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
+
+        // Línea divisoria
+        doc.setDrawColor(200, 200, 200);
+        doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
+
+        // Obtener datos de la tabla
+        const rows = [];
+        document.querySelectorAll('#myTable tbody tr').forEach(tr => {
+            if (tr.style.display === 'none') return; // Solo filas visibles
+            const cells = tr.querySelectorAll('td');
+            if (cells.length) {
+                rows.push([
+                    cells[0].innerText.trim(), // Titulo
+                    cells[1].innerText.trim(), // Fecha
+                    cells[3].innerText.trim(), // Modalidad
+                    cells[4].innerText.trim(), // Duración
+                    cells[6].innerText.trim(), // Estatus
+                ]);
+            }
+        });
+
+        // Encabezados
+        const headers = [['Título',  'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
+
+        // Tabla
+        doc.autoTable({
+            head: headers,
+            body: rows,
+            startY: 50,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [30, 41, 59] }, // bg-slate-800
+            alternateRowStyles: { fillColor: [243, 244, 246] }, // bg-gray-100
+        });
+
+        doc.save('Reporte_Actividades_' + becario + '_' + new Date().toLocaleString() + '.pdf');
+    });
+
+    // Función para convertir imagen a base64
+    function toDataURL(url, callback) {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+            const reader = new FileReader();
+            reader.onloadend = function() {
+                callback(reader.result);
+            }
+            reader.readAsDataURL(xhr.response);
+        };
+        xhr.onerror = function() {
+            alert('No se pudo cargar el logo para el reporte. El PDF se generará sin logo.');
+            callback('');
+        };
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.send();
+    }
+});
 </script>
 
 @endsection

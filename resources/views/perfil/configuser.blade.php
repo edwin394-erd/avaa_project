@@ -5,7 +5,7 @@
 @endsection
 
 @section('contenido')
-<div class="md:w-2/5 mx-auto py-10 px-0 md:px-10">
+<div class="w-3/3 md:w-4/5 xl:w-2/5 mx-auto py-10 px-0 md:px-10">
     <div class="p-0 min-h-[650px]">
             <!-- Inforsmacion personal -->
             <div class="flex items-center justify-center w-full">
