@@ -14,7 +14,7 @@ class RegisterController extends Controller
     }
 
     public function store(Request $request){
-      
+
         $this->validate($request,[
             'name' => ['required', 'max:30', 'min:5','regex:/^[\\pL\\s\\-]+$/u'],
             'email' => ['required', 'max:30', 'min:5', 'unique:users','email'],
@@ -33,6 +33,6 @@ class RegisterController extends Controller
             'password' =>Hash::make($request->password)
         ]);
 
-        return redirect()->route('login')->with('msg_registroExitoso', 'Registro exitoso, ya puedes iniciar sesión');
+        return redirect()->route('login')->with('success', 'Registro exitoso, ya puedes iniciar sesión');
     }
 }

@@ -63,7 +63,7 @@ window.createNotification = function({ type = 'success', title = '', message = '
     notification.innerHTML = `
         ${icon}
         <div class="flex-1">
-            <p class="font-semibold text-sm" style="color: ${type === 'error' ? '#d11f1f' : ''};">${title}</p>
+            <p class="font-semibold text-sm" style="color: ${type === 'error' ? '#d11f1f' : 'text-green-700'};">${title}</p>
             <p class="text-gray-600 text-xs">${message}</p>
         </div>
         <button class="closeBtn text-gray-400 hover:text-gray-600 transition">
@@ -131,6 +131,6 @@ function togglePassword(fieldId, btn) {
 }
 </script>
 </body>
-<div id="notificationsContainer" class="fixed bottom-4 right-4 z-[99999] flex flex-col items-end space-y-2"></div>
+<div id="notificationsContainer" class="fixed top-8 right-4 z-[99999] flex flex-col items-end space-y-2"></div>
 
 </html>

@@ -16,11 +16,17 @@ class Stat extends Model
         'duracion',
         'fecha',
         'user_id',
-        'estado'
+        'estado',
+        'observacion',
+        'anulado',
     ];
 
     public function evidencias()
     {
         return $this->hasMany(Evidencia::class, 'stats_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -19,14 +19,6 @@
 
 		<form action="{{route('login')}}" method="POST" novalidate>
 			@csrf
-			@if (session('msg_error'))
-				<p class="bg-red-500 text-white my-2 rounded-lg text-sm p-2 text-center">{{@session('msg_error')}}</p>
-			@endif
-
-			@if (session('msg_registroExitoso'))
-				<p class="bg-green-700 text-white my-2 rounded-lg text-sm p-2 text-center">{{@session('msg_registroExitoso')}}</p>
-			@endif
-
 			<div class="mb-4">
 				<label for="email" class="block text-sm font-medium text-gray-700 mb-2">Correo</label>
 				<input type="email" name="email" class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 @error('email') border-red-500 @enderror" value="{{old('email')}}" placeholder="tucorreo@email.com" required>

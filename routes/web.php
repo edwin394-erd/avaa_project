@@ -37,12 +37,15 @@ Route::post('/actividades/crear',[StatController::class, 'store'])->name('stat.s
 Route::post('/actividades/{stat}/anular', [StatController::class, 'anular'])->name('stat.anular');
 Route::post('/actividades/{stat}/restaurar', [StatController::class, 'restaurar'])->name('stat.restaurar');
 
+Route::post('/actividades/{stat}/aprobar', [StatController::class, 'aprobar'])->name('stat.aprobar');
+Route::post('/actividades/{stat}/rechazar', [StatController::class, 'rechazar'])->name('stat.rechazar');
+
 Route::get('/tabla-actividades',[StatController::class, 'index'])->name('stats.index');
 Route::get('/actividades/{modalidad}/', [StatController::class, 'modalidadindex'])->name('modalidad.index');
 
 Route::post('/imagenes',[ImagenController::class, 'store'])->name('imagenes.store');
 
-Route::post('/Evidencias',[EvidenciaController::class, 'store'])->name('evidencia.store');
+Route::post('/evidencias',[EvidenciaController::class, 'store'])->name('evidencia.store');
 
 Route::get('/Perfil/datos-personales',[PerfilController::class, 'datosindex'])->name('datos.index');
 

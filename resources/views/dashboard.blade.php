@@ -21,7 +21,7 @@ Inicio
         }
     @endphp
     <h1 class="text-lg 2xl:text-xl font-bold text-gray-700 text-left px-2 mb-2">
-        {{ $saludo }}, {{$nombre_becario}} &#9995;
+        {{ $saludo }}, {{$nombre_user}} &#9995;
     </h1>
     {{-- <h2 class="text-md 2xl:text-lg font-semibold text-gray-600 text-center">Aquí tienes un resumen de tu progreso &#x1F4C8; </h2> --}}
 
