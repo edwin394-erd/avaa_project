@@ -52,10 +52,20 @@ Route::get('/Perfil/datos-personales',[PerfilController::class, 'datosindex'])->
 Route::get('/Perfil/configuracion-usuario',[PerfilController::class, 'configindex'])->name('configuser.index');
 Route::post('/Perfil/configuracion-usuario', [PerfilController::class, 'update'])->name('configuser.update');
 
+Route::get('/notificaciones/json', function () {
+    $notificaciones = auth()->user()
+        ->notifications()
+        ->latest()
+        ->take(10)
+        ->get(['id', 'titulo', 'mensaje', 'leida', 'created_at', 'stat_id']);
+    return response()->json($notificaciones);
+})->middleware('auth');
+
 Route::post('/notificaciones/marcar-leidas', function () {
     auth()->user()->notifications()->where('leida', false)->update(['leida' => true]);
     return response()->json(['ok' => true]);
 })->name('notificaciones.marcarLeidas')->middleware('auth');
+
 
 
 
