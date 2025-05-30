@@ -417,11 +417,9 @@
                                             @if ($user->role == 'admin')
                                                 <div class="flex p-0">
                                                     {{-- aprobar --}}
-
-                                                    <form action="{{ route('stat.aprobar', $stat) }}" method="POST">
-                                                        @csrf
-                                                        <button type="submit"
-                                                            class="block text-white  focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                                    @if ($stat->estado == 'aprobado')
+                                                        <button disabled
+                                                            class="block text-white opacity-50 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                                                             <svg width="30px" height="30px" viewBox="0 0 24 24"
                                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -435,7 +433,23 @@
                                                                 </g>
                                                             </svg>
                                                         </button>
-                                                    </form>
+                                                    @else
+                                                        <button onclick="abrirModal('modal-aprobar-{{ $stat->id }}')"
+                                                            class="block text-white focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                                            <svg width="30px" height="30px" viewBox="0 0 24 24"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                                    stroke-linejoin="round"></g>
+                                                                <g id="SVGRepo_iconCarrier">
+                                                                    <path d="M4 12.6111L8.92308 17.5L20 6.5"
+                                                                        stroke="#318b18" stroke-width="2"
+                                                                        stroke-linecap="round" stroke-linejoin="round">
+                                                                    </path>
+                                                                </g>
+                                                            </svg>
+                                                        </button>
+                                                    @endif
                                                     {{-- rechazar --}}
                                                     @if ($stat->estado == 'rechazado')
                                                         <button disabled
@@ -693,7 +707,47 @@
                                     </div>
                     </div>
 
+ <div id="modal-aprobar-{{ $stat->id }}"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full relative">
+            <h2 class="text-lg font-bold mb-4 text-center">Confirmar aprobación</h2>
+            <h2 class="text-sm mb-1 text-center"> Actividad: {{ $stat->titulo }}
+                ({{ \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') }})</h2>
+                    <h2 class="text-sm mb-1 text-center"> Becario:
+                {{ $stat->user->Becario->nombre }}</h2>
+            <hr><br>
+            <button type="button"
+                onclick="cerrarModal('modal-aprobar-{{ $stat->id }}')"
+                class="absolute top-2 right-2 text-gray-500 hover:text-black text-lg 2xl:text-2xl">&times;</button>
+            <div class="flex flex-col items-center">
+                <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2"
+                        d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <h3 class="mb-5 text-lg font-normal text-gray-500 text-center">¿Estás
+                    seguro de que quieres aprobar esta actividad?</h3>
+                <hr><br>
+                <div class="text-center">
+                    <form action="{{ route('stat.aprobar', $stat) }}" method="POST"
+                        class="w-full flex flex-col items-center">
+                        @csrf
+                        <button type="submit"
+                            class="bg-gray-700 hover:bg-gray-800 text-white font-medium rounded px-2 py-2 mt-2 mx-3">
+                            Sí, estoy seguro
+                        </button>
+                    </form>
+                    <button type="button"
+                        onclick="cerrarModal('modal-aprobar-{{ $stat->id }}')"
+                        class="py-2 px-2 mt-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 mx-3">
+                        No, cancelar
+                    </button>
+                </div>
 
+            </div>
+        </div>
                 </div>
                 <!-- Modal para evidencias -->
                 <div id="modal-evidencias"

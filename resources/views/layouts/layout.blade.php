@@ -494,7 +494,8 @@ fetchNotificaciones();
 @endif
 </script>
 
-<div id="notificationsContainer" class="fixed top-8 right-4 z-[99999] flex flex-col items-end space-y-2 md:min-w-[900px]"></div>
+<div id="notificationsContainer" class="fixed top-10 right-4 left-4 md:left-auto z-[99999] flex flex-col items-end md:items-end items-center space-y-2 md:min-w-[400px]">
+</div>
 </body>
 
 </html>

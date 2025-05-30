@@ -86,14 +86,34 @@ class StatController extends Controller
             ->get();
             $total_chat = $stats_chat->sum('duracion');
             $porcen_chat = 0;
+
+            return view('stats.index')->with([
+            'user' => $user,
+            'stats' => $stats,
+            'meta_volin' => $meta_volin ?? 0,
+            'meta_volex' => $meta_volex ?? 0,
+            'meta_taller' => $$meta_taller ?? 0,
+            'meta_chat' => $meta_chat ?? 0,
+            'stats_realizado_volin' => $stats_realizado_volin ?? [],
+            'stats_realizado_volex' => $stats_realizado_volex ?? [],
+            'stats_realizado_taller' => $stats_realizado_taller ?? [],
+            'stats_realizado_chat' => $stats_realizado_chat ?? [],
+            'total_volin' => $total_volin ?? 0,
+            'total_volex' => $total_volex ?? 0,
+            'total_taller' => $total_taller ?? 0,
+            'total_chat' => $total_chat ?? 0,
+            'porcen_volin' => $porcen_volin ?? 0,
+            'porcen_volex' => $porcen_volex ?? 0,
+            'porcen_taller' => $porcen_taller ?? 0,
+            'porcen_chat' => $porcen_chat ?? 0,
+        ]);
         } else {
             $stats = Stat::with('evidencias')
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
-        }
 
-        return view('stats.index')->with([
+             return view('stats.index')->with([
             'user' => $user,
             'stats' => $stats,
             'meta_volin' => $user->becario->meta_volin ?? 0,
@@ -113,6 +133,9 @@ class StatController extends Controller
             'porcen_taller' => $porcen_taller ?? 0,
             'porcen_chat' => $porcen_chat ?? 0,
         ]);
+        }
+
+
     }
 
     public function modalidadindex(String $modalidad){
