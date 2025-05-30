@@ -130,17 +130,6 @@
                     </a>
                 </div>
             </li>
-            <li class="flex flex-col items-center">
-                <a href="" title="Notificaciones"
-                    class="flex flex-col items-center rounded md:border-0 md:p-0 text-white hover:bg-slate-700 hover:text-white md:hover:bg-transparent group relative">
-                    <span class="flex items-center justify-center">
-                       <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="19px" height="19px" viewBox="0,0,256,256" class="">
-                        <g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M25,0c-2.20703,0 -4,1.79297 -4,4c0,2.20703 1.79297,4 4,4c2.20703,0 4,-1.79297 4,-4c0,-2.20703 -1.79297,-4 -4,-4zM19.375,6.09375c-4.57031,1.95703 -7.375,6.36328 -7.375,11.90625c0,11 -3.80078,13.76172 -6.0625,15.40625c-1.00391,0.72656 -1.9375,1.40234 -1.9375,2.59375c0,4.20703 6.28125,6 21,6c14.71875,0 21,-1.79297 21,-6c0,-1.19141 -0.93359,-1.86719 -1.9375,-2.59375c-2.26172,-1.64453 -6.0625,-4.40625 -6.0625,-15.40625c0,-5.55859 -2.80078,-9.95312 -7.375,-11.90625c-0.85547,2.27344 -3.05859,3.90625 -5.625,3.90625c-2.56641,0 -4.76953,-1.63672 -5.625,-3.90625zM19,43.875c0,0.03906 0,0.08594 0,0.125c0,3.30859 2.69141,6 6,6c3.30859,0 6,-2.69141 6,-6c0,-0.03906 0,-0.08594 0,-0.125c-1.88281,0.07813 -3.88281,0.125 -6,0.125c-2.11719,0 -4.11719,-0.04687 -6,-0.125z"></path></g></g>
-                        </svg>
-                    </span>
-                    <span class="block w-full h-1 rounded-t mt-1 transition-all duration-200 {{ $currentRoute == 'notificaciones.index' ? 'bg-green-600' : 'invisible' }}"></span>
-                </a>
-             </li>
 
             @else
             <li class="flex flex-col items-center">
@@ -161,19 +150,51 @@
                     <span class="block w-full h-1 rounded-t mt-1 transition-all duration-200 {{ $currentRoute == 'stats.index' ? 'bg-green-600' : 'invisible' }}"></span>
                 </a>
             </li>
-            <li class="flex flex-col items-center">
-                <a href="" title="Notificaciones"
-                    class="flex flex-col items-center rounded md:border-0 md:p-0 text-white hover:bg-slate-700 hover:text-white md:hover:bg-transparent group relative">
-                    <span class="flex items-center justify-center">
-                       <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="19px" height="19px" viewBox="0,0,256,256" class="">
-                        <g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M25,0c-2.20703,0 -4,1.79297 -4,4c0,2.20703 1.79297,4 4,4c2.20703,0 4,-1.79297 4,-4c0,-2.20703 -1.79297,-4 -4,-4zM19.375,6.09375c-4.57031,1.95703 -7.375,6.36328 -7.375,11.90625c0,11 -3.80078,13.76172 -6.0625,15.40625c-1.00391,0.72656 -1.9375,1.40234 -1.9375,2.59375c0,4.20703 6.28125,6 21,6c14.71875,0 21,-1.79297 21,-6c0,-1.19141 -0.93359,-1.86719 -1.9375,-2.59375c-2.26172,-1.64453 -6.0625,-4.40625 -6.0625,-15.40625c0,-5.55859 -2.80078,-9.95312 -7.375,-11.90625c-0.85547,2.27344 -3.05859,3.90625 -5.625,3.90625c-2.56641,0 -4.76953,-1.63672 -5.625,-3.90625zM19,43.875c0,0.03906 0,0.08594 0,0.125c0,3.30859 2.69141,6 6,6c3.30859,0 6,-2.69141 6,-6c0,-0.03906 0,-0.08594 0,-0.125c-1.88281,0.07813 -3.88281,0.125 -6,0.125c-2.11719,0 -4.11719,-0.04687 -6,-0.125z"></path></g></g>
-                        </svg>
-                    </span>
-                    <span class="block w-full h-1 rounded-t mt-1 transition-all duration-200 {{ $currentRoute == 'notificaciones.index' ? 'bg-green-600' : 'invisible' }}"></span>
-                </a>
-             </li>
+
 
         @endif
+        <li class="flex flex-col items-center relative group">
+            <button type="button"
+                class="flex flex-col items-center rounded md:border-0 md:p-0 text-white hover:bg-slate-700 hover:text-white md:hover:bg-transparent group relative focus:outline-none"
+                id="notificacionesDropdownBtn"
+                title="Notificaciones">
+                <span class="flex items-center justify-center relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="19px" height="19px" viewBox="0,0,256,256">
+                        <g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M25,0c-2.20703,0 -4,1.79297 -4,4c0,2.20703 1.79297,4 4,4c2.20703,0 4,-1.79297 4,-4c0,-2.20703 -1.79297,-4 -4,-4zM19.375,6.09375c-4.57031,1.95703 -7.375,6.36328 -7.375,11.90625c0,11 -3.80078,13.76172 -6.0625,15.40625c-1.00391,0.72656 -1.9375,1.40234 -1.9375,2.59375c0,4.20703 6.28125,6 21,6c14.71875,0 21,-1.79297 21,-6c0,-1.19141 -0.93359,-1.86719 -1.9375,-2.59375c-2.26172,-1.64453 -6.0625,-4.40625 -6.0625,-15.40625c0,-5.55859 -2.80078,-9.95312 -7.375,-11.90625c-0.85547,2.27344 -3.05859,3.90625 -5.625,3.90625c-2.56641,0 -4.76953,-1.63672 -5.625,-3.90625zM19,43.875c0,0.03906 0,0.08594 0,0.125c0,3.30859 2.69141,6 6,6c3.30859,0 6,-2.69141 6,-6c0,-0.03906 0,-0.08594 0,-0.125c-1.88281,0.07813 -3.88281,0.125 -6,0.125c-2.11719,0 -4.11719,-0.04687 -6,-0.125z"></path></g></g>
+                    </svg>
+                    @php
+                        $notificacionesNoLeidas = auth()->user()->notifications()->where('leida', false)->count();
+                    @endphp
+                    @if($notificacionesNoLeidas > 0)
+                        <span class="absolute -top-1 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5">
+                            {{ $notificacionesNoLeidas }}
+                        </span>
+                    @endif
+                </span>
+                <span class="block w-full h-1 rounded-t mt-1 transition-all duration-200 {{ $currentRoute == 'notificaciones.index' ? 'bg-green-600' : 'invisible' }}"></span>
+            </button>
+            <div class="hidden absolute right-0 mt-10 w-72 sm:w-80 bg-white rounded-md shadow-lg z-50 transition-all duration-300 origin-top-right scale-95 opacity-0"
+                id="notificacionesDropdownMenu">
+                <div class="p-4 border-b font-bold text-gray-700">Notificaciones</div>
+                <div class="max-h-64 sm:max-h-80 overflow-y-auto">
+                   @forelse(auth()->user()->notifications()->latest()->take(10)->get() as $notificacion)
+                        <a
+                            href="{{ route('stats.index', ['highlight' => $notificacion->stat_id]) }}"
+                            class="block px-4 py-3 border-b last:border-b-0 {{ $notificacion->leida ? 'bg-gray-100' : 'bg-yellow-100' }} hover:bg-gray-200 cursor-pointer transition-colors"
+                        >
+                            <div class="font-semibold text-sm text-gray-800">{{ $notificacion->titulo }}</div>
+                            <div class="text-xs text-gray-600">{{ $notificacion->mensaje }}</div>
+                            <div class="text-xs text-gray-400 text-right">{{ $notificacion->created_at->diffForHumans() }}</div>
+                        </a>
+                    @empty
+                        <div class="px-4 py-3 text-gray-500 text-center">Sin notificaciones</div>
+                    @endforelse
+                </div>
+                <div class="p-2 text-center">
+                    <a href="" class="text-blue-600 text-xs hover:underline">Ver todas</a>
+                </div>
+            </div>
+        </li>
         <!-- Dropdown Perfil -->
         <li class="relative flex flex-col items-center group">
             <button type="button" class="flex flex-col items-center rounded md:border-0 md:p-0 text-white hover:bg-slate-700 hover:text-white md:hover:bg-transparent group relative focus:outline-none" id="perfilDropdownBtn">
@@ -182,11 +203,37 @@
                 </span>
                 <span class="block w-full h-1 rounded-t mt-1 transition-all duration-200 {{ $currentRoute == 'configuser.index' || $currentRoute == 'datos.index'? 'bg-green-600' : 'invisible' }}"></span>
             </button>
+            <div class="hidden absolute right-0 mt-10 w-56 bg-white rounded-md shadow-lg z-50 transition-all duration-300 origin-top-right scale-95 opacity-0" id="perfilDropdownMenu">
+                <a href="{{ route('configuser.index') }}" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-t-md">
+                    <span class="mr-3">
+                        <svg width="22" height="22" viewBox="0 0 24.00 24.00" xmlns="http://www.w3.org/2000/svg" fill="#222749" stroke="#222749" stroke-width="0.00024">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path fill="none" d="M0 0h24v24H0z"></path>
+                                <path d="M12 14v2a6 6 0 0 0-6 6H4a8 8 0 0 1 8-8zm0-1c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6zm0-2c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm2.595 7.812a3.51 3.51 0 0 1 0-1.623l-.992-.573 1-1.732.992.573A3.496 3.496 0 0 1 17 14.645V13.5h2v1.145c.532.158 1.012.44 1.405.812l.992-.573 1 1.732-.992.573a3.51 3.51 0 0 1 0 1.622l.992.573-1 1.732-.992-.573a3.496 3.496 0 0 1-1.405.812V22.5h-2v-1.145a3.496 3.496 0 0 1-1.405-.812l-.992.573-1-1.732.992-.572zM18 19.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"></path>
+                            </g>
+                        </svg>
+                    </span>
+                    Configuración de usuario
+                </a>
 
-            <div class="hidden absolute right-0 mt-10 w-48 bg-white rounded-md shadow-lg z-50 transition-all duration-300 origin-top-right scale-95 opacity-0" id="perfilDropdownMenu">
-                <a href="{{ route('configuser.index') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-t-md">Configuración de usuario</a>
-                {{-- <a href="{{ route('datos.index') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Datos personales</a> --}}
-                <button type="button" onclick="openLogoutModal()" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">Cerrar Sesión</button>
+                {{-- <a href="{{ route('datos.index') }}" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
+                    <span class="mr-2">
+                        <svg width="22" height="22" class="text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.797.657 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </span>
+                    Datos personales
+                </a> --}}
+
+                <button type="button" onclick="openLogoutModal()" class="w-full flex items-center text-left px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-b-md">
+                    <span class="mr-2">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#262d5e"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21 12L13 12" stroke="#201b4b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M18 15L20.913 12.087V12.087C20.961 12.039 20.961 11.961 20.913 11.913V11.913L18 9" stroke="#201b4b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M16 5V4.5V4.5C16 3.67157 15.3284 3 14.5 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H14.5C15.3284 21 16 20.3284 16 19.5V19.5V19" stroke="#201b4b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                    </span>
+                    Cerrar Sesión
+                </button>
+            </div>
             </div>
 
             <!-- Modal de confirmación de cierre de sesión -->
@@ -250,6 +297,10 @@ document.addEventListener('DOMContentLoaded', function () {
         {
             btn: document.getElementById('adminDropdownBtn'),
             menu: document.getElementById('adminDropdownMenu')
+        },
+        {
+            btn: document.getElementById('notificacionesDropdownBtn'),
+            menu: document.getElementById('notificacionesDropdownMenu')
         }
     ];
 
@@ -276,6 +327,20 @@ document.addEventListener('DOMContentLoaded', function () {
                         menu.classList.remove('scale-95', 'opacity-0');
                         menu.classList.add('scale-100', 'opacity-100');
                     }, 10);
+
+                    // Marcar notificaciones como leídas al abrir el dropdown
+                    if (btn.id === 'notificacionesDropdownBtn') {
+                        fetch("{{ route('notificaciones.marcarLeidas') }}", {
+                            method: "POST",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                                "Accept": "application/json"
+                            }
+                        }).then(() => {
+                            // Opcional: ocultar el badge de no leídas
+                            document.querySelectorAll('#notificacionesDropdownBtn .absolute.bg-red-600').forEach(el => el.style.display = 'none');
+                        });
+                    }
                 } else {
                     menu.classList.remove('scale-100', 'opacity-100');
                     menu.classList.add('scale-95', 'opacity-0');
@@ -286,6 +351,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+
 
     document.addEventListener('click', function (e) {
         dropdowns.forEach(({btn, menu}) => {
@@ -392,6 +458,7 @@ window.createNotification = function({ type = 'success', title = '', message = '
     });
 @endif
 </script>
+
 <div id="notificationsContainer" class="fixed top-8 right-4 z-[99999] flex flex-col items-end space-y-2 md:min-w-[900px]"></div>
 </body>
 

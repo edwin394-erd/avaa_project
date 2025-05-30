@@ -113,7 +113,7 @@ Inicio
                     <br>
                     </div>
                     <div class="text-center pb-4 {{ $card['bgcolor'] }} rounded-b-xl">
-                         <a class="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent decoration-2 hover:text-slate-700 hover:underline focus:underline focus:outline-none focus:text-blue-700 disabled:opacity-50 disabled:pointer-events-none text-center items-center {{ $card['color'] }}"
+                         <a class="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent decoration-2 {{ $card['color'] }} hover:underline focus:underline focus:outline-none focus:text-slate-700 disabled:opacity-50 disabled:pointer-events-none text-center items-center {{ $card['color'] }}"
                         href="{{ route('modalidad.index', ['modalidad' => $card['name'] ]) }}">
                         Ver detalle
                         <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"

@@ -6,6 +6,7 @@ use App\Models\Stat;
 use App\Models\Evidencia;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\Notification;
 
 class StatController extends Controller
 {
@@ -18,10 +19,73 @@ class StatController extends Controller
         $user = auth()->user();
 
         if ($user->role === 'admin') {
+            $startOfYear = Carbon::now()->startOfYear();
+            $endOfYear = Carbon::now()->endOfYear();
+            $user = auth()->user();
             $stats = Stat::with('evidencias')
             ->where('anulado', 'NO')
             ->orderBy('created_at', 'desc')
             ->get();
+            $meta_volin = \App\Models\Becario::sum('meta_volin');
+            $meta_volex = \App\Models\Becario::sum('meta_volex');
+            $meta_taller = \App\Models\Becario::sum('meta_taller');
+            $meta_chat = \App\Models\Becario::sum('meta_chat');
+
+            $stats_realizado_volin = Stat::where('actividad', 'volin')
+                ->where('estado', 'aprobado')
+                ->where('anulado', 'NO')
+                ->get();
+
+            $stats_realizado_volex = Stat::where('actividad', 'volex')
+                ->where('estado', 'aprobado')
+                ->where('anulado', 'NO')
+                ->get();
+
+            $stats_realizado_taller = Stat::where('actividad', 'taller')
+                ->where('estado', 'aprobado')
+                ->where('anulado', 'NO')
+                ->get();
+
+            $stats_realizado_chat = Stat::where('actividad', 'chat')
+                ->where('estado', 'aprobado')
+                ->where('anulado', 'NO')
+                ->get();
+
+            // VOLUNTARIADO INTERNO
+            $stats_volin = Stat::where('actividad', 'volin')
+            ->where('estado', 'aprobado')
+            ->where('anulado', 'NO')
+            ->where('fecha', '>=', $startOfYear)
+            ->get();
+            $total_volin = $stats_volin->sum('duracion');
+            $porcen_volin = 0;
+
+            // VOLUNTARIADO EXTERNO
+            $stats_volex = Stat::where('actividad', 'volex')
+            ->where('estado', 'aprobado')
+            ->where('anulado', 'NO')
+            ->where('fecha', '>=', $startOfYear)
+            ->get();
+            $total_volex = $stats_volex->sum('duracion');
+            $porcen_volex = 0;
+
+            // TALLER
+            $stats_taller = Stat::where('actividad', 'taller')
+            ->where('estado', 'aprobado')
+            ->where('anulado', 'NO')
+            ->where('fecha', '>=', $startOfYear)
+            ->get();
+            $total_taller = $stats_taller->sum('duracion');
+            $porcen_taller = 0;
+
+            // CHAT
+            $stats_chat = Stat::where('actividad', 'chat')
+            ->where('estado', 'aprobado')
+            ->where('anulado', 'NO')
+            ->where('fecha', '>=', $startOfYear)
+            ->get();
+            $total_chat = $stats_chat->sum('duracion');
+            $porcen_chat = 0;
         } else {
             $stats = Stat::with('evidencias')
             ->where('user_id', $user->id)
@@ -32,6 +96,22 @@ class StatController extends Controller
         return view('stats.index')->with([
             'user' => $user,
             'stats' => $stats,
+            'meta_volin' => $user->becario->meta_volin ?? 0,
+            'meta_volex' => $user->becario->meta_volex ?? 0,
+            'meta_taller' => $user->becario->meta_taller ?? 0,
+            'meta_chat' => $user->becario->meta_chat ?? 0,
+            'stats_realizado_volin' => $stats_realizado_volin ?? [],
+            'stats_realizado_volex' => $stats_realizado_volex ?? [],
+            'stats_realizado_taller' => $stats_realizado_taller ?? [],
+            'stats_realizado_chat' => $stats_realizado_chat ?? [],
+            'total_volin' => $total_volin ?? 0,
+            'total_volex' => $total_volex ?? 0,
+            'total_taller' => $total_taller ?? 0,
+            'total_chat' => $total_chat ?? 0,
+            'porcen_volin' => $porcen_volin ?? 0,
+            'porcen_volex' => $porcen_volex ?? 0,
+            'porcen_taller' => $porcen_taller ?? 0,
+            'porcen_chat' => $porcen_chat ?? 0,
         ]);
     }
 
@@ -277,8 +357,17 @@ class StatController extends Controller
         if ($stat->anulado === 'NO') {
             $stat->estado = 'aprobado';
             $stat->save();
-            return back()->with('success', 'Actividad aprobada');
-        }
+
+            // Notificar al usuario dueño de la actividad
+            Notification::create([
+                'user_id' => $stat->user_id,
+                'titulo' => 'Actividad aprobada',
+                'mensaje' => 'Tu actividad "' . $stat->titulo . ' ('. \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') .') fue aprobada.',
+                'stat_id' => $stat->id,
+            ]);
+                return back()->with('success', 'Actividad aprobada');
+            }
+
         return back()->with('error', 'No se puede aprobar una actividad anulada');
     }
 
@@ -288,6 +377,13 @@ class StatController extends Controller
             $stat->estado = 'rechazado';
             $stat->observacion = $request->observacion ?? 'Actividad rechazada por el administrador';
             $stat->save();
+            // Notificar al usuario dueño de la actividad
+            Notification::create([
+                'user_id' => $stat->user_id,
+                'titulo' => 'Actividad rechazada',
+                'mensaje' => 'Tu actividad "' . $stat->titulo . ' ('. \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') .') fue rechazada.',
+                'stat_id' => $stat->id,
+            ]);
             return back()->with('success', 'Actividad rechazada');
         }
         return back()->with('error', 'No se puede rechazar una actividad anulada');
@@ -328,6 +424,23 @@ class StatController extends Controller
             }
         }
     }
+     // Notificar a todos los admins
+    $admins = \App\Models\User::where('role', 'admin')->get();
+    foreach ($admins as $admin) {
+        \App\Models\Notification::create([
+            'user_id' => $admin->id,
+            'titulo' => 'Nueva actividad cargada',
+            'mensaje' => 'El becario "' . auth()->user()->becario->nombre . '" cargó la actividad ' . (
+                trim($stat->actividad) === 'volin' ? 'Voluntariado Interno' :
+                (trim($stat->actividad) === 'volex' ? 'Voluntariado Externo' :
+                (trim($stat->actividad) === 'taller' ? 'Taller' :
+                (trim($stat->actividad) === 'chat' ? 'Chat' : $stat->actividad)))
+            ) . ': "' . $stat->titulo . '" (' . \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') . ').',
+            'stat_id' => $stat->id,
+        ]);
+    }
+
+    return redirect()->route('stats.index')->with('success', 'La actividad se ha registrado exitosamente');
 
         return redirect()->route('stats.index')->with('success', 'La actividad se ha registrado exitosamente');
 

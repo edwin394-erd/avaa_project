@@ -20,7 +20,7 @@
             $bgcolor2 = "bg-[#dc3545]";
             $icono = "icon-volex.png";
             $meta = $meta_volex ?? 0;
-            $hover = "hover:bg-[#f2d4d6]";
+            $hover = "hover:bg-[#f9e5e7]";
             break;
         case "chat":
             $n_actividad = "Chats";
@@ -146,25 +146,34 @@
                         </div>
 
 
-                        <div id="modal-filtrar-fecha" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-                        <div class="bg-white rounded-lg p-6 max-w-sm w-full relative">
-                            <h2 class="text-lg font-bold mb-4 text-center">Filtrar actividades por fecha</h2>
-                            <button type="button" id="cerrar-modal-filtrar-fecha" class="absolute top-2 right-2 text-gray-500 hover:text-black text-lg 2xl:text-2xl">&times;</button>
-                            <form id="form-filtrar-fecha" class="flex flex-col gap-4">
-                                <div>
-                                    <label for="fecha-inicio" class="block text-sm font-medium text-gray-700 mb-1">Fecha de inicio</label>
-                                    <input type="date" id="fecha-inicio" name="fecha_inicio" class="w-full border rounded px-3 py-2" max="{{ now()->toDateString() }}" required>
-                                </div>
-                                <div>
-                                    <label for="fecha-fin" class="block text-sm font-medium text-gray-700 mb-1">Fecha de fin</label>
-                                    <input type="date" id="fecha-fin" name="fecha_fin" class="w-full border rounded px-3 py-2" max="{{ now()->toDateString() }}" required>
-                                </div>
-                                <button type="submit" class="bg-slate-800 hover:bg-slate-700 text-white font-medium rounded px-4 py-2 mt-2">Aplicar filtro</button>
-                            </form>
-
-                    </div>
-
-                    </div>
+                        <div id="modal-filtrar-fecha"
+                            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                            <div class="bg-white rounded-lg p-6 max-w-sm w-full relative">
+                                <h2 class="text-lg text-gray-700 font-bold mb-4 text-center">Filtrar actividades por fecha
+                                </h2>
+                                <button type="button" id="cerrar-modal-filtrar-fecha"
+                                    class="absolute top-2 right-2 text-gray-500 hover:text-black text-lg 2xl:text-2xl">&times;</button>
+                                <form id="form-filtrar-fecha" class="flex flex-col gap-4">
+                                    <div>
+                                        <label for="fecha-inicio"
+                                            class="block text-sm font-medium text-gray-700 mb-1">Fecha de inicio</label>
+                                        <input type="date" id="fecha-inicio" name="fecha_inicio"
+                                            class="w-full border border-gray-400 rounded px-3 py-2"
+                                            max="{{ now()->toDateString() }}" required>
+                                    </div>
+                                    <div>
+                                        <label for="fecha-fin" class="block text-sm font-medium text-gray-700 mb-1">Fecha
+                                            de fin</label>
+                                        <input type="date" id="fecha-fin" name="fecha_fin"
+                                            class="w-full border border-gray-400 rounded px-3 py-2"
+                                            max="{{ now()->toDateString() }}" required>
+                                    </div>
+                                    <button type="submit"
+                                        class="bg-slate-800 hover:bg-slate-700 text-white font-medium rounded px-4 py-2 mt-2">Aplicar
+                                        filtro</button>
+                                </form>
+                            </div>
+                        </div>
 
                     <label for="table-search" class="sr-only text-sm">Buscar</label>
                     <div class="relative">
@@ -204,7 +213,7 @@
                             <tbody>
                                 @forelse ($stats as $stat)
                                     <tr
-                                        class="bg-white text-sm border-b border-gray-200 transition duration-300 ease-in-out hover:bg-blue-100 text-sm">
+                                        class="bg-white text-sm border-b border-gray-200 transition duration-300 ease-in-out text-sm {{ $hover }}">
                                         @if ($user->role == 'admin')
                                             <td class="px-3 py-4 text-center">{{ $stat->user->becario->nombre }}</td>
                                         @endif
@@ -262,7 +271,7 @@
                                                             <style>
                                                                 .a {
                                                                     fill: none;
-                                                                    stroke: hsl(125, 68%, 21%);
+                                                                    stroke: hsl(227, 57%, 18%);
                                                                     stroke-linecap: round;
                                                                     stroke-linejoin: round;
                                                                     stroke-width: 3.5;
@@ -286,7 +295,11 @@
                                             @elseif ($stat->estado == 'pendiente')
                                                 <span class="bg-yellow-200 p-2 text-bold rounded ">PENDIENTE</span>
                                             @elseif ($stat->estado == 'rechazado')
-                                                <span class="bg-red-300 p-2 text-bold rounded ">RECHAZADO</span>
+                                                <span class="bg-red-300 p-2 text-bold rounded cursor-pointer"
+                                                    onclick="abrirModal('modal-motivo-rechazo-{{ $stat->id }}')"
+                                                    title="Ver motivo de rechazo">
+                                                    RECHAZADO
+                                                </span>
                                             @else
                                                 <span class="bg-green-200 p-2 text-bold rounded ">APROBADO</span>
                                             @endif
@@ -296,39 +309,57 @@
                                                 <div class="flex p-0">
                                                     {{-- aprobar --}}
 
-                                                    <form action="{{ route('stat.aprobar', $stat) }}" method="POST">
-                                                        @csrf
-                                                        <button type="submit"
-                                                            class="block text-white  focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                                                            <svg width="30px" height="30px" viewBox="0 0 24 24"
-                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                                    stroke-linejoin="round"></g>
-                                                                <g id="SVGRepo_iconCarrier">
-                                                                    <path d="M4 12.6111L8.92308 17.5L20 6.5"
-                                                                        stroke="#318b18" stroke-width="2"
-                                                                        stroke-linecap="round" stroke-linejoin="round">
-                                                                    </path>
-                                                                </g>
-                                                            </svg>
-                                                        </button>
-                                                    </form>
-                                                    {{-- rechazar --}}
-                                                    <button onclick="abrirModal('modal-rechazar-{{ $stat->id }}')"
-                                                        class="block text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                                    <!-- Botón para abrir el modal de aprobar -->
+                                                    <button onclick="abrirModal('modal-aprobar-{{ $stat->id }}')"
+                                                        class="block text-white focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                                                         <svg width="30px" height="30px" viewBox="0 0 24 24"
                                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
                                                                 stroke-linejoin="round"></g>
                                                             <g id="SVGRepo_iconCarrier">
-                                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                                    d="M5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289Z"
-                                                                    fill="#af1212"></path>
+                                                                <path d="M4 12.6111L8.92308 17.5L20 6.5"
+                                                                    stroke="#318b18" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                </path>
                                                             </g>
                                                         </svg>
                                                     </button>
+
+
+
+                                                    {{-- rechazar --}}
+                                                    @if ($stat->estado == 'rechazado')
+                                                        <button disabled
+                                                            class="block text-white opacity-50 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                                            <svg width="30px" height="30px" viewBox="0 0 24 24"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                                    stroke-linejoin="round"></g>
+                                                                <g id="SVGRepo_iconCarrier">
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289Z"
+                                                                        fill="#af1212"></path>
+                                                                </g>
+                                                            </svg>
+                                                        </button>
+                                                    @else
+                                                        <button onclick="abrirModal('modal-rechazar-{{ $stat->id }}')"
+                                                            class="block text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                                            <svg width="30px" height="30px" viewBox="0 0 24 24"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                                    stroke-linejoin="round"></g>
+                                                                <g id="SVGRepo_iconCarrier">
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289Z"
+                                                                        fill="#af1212"></path>
+                                                                </g>
+                                                            </svg>
+                                                        </button>
+                                                    @endif
 
 
                                                 </div>
@@ -549,10 +580,51 @@
                                                     No, cancelar
                                                 </button>
                                             </div>
-
                                         </div>
                                     </div>
-                    </div>
+                                 </div>
+
+                                    <div id="modal-aprobar-{{ $stat->id }}"
+                                        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                                        <div class="bg-white rounded-lg p-6 max-w-sm w-full relative">
+                                            <h2 class="text-lg font-bold mb-4 text-center">Confirmar aprobación</h2>
+                                            <h2 class="text-sm mb-1 text-center"> Actividad: {{ $stat->titulo }}
+                                                ({{ \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') }})</h2>
+                                                 <h2 class="text-sm mb-1 text-center"> Becario:
+                                                {{ $stat->user->Becario->nombre }}</h2>
+                                            <hr><br>
+                                            <button type="button"
+                                                onclick="cerrarModal('modal-aprobar-{{ $stat->id }}')"
+                                                class="absolute top-2 right-2 text-gray-500 hover:text-black text-lg 2xl:text-2xl">&times;</button>
+                                            <div class="flex flex-col items-center">
+                                                <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 20 20">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                </svg>
+                                                <h3 class="mb-5 text-lg font-normal text-gray-500 text-center">¿Estás
+                                                    seguro de que quieres aprobar esta actividad?</h3>
+                                                <hr><br>
+                                                <div class="text-center">
+                                                    <form action="{{ route('stat.aprobar', $stat) }}" method="POST"
+                                                        class="w-full flex flex-col items-center">
+                                                        @csrf
+                                                        <button type="submit"
+                                                            class="bg-gray-700 hover:bg-gray-800 text-white font-medium rounded px-2 py-2 mt-2 mx-3">
+                                                            Sí, estoy seguro
+                                                        </button>
+                                                    </form>
+                                                    <button type="button"
+                                                        onclick="cerrarModal('modal-aprobar-{{ $stat->id }}')"
+                                                        class="py-2 px-2 mt-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 mx-3">
+                                                        No, cancelar
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
 
 
                 </div>
@@ -583,6 +655,30 @@
                     <button onclick="cerrarModalImgAmpliada()"
                         class="absolute top-4 right-6 text-white text-4xl font-bold">&times;</button>
                 </div>
+                 <!-- Modal Motivo de Rechazo -->
+                <div id="modal-motivo-rechazo-{{ $stat->id }}"
+                    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                    <div class="bg-white rounded-lg p-6 max-w-sm w-full relative">
+                        <h2 class="text-lg font-bold mb-4 text-center text-red-700">Motivo de Rechazo</h2>
+                        <button type="button"
+                            onclick="cerrarModal('modal-motivo-rechazo-{{ $stat->id }}')"
+                            class="absolute top-2 right-2 text-gray-500 hover:text-black text-lg 2xl:text-2xl">&times;</button>
+                        <div class="text-gray-700 text-center mb-2">
+                            <span class="font-semibold">Actividad:</span> {{ $stat->titulo }}<br>
+                            <span class="font-semibold">Fecha:</span> {{ \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') }}
+                        </div>
+                        <hr class="mb-4">
+                        <div class="text-red-700 text-center italic">
+                            {{ $stat->observacion ?: 'Sin motivo especificado.' }}
+                        </div>
+                        <div class="flex justify-center mt-4">
+                            <button type="button"
+                                onclick="cerrarModal('modal-motivo-rechazo-{{ $stat->id }}')"
+                                class="py-2 px-4 text-sm font-medium text-white focus:outline-none bg-slate-800 rounded-lg border border-gray-200 hover:bg-slate-900">
+                                Cerrar
+                            </button>
+                        </div>
+                    </div>
 
                 @empty
                     <tr>
@@ -1019,10 +1115,11 @@ document.getElementById('btn-generar-reporte').addEventListener('click', functio
             if (cells.length) {
                 rows.push([
                     cells[0].innerText.trim(), // Titulo
-                    cells[1].innerText.trim(), // Fecha
-                    cells[2].innerText.trim(), // Modalidad
-                    cells[3].innerText.trim(), // Duración
-                    cells[5].innerText.trim(), // Estatus
+                    cells[2].innerText.trim(), // Fecha
+                    cells[3].innerText.trim(), // Modalidad
+                    cells[4].innerText.trim(), // Duración
+                    cells[6].innerText.trim(), // Estatus
+
                 ]);
             }
         });
@@ -1067,6 +1164,7 @@ document.getElementById('btn-generar-reporte').addEventListener('click', functio
   <script>
             document.getElementById('btn-generar-reporte-admin').addEventListener('click', function() {
                 // Obtener logo (ajusta la ruta si es necesario)
+                let modalidad = "{{ $n_actividad }}";
                 let becario = "{{ $user->becario->nombre }}";;
                 const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
                 const doc = new window.jspdf.jsPDF({
@@ -1082,7 +1180,7 @@ document.getElementById('btn-generar-reporte').addEventListener('click', functio
                     // Título principal
                     doc.setFontSize(16);
                     doc.setFont('helvetica', 'bold');
-                    doc.text('Reporte general de'+ modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+                    doc.text('Reporte general de '+ modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
 
 
                     // Datos del becario y fecha
@@ -1136,7 +1234,7 @@ document.getElementById('btn-generar-reporte').addEventListener('click', functio
                         }, // bg-gray-100
                     });
 
-                    doc.save('Reporte_Actividades_' + becario + '_' + new Date().toLocaleString() + '.pdf');
+                    doc.save('Reporte_General_Actividades_' + new Date().toLocaleString() + '.pdf');
                 });
 
                 // Función para convertir imagen a base64

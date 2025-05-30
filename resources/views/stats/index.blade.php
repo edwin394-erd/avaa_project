@@ -5,6 +5,10 @@
 @endsection
 
 @section('contenido')
+@php
+    $highlightId = request('highlight');
+@endphp
+
     <div class="2xl:w-6/6 mx-auto py-5 px-0 md:px-5">
 
         {{-- <h1 class="text-lg 2xl:text-2xl font-bold text-gray-800 text-center">Tabla de Actividades</h1>
@@ -16,7 +20,7 @@
             <!-- Formulario para agregar actividad -->
             <div class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0">
                 <div class="flex flex-col bg-white border shadow-xl shadow-gray-100 rounded-l-xl p-4 h-full">
-                    @if ($user->role == 'user')
+                @if ($user->role == 'user')
                         <h1 class="text-lg 2xl:text-xl font-bold text-gray-700 text-center mb-4">Agregar Actividad</h1>
                         <hr class="mb-2">
 
@@ -115,33 +119,128 @@
                             class="mt-auto w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Agregar
                         </button>
                     @else
+                    {{-- si es admin --}}
                         <h1 class="text-lg 2xl:text-xl font-bold text-gray-700 text-center mb-4">Actividades Cargadas</h1>
                         <hr class="mb-2">
-                    @endif
+
+                                 @foreach ([
+                                    [
+                                        'title' => 'Voluntariado Interno',
+                                        'total' => $total_volin,
+                                        'meta' => $meta_volin,
+                                        'percentage' => $porcen_volin,
+                                        'color' => 'text-[#28a745]',
+                                        'bgcolor' => 'bg-[#28a745]',
+                                        'icono' => 'icon-volin.png',
+                                        'name' => 'volin',
+                                        'stats_realizado' => $stats_realizado_volin,
+                                    ],
+                                    [
+                                        'title' => 'Voluntariado Externo',
+                                        'total' => $total_volex,
+                                        'meta' => $meta_volex,
+                                        'percentage' => $porcen_volex,
+                                        'color' => 'text-[#dc3545]',
+                                        'bgcolor' => 'bg-[#dc3545]',
+                                        'icono' => 'icon-volex.png',
+                                        'name' => 'volex',
+                                        'stats_realizado' => $stats_realizado_volex,
+                                    ],
+                                    [
+                                        'title' => 'Chats',
+                                        'total' => $total_chat,
+                                        'meta' => $meta_chat,
+                                        'percentage' => $porcen_chat,
+                                        'color' => 'text-[#fd7e14]',
+                                        'bgcolor' => 'bg-[#fd7e14]',
+                                        'icono' => 'icon-chat.png',
+                                        'name' => 'chat',
+                                        'stats_realizado' => $stats_realizado_chat,
+                                    ],
+                                    [
+                                        'title' => 'Talleres',
+                                        'total' => $total_taller,
+                                        'meta' => $meta_taller,
+                                        'percentage' => $porcen_taller,
+                                        'color' => 'text-[#007bff]',
+                                        'bgcolor' => 'bg-[#007bff]',
+                                        'icono' => 'icon-taller.png',
+                                        'name' => 'taller',
+                                        'stats_realizado' => $stats_realizado_taller,
+                                    ],
+                                ] as $modalidad)
+                                @php
+                                    // Puedes ajustar el total objetivo aquí
+                                    $totalRealizadas = $modalidad['stats_realizado']->count();
+                                    $totalHoras =   $modalidad['stats_realizado']->sum('duracion');
+                                    $meta = $modalidad['meta'];
+                                    $icono = $modalidad['icono'];
+                                    $porcentaje = $meta > 0 ? min(100, round(($totalHoras / $meta) * 100)) : 0;
+                                    $bgcolor2 = $modalidad['bgcolor'];
+                                    $color = $modalidad['color'];
+                                    $n_actividad = $modalidad['title'];
+                                @endphp
+                                 <div class="flex items-center space-x-3 mb-3 text-center">
+                                    <img src="{{ asset('imgs/' . $icono)}}" alt="icono" class="w-10 h-10 3xl:w-12 3xl:h-12">
+                                    <h1 class="test-md lg:text-lg 3xl:text-xl font-bold {{ $color }} mb-0 flex items-center"> {{ $n_actividad }}</h1>
+                                </div>
+                                <div class="flex flex-col gap-0.5 2xl:gap-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600 text-sm">Total actividades realizadas:</span>
+                                        <span class="font-bold text-lg">{{ $totalRealizadas }}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600 text-sm">Total horas realizadas:</span>
+                                        <span class="font-bold text-lg">{{ $totalHoras }}h</span>
+                                    </div>
+
+                                    <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden mt-2">
+                                       <div
+                                        class="h-4 rounded-full {{ $bgcolor2 }} transition-all duration-700 ease-in-out barra-progreso"
+                                        style="width: 0%"
+                                        data-porcentaje="{{ $porcentaje }}"
+                                     ></div>
+                                    </div>
+                                    <div class="text-right text-xs text-gray-700 mt-1">
+                                        Progreso: <span class="font-semibold">{{ $porcentaje }}%</span> /
+                                        <span>Meta: {{ $meta }} horas</span>
+                                    </div>
+                                </div>
+                                @endforeach
+                                 @endif
+                            </div>
+                        </div>
 
 
-                </div>
-            </div>
 
-            <!-- Tabla de estadísticas -->
-            <div class="w-full xl:w-3/4 p-0 flex flex-col">
-                <div class="flex flex-col bg-white border shadow-xl shadow-gray-100 xl:rounded-r-xl p-5 h-full">
-                    <div
-                        class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+
+           <!-- Tabla de estadísticas -->
+        <div class="w-full xl:w-3/4 p-0 flex flex-col">
+            <div class="flex flex-col bg-white border shadow-xl shadow-gray-100 xl:rounded-r-xl p-5 h-full">
+                 {{-- <div class="flex items-center space-x-3 mb-3">
+                    <h1 class="text-lg 2xl:text-xl font-bold mb-0 text-gray-700 flex items-center">Tabla de {{ $n_actividad }}</h1>
+                 </div> --}}
+                <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
                         <div>
-                            {{-- filtrar por fecha --}}
-                            <button type="button" id="abrir-modal-filtrar-fecha"
-                                class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5"md:
-                                onclick="document.getElementById('modal-filtrar-fecha').classList.remove('hidden')">
-                                Filtrar por fecha
-                            </button>
+                             {{-- filtrar por fecha --}}
+                        <button
+                            type="button"
+                            id="abrir-modal-filtrar-fecha"
+                            class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5"
+                            onclick="document.getElementById('modal-filtrar-fecha').classList.remove('hidden')"
+                        >
+                            Filtrar por fecha
+                        </button>
 
-                            <button type="button" id="btn-ver-todo"
-                                class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2">
-                                Ver todo
-                            </button>
+                        <button
+                            type="button"
+                            id="btn-ver-todo"
+                            class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2"
+                        >
 
-                            @if ($user->role == 'admin')
+                            Ver todo
+                        </button>
+                         @if ($user->role == 'admin')
                                 <button type="button" id="btn-generar-reporte-admin"
                                     class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2">
                                     Generar reporte
@@ -152,9 +251,7 @@
                                     Generar reporte
                                 </button>
                             @endif
-
                         </div>
-
 
                         <div id="modal-filtrar-fecha"
                             class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
@@ -182,9 +279,7 @@
                                         class="bg-slate-800 hover:bg-slate-700 text-white font-medium rounded px-4 py-2 mt-2">Aplicar
                                         filtro</button>
                                 </form>
-
                             </div>
-
                         </div>
 
                         <label for="table-search" class="sr-only text-sm">Buscar</label>
@@ -203,7 +298,7 @@
                         </div>
                     </div>
 
-                    <div class="overflow-y-auto h-[calc(75vh-4rem)]">
+                    <div class="overflow-y-auto h-[calc(80vh-4rem)]">
                         <table class="w-full text-sm text-left rtl:text-right text-black table-auto bg-white"
                             id="myTable">
                             <thead class="text-gray-700 text-md uppercase border-b border-gray-200">
@@ -215,7 +310,7 @@
                                     <th scope="col" class="px-3 py-3 text-center">Actividad</th>
                                     <th scope="col" class="px-3 py-3 text-center">Fecha</th>
                                     <th scope="col" class="px-3 py-3 text-center">Modalidad</th>
-                                    <th scope="col" class="px-3 py-3 text-center">Duración</th>
+                                    <th scope="col" class="px-3 py-3 text-center">Duración (Horas)</th>
                                     <th scope="col" class="px-3 py-3 text-center">Ver evidencias</th>
                                     <th scope="col" class="px-3 py-3 text-center">Estatus</th>
                                     <th scope="col" class="px-3 py-3 "> Opciones</th>
@@ -225,7 +320,8 @@
                             <tbody>
                                 @forelse ($stats as $stat)
                                     <tr
-                                        class="bg-white text-sm border-b border-gray-200 transition duration-300 ease-in-out hover:bg-blue-100 text-sm">
+                                        id="stat-{{ $stat->id }}"
+                                        class="{{ $highlightId == $stat->id ? 'bg-yellow-200 hover:bg-yellow-100' : '' }} bg-white text-sm border-b border-gray-200 transition duration-300 ease-in-out hover:bg-blue-100 text-sm">
                                         @if ($user->role == 'admin')
                                             <td class="px-3 py-4 text-center">{{ $stat->user->becario->nombre }}</td>
                                         @endif
@@ -283,7 +379,7 @@
                                                             <style>
                                                                 .a {
                                                                     fill: none;
-                                                                    stroke: hsl(125, 68%, 21%);
+                                                                    stroke: hsl(227, 57%, 18%);
                                                                     stroke-linecap: round;
                                                                     stroke-linejoin: round;
                                                                     stroke-width: 3.5;
@@ -307,7 +403,12 @@
                                             @elseif ($stat->estado == 'pendiente')
                                                 <span class="bg-yellow-200 p-2 text-bold rounded ">PENDIENTE</span>
                                             @elseif ($stat->estado == 'rechazado')
-                                                <span class="bg-red-300 p-2 text-bold rounded ">RECHAZADO</span>
+                                                <span class="bg-red-300 p-2 text-bold rounded cursor-pointer"
+                                                    onclick="abrirModal('modal-motivo-rechazo-{{ $stat->id }}')"
+                                                    title="Ver motivo de rechazo">
+                                                    RECHAZADO
+                                                </span>
+
                                             @else
                                                 <span class="bg-green-200 p-2 text-bold rounded ">APROBADO</span>
                                             @endif
@@ -336,20 +437,37 @@
                                                         </button>
                                                     </form>
                                                     {{-- rechazar --}}
-                                                    <button onclick="abrirModal('modal-rechazar-{{ $stat->id }}')"
-                                                        class="block text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                                                        <svg width="30px" height="30px" viewBox="0 0 24 24"
-                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                                stroke-linejoin="round"></g>
-                                                            <g id="SVGRepo_iconCarrier">
-                                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                                    d="M5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289Z"
-                                                                    fill="#af1212"></path>
-                                                            </g>
-                                                        </svg>
-                                                    </button>
+                                                    @if ($stat->estado == 'rechazado')
+                                                        <button disabled
+                                                            class="block text-white opacity-50 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                                            <svg width="30px" height="30px" viewBox="0 0 24 24"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                                    stroke-linejoin="round"></g>
+                                                                <g id="SVGRepo_iconCarrier">
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289Z"
+                                                                        fill="#af1212"></path>
+                                                                </g>
+                                                            </svg>
+                                                        </button>
+                                                    @else
+                                                        <button onclick="abrirModal('modal-rechazar-{{ $stat->id }}')"
+                                                            class="block text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                                            <svg width="30px" height="30px" viewBox="0 0 24 24"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                                    stroke-linejoin="round"></g>
+                                                                <g id="SVGRepo_iconCarrier">
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289Z"
+                                                                        fill="#af1212"></path>
+                                                                </g>
+                                                            </svg>
+                                                        </button>
+                                                    @endif
 
 
                                                 </div>
@@ -605,6 +723,31 @@
                         class="absolute top-4 right-6 text-white text-4xl font-bold">&times;</button>
                 </div>
 
+                 <!-- Modal Motivo de Rechazo -->
+                <div id="modal-motivo-rechazo-{{ $stat->id }}"
+                    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                    <div class="bg-white rounded-lg p-6 max-w-sm w-full relative">
+                        <h2 class="text-lg font-bold mb-4 text-center text-red-700">Motivo de Rechazo</h2>
+                        <button type="button"
+                            onclick="cerrarModal('modal-motivo-rechazo-{{ $stat->id }}')"
+                            class="absolute top-2 right-2 text-gray-500 hover:text-black text-lg 2xl:text-2xl">&times;</button>
+                        <div class="text-gray-700 text-center mb-2">
+                            <span class="font-semibold">Actividad:</span> {{ $stat->titulo }}<br>
+                            <span class="font-semibold">Fecha:</span> {{ \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') }}
+                        </div>
+                        <hr class="mb-4">
+                        <div class="text-red-700 text-center italic">
+                            {{ $stat->observacion ?: 'Sin motivo especificado.' }}
+                        </div>
+                        <div class="flex justify-center mt-4">
+                            <button type="button"
+                                onclick="cerrarModal('modal-motivo-rechazo-{{ $stat->id }}')"
+                                class="py-2 px-4 text-sm font-medium text-white focus:outline-none bg-slate-800 rounded-lg border border-gray-200 hover:bg-slate-900">
+                                Cerrar
+                            </button>
+                        </div>
+                    </div>
+
                 @empty
                     <tr>
                         <td colspan="8" class="p-10 text-center uppercase text-gray-500 align-middle">No hay
@@ -613,6 +756,8 @@
                     @endforelse
                     </tbody>
                     </table>
+                </div>
+
                 </div>
                 {{-- <div class="mt-4">
                     <p class="text-sm text-gray-700 text-center mt-2">Mostrando
@@ -1034,4 +1179,28 @@
                 }
             });
         </script>
+        <script>
+      document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.barra-progreso').forEach(barra => {
+                const porcentaje = barra.dataset.porcentaje || '0';
+                barra.style.transition = 'none';
+                barra.style.width = '0%';
+                barra.offsetHeight; // trigger reflow
+                setTimeout(() => {
+                    barra.style.transition = 'width 1s cubic-bezier(0.4,0,0.2,1)';
+                    barra.style.width = porcentaje + '%';
+                }, 100);
+            });
+        });
+        </script>
+        @if(request('highlight'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const row = document.getElementById('stat-{{ request('highlight') }}');
+                if(row) {
+                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        </script>
+        @endif
     @endsection
