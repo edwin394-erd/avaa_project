@@ -92,7 +92,7 @@ class StatController extends Controller
             'stats' => $stats,
             'meta_volin' => $meta_volin ?? 0,
             'meta_volex' => $meta_volex ?? 0,
-            'meta_taller' => $$meta_taller ?? 0,
+            'meta_taller' => $meta_taller ?? 0,
             'meta_chat' => $meta_chat ?? 0,
             'stats_realizado_volin' => $stats_realizado_volin ?? [],
             'stats_realizado_volex' => $stats_realizado_volex ?? [],

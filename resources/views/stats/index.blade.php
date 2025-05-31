@@ -120,7 +120,7 @@
                         </button>
                     @else
                     {{-- si es admin --}}
-                        <h1 class="text-lg 2xl:text-xl font-bold text-gray-700 text-center mb-4">Actividades Cargadas</h1>
+                        <h1 class="text-lg 2xl:text-xl font-bold text-gray-700 text-center mb-4 ">Actividades Cargadas</h1>
                         <hr class="mb-2">
 
                                  @foreach ([
@@ -180,7 +180,7 @@
                                     $color = $modalidad['color'];
                                     $n_actividad = $modalidad['title'];
                                 @endphp
-                                 <div class="flex items-center space-x-3 mb-3 text-center">
+                                 <div class="flex items-center space-x-3 xl:mb-3 text-center">
                                     <img src="{{ asset('imgs/' . $icono)}}" alt="icono" class="w-10 h-10 3xl:w-12 3xl:h-12">
                                     <h1 class="test-md lg:text-lg 3xl:text-xl font-bold {{ $color }} mb-0 flex items-center"> {{ $n_actividad }}</h1>
                                 </div>
@@ -298,7 +298,7 @@
                         </div>
                     </div>
 
-                    <div class="overflow-y-auto h-[calc(80vh-4rem)]">
+                    <div class="flex-1 overflow-y-auto" style="min-height:0;">
                         <table class="w-full text-sm text-left rtl:text-right text-black table-auto bg-white"
                             id="myTable">
                             <thead class="text-gray-700 text-md uppercase border-b border-gray-200">
@@ -930,28 +930,44 @@
                     });
                 }
             });
-            document.getElementById('form-filtrar-fecha').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const inicio = document.getElementById('fecha-inicio').value;
-                const fin = document.getElementById('fecha-fin').value;
-                if (!inicio || !fin || inicio > fin) {
-                    alert('Selecciona un rango de fechas válido.');
-                    return;
-                }
-                // Filtrar filas de la tabla
-                const rows = document.querySelectorAll('#myTable tbody tr');
-                rows.forEach(row => {
-                    const fechaTd = row.querySelector('td:nth-child(5)');
-                    if (!fechaTd) return;
-                    const fecha = fechaTd.textContent.trim();
-                    if (fecha >= inicio && fecha <= fin) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
+          document.getElementById('form-filtrar-fecha').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const inicio = document.getElementById('fecha-inicio').value;
+            const fin = document.getElementById('fecha-fin').value;
+            if (!inicio || !fin || inicio > fin) {
+                alert('Selecciona un rango de fechas válido.');
+                return;
+            }
+            // Filtrar filas de la tabla
+            const rows = document.querySelectorAll('#myTable tbody tr');
+            rows.forEach(row => {
+                // Busca la celda que contiene la fecha (la que tiene formato dd/mm/yyyy)
+                let fechaTd = null;
+                row.querySelectorAll('td').forEach(td => {
+                    if (/^\d{2}\/\d{2}\/\d{4}$/.test(td.textContent.trim())) {
+                        fechaTd = td;
                     }
                 });
-                cerrarModal('modal-filtrar-fecha');
+                if (!fechaTd) {
+                    row.style.display = 'none';
+                    return;
+                }
+                const fechaTexto = fechaTd.textContent.trim(); // dd/mm/yyyy
+                // Convertir a yyyy-mm-dd
+                const partes = fechaTexto.split('/');
+                if (partes.length !== 3) {
+                    row.style.display = 'none';
+                    return;
+                }
+                const fechaFormateada = `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
+                if (fechaFormateada >= inicio && fechaFormateada <= fin) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
             });
+            cerrarModal('modal-filtrar-fecha');
+        });
         </script>
 
         <script>

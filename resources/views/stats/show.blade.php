@@ -819,28 +819,44 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-document.getElementById('form-filtrar-fecha').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const inicio = document.getElementById('fecha-inicio').value;
-    const fin = document.getElementById('fecha-fin').value;
-    if (!inicio || !fin || inicio > fin) {
-        alert('Selecciona un rango de fechas válido.');
-        return;
-    }
-    // Filtrar filas de la tabla
-    const rows = document.querySelectorAll('#myTable tbody tr');
-    rows.forEach(row => {
-        const fechaTd = row.querySelector('td:nth-child(5)');
-        if (!fechaTd) return;
-        const fecha = fechaTd.textContent.trim();
-        if (fecha >= inicio && fecha <= fin) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
-        }
-    });
-    cerrarModal('modal-filtrar-fecha');
-});
+ document.getElementById('form-filtrar-fecha').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const inicio = document.getElementById('fecha-inicio').value;
+            const fin = document.getElementById('fecha-fin').value;
+            if (!inicio || !fin || inicio > fin) {
+                alert('Selecciona un rango de fechas válido.');
+                return;
+            }
+            // Filtrar filas de la tabla
+            const rows = document.querySelectorAll('#myTable tbody tr');
+            rows.forEach(row => {
+                // Busca la celda que contiene la fecha (la que tiene formato dd/mm/yyyy)
+                let fechaTd = null;
+                row.querySelectorAll('td').forEach(td => {
+                    if (/^\d{2}\/\d{2}\/\d{4}$/.test(td.textContent.trim())) {
+                        fechaTd = td;
+                    }
+                });
+                if (!fechaTd) {
+                    row.style.display = 'none';
+                    return;
+                }
+                const fechaTexto = fechaTd.textContent.trim(); // dd/mm/yyyy
+                // Convertir a yyyy-mm-dd
+                const partes = fechaTexto.split('/');
+                if (partes.length !== 3) {
+                    row.style.display = 'none';
+                    return;
+                }
+                const fechaFormateada = `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
+                if (fechaFormateada >= inicio && fechaFormateada <= fin) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            cerrarModal('modal-filtrar-fecha');
+        });
 </script>
 
 <script>
