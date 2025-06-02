@@ -139,47 +139,45 @@
                     <hr>
                     <br>
                     <!-- Lista de actividades -->
-                    <div class="space-y-4 flex-grow">
-                        <div
-                            class="flex items-center justify-between bg-gray-50 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-                            <div class="flex flex-col">
-                                <h4 class="font-semibold text-lg text-gray-800">Voluntariado Externo</h4>
-                                <p class="text-sm text-gray-600">Actividad de voluntariado en el evento de limpieza del
-                                    parque.</p>
+                    <div class="space-y-4 flex-grow max-h-[520px] overflow-y-auto">
+                        @forelse($stats as $actividad)
+                            <div class="flex items-center justify-between bg-gradient-to-r from-gray-50 via-white to-gray-100 p-5 rounded-2xl shadow transition-all duration-200 hover:shadow-xl border border-gray-200 group">
+                                <div class="flex flex-col">
+                                    <h4 class="font-semibold text-md md:text-lg text-gray-800 group-hover:text-blue-700 transition-colors">
+                                        {{ $actividad->titulo ?? $actividad->nombre ?? 'Actividad' }}
+                                    </h4>
+                                    <p class="text-sm md:text-base text-gray-500 mt-1 line-clamp-2">
+                                        Becario: {{ $actividad->user->Becario->nombre ?? '-' }}
+                                    </p>
+                                </div>
+                                <div class="text-right ml-4 flex flex-col items-end">
+                                    <span class="block text-xs md:text-sm text-gray-400 font-medium">
+                                        {{ \Carbon\Carbon::parse($actividad->fecha ?? $actividad->created_at)->format('d M, Y') }}
+                                    </span>
+                                    <span class="inline-block px-2 py-1 mt-2 rounded-full text-xs font-semibold
+                                        @if(isset($actividad->estado))
+                                            @if($actividad->estado == 'Pendiente') bg-yellow-100 text-yellow-700 border border-yellow-300
+                                            @elseif($actividad->estado == 'En Progreso') bg-green-100 text-green-700 border border-green-300
+                                            @elseif($actividad->estado == 'Completada') bg-blue-100 text-blue-700 border border-blue-300
+                                            @else bg-gray-100 text-gray-600 border border-gray-300
+                                            @endif
+                                        @else
+                                            bg-gray-100 text-gray-600 border border-gray-300
+                                        @endif
+                                    ">
+                                        {{ $actividad->estado ?? 'Sin estado' }}
+                                    </span>
+                                </div>
                             </div>
-                            <div class="text-right">
-                                <span class="block text-sm text-gray-500">Fecha: 15 Nov, 2023</span>
-                                <span class="block text-sm text-yellow-600 mt-1">Pendiente</span>
+                        @empty
+                            <div class="flex flex-col items-center justify-center text-center text-gray-400 mt-8">
+                                <svg class="w-12 h-12 mb-2 text-gray-200" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"></path>
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                </svg>
+                                <p class="text-base font-medium">No tienes actividades recientes.</p>
                             </div>
-                        </div>
-                        <div
-                            class="flex items-center justify-between bg-gray-50 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-                            <div class="flex flex-col">
-                                <h4 class="font-semibold text-lg text-gray-800">Taller de Liderazgo</h4>
-                                <p class="text-sm text-gray-600">Taller sobre habilidades de liderazgo para jóvenes en
-                                    la comunidad.</p>
-                            </div>
-                            <div class="text-right">
-                                <span class="block text-sm text-gray-500">Fecha: 20 Nov, 2023</span>
-                                <span class="block text-sm text-green-600 mt-1">En Progreso</span>
-                            </div>
-                        </div>
-                        <div
-                            class="flex items-center justify-between bg-gray-50 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-                            <div class="flex flex-col">
-                                <h4 class="font-semibold text-lg text-gray-800">Charla sobre Medio Ambiente</h4>
-                                <p class="text-sm text-gray-600">Charla educativa sobre la importancia de cuidar el
-                                    medio ambiente.</p>
-                            </div>
-                            <div class="text-right">
-                                <span class="block text-sm text-gray-500">Fecha: 25 Nov, 2023</span>
-                                <span class="block text-sm text-red-600 mt-1">Completada</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Si no hay actividades -->
-                    <div class="text-center text-gray-600 mt-4">
-                        <p>No tienes actividades próximas.</p>
+                        @endforelse
                     </div>
                     <div class="flex-grow"></div>
                 </div>
@@ -195,10 +193,10 @@
                     </div>
                     <hr>
                     <br>
-                    <div class="justify-between border-gray-200 pb-3 text-center">
+                    <div class="justify-between border-gray-200 pb-1 text-center">
                         <dl>
                             <dt class="text-base font-normal text-gray-500 pb-1">Horas Totales</dt>
-                            <dd class="leading-none text-3xl font-bold text-gray-800">
+                            <dd class="leading-none text-2xl font-bold text-gray-800">
                                 {{$total_volin + $total_volex + $total_taller + $total_chat}} Horas</dd>
                         </dl>
                         <div>
@@ -236,8 +234,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 
     </div>

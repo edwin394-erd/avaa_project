@@ -9,6 +9,8 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\EvidenciaController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ActivityController;
 
 
 /*
@@ -41,7 +43,7 @@ Route::post('/actividades/{stat}/aprobar', [StatController::class, 'aprobar'])->
 Route::post('/actividades/{stat}/rechazar', [StatController::class, 'rechazar'])->name('stat.rechazar');
 
 Route::get('/tabla-actividades',[StatController::class, 'index'])->name('stats.index');
-Route::get('/actividades/{modalidad}/', [StatController::class, 'modalidadindex'])->name('modalidad.index');
+Route::get('/Actividades/{modalidad}/', [StatController::class, 'modalidadindex'])->name('modalidad.index');
 
 Route::post('/imagenes',[ImagenController::class, 'store'])->name('imagenes.store');
 
@@ -51,6 +53,12 @@ Route::get('/Perfil/datos-personales',[PerfilController::class, 'datosindex'])->
 
 Route::get('/Perfil/configuracion-usuario',[PerfilController::class, 'configindex'])->name('configuser.index');
 Route::post('/Perfil/configuracion-usuario', [PerfilController::class, 'update'])->name('configuser.update');
+
+Route::get('/Usuarios',[UserController::class, 'index'])->name('users.index');
+Route::post('/Usuarios',[UserController::class, 'store'])->name('users.store');
+
+Route::get('/AdminActividades',[ActivityController::class, 'index'])->name('activities.index');
+
 
 Route::get('/notificaciones/json', function () {
     $notificaciones = auth()->user()

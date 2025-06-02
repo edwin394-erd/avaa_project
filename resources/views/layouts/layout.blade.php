@@ -105,7 +105,7 @@
                         </span>
                         Gestionar Actividades
                     </a>
-                    <a href="{{ route('stats.index') }}" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
+                    <a href="{{ route('activities.index') }}"  class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
                         <span class="mr-2">
                             <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 900.000000 900.000000" preserveAspectRatio="xMidYMid meet" class="scale-[1.8] translate-y-0.5">
                                 <g transform="translate(0.000000,900.000000) scale(0.100000,-0.100000)" fill="#4b5563" stroke="none">
@@ -122,7 +122,7 @@
                         </span>
                         Actividades Próximas
                     </a>
-                    <a href="" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-b-md">
+                    <a href="{{ route('users.index') }}" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-b-md">
                         <span class="mr-2">
                             <svg width="18px" height="18px" viewBox="-0.96 -0.96 25.92 25.92" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#4b5563"><path d="M1.5 6.5C1.5 3.46243 3.96243 1 7 1C10.0376 1 12.5 3.46243 12.5 6.5C12.5 9.53757 10.0376 12 7 12C3.96243 12 1.5 9.53757 1.5 6.5Z" fill="#4b5563"></path> <path d="M14.4999 6.5C14.4999 8.00034 14.0593 9.39779 13.3005 10.57C14.2774 11.4585 15.5754 12 16.9999 12C20.0375 12 22.4999 9.53757 22.4999 6.5C22.4999 3.46243 20.0375 1 16.9999 1C15.5754 1 14.2774 1.54153 13.3005 2.42996C14.0593 3.60221 14.4999 4.99966 14.4999 6.5Z" fill="#4b5563"></path> <path d="M0 18C0 15.7909 1.79086 14 4 14H10C12.2091 14 14 15.7909 14 18V22C14 22.5523 13.5523 23 13 23H1C0.447716 23 0 22.5523 0 22V18Z" fill="#4b5563"></path> <path d="M16 18V23H23C23.5522 23 24 22.5523 24 22V18C24 15.7909 22.2091 14 20 14H14.4722C15.4222 15.0615 16 16.4633 16 18Z" fill="#4b5563"></path></svg>
                         </span>
@@ -198,8 +198,15 @@
         <!-- Dropdown Perfil -->
         <li class="relative flex flex-col items-center group">
             <button type="button" class="flex flex-col items-center rounded md:border-0 md:p-0 text-white hover:bg-slate-700 hover:text-white md:hover:bg-transparent group relative focus:outline-none" id="perfilDropdownBtn">
-                <span class="flex items-center justify-center">
+                <span class="flex items-center justify-center relative">
                     <svg fill="#ffffff" class="transition-colors duration-200 group-hover:fill-green-300" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 45.532 45.532" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M22.766,0.001C10.194,0.001,0,10.193,0,22.766s10.193,22.765,22.766,22.765c12.574,0,22.766-10.192,22.766-22.765 S35.34,0.001,22.766,0.001z M22.766,6.808c4.16,0,7.531,3.372,7.531,7.53c0,4.159-3.371,7.53-7.531,7.53 c-4.158,0-7.529-3.371-7.529-7.53C15.237,10.18,18.608,6.808,22.766,6.808z M22.761,39.579c-4.149,0-7.949-1.511-10.88-4.012 c-0.714-0.609-1.126-1.502-1.126-2.439c0-4.217,3.413-7.592,7.631-7.592h8.762c4.219,0,7.619,3.375,7.619,7.592 c0,0.938-0.41,1.829-1.125,2.438C30.712,38.068,26.911,39.579,22.761,39.579z"></path> </g> </g></svg>
+                    @if(auth()->user()->role == 'admin')
+                        <span class="absolute -top-1 -right-1 bg-yellow-400 border border-white rounded-full w-3 h-3 flex items-center justify-center">
+                            <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor" class="text-yellow-700">
+                                <path d="M10 2l2.39 4.84 5.34.78-3.87 3.77.91 5.33L10 13.27l-4.77 2.51.91-5.33-3.87-3.77 5.34-.78z"/>
+                            </svg>
+                        </span>
+                    @endif
                 </span>
                 <span class="block w-full h-1 rounded-t mt-1 transition-all duration-200 {{ $currentRoute == 'configuser.index' || $currentRoute == 'datos.index'? 'bg-green-600' : 'invisible' }}"></span>
             </button>

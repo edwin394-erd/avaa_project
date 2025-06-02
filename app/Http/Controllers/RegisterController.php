@@ -16,15 +16,16 @@ class RegisterController extends Controller
     public function store(Request $request){
 
         $this->validate($request,[
-            'name' => ['required', 'max:30', 'min:5','regex:/^[\\pL\\s\\-]+$/u'],
+            'name' => ['required', 'max:100', 'min:1','regex:/^[\\pL\\s\\-]+$/u'],
+            'lastname' => ['required', 'max:100', 'min:5','regex:/^[\\pL\\s\\-]+$/u'],
             'email' => ['required', 'max:30', 'min:5', 'unique:users','email'],
             'password' => ['required', 'max:30', 'min:6', 'confirmed'],
         ]);
 
         $becario = Becario::create([
             'nombre' => $request->name,
+            'apellido' => $request->lastname,
             'cedula' => $request->cedula,
-
         ]);
 
         User::create([

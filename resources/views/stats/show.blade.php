@@ -191,7 +191,7 @@
                     </div>
                 </div>
 
-                <div class="overflow-y-auto h-[calc(75vh-4rem)]">
+                <div class="overflow-y-auto h-[calc(80vh-4rem)]">
                     <table class="w-full text-sm text-left rtl:text-right text-black table-auto bg-white"
                             id="myTable">
                             <thead class="text-gray-700 text-md uppercase border-b border-gray-200">
@@ -1042,7 +1042,9 @@ const options2 = {
         sparkline: { enabled: false },
         type: "bar",
         width: "100%",
-        height: window.innerWidth >= 640 ? 400 : 300,
+        height: document.getElementById("bar-chart")
+            ? Math.max(100, Math.round(document.getElementById("bar-chart").offsetHeight || document.getElementById("bar-chart").offsetWidth * 0.95))
+            : (window.innerWidth >= 1280 ? 500 : window.innerWidth >= 900 ? 300 : window.innerWidth >= 640 ? 200 : 140),
         toolbar: { show: false }
     },
     plotOptions: {
@@ -1058,7 +1060,7 @@ const options2 = {
     },
     legend: { show: false },
     tooltip: {
-        enabled: true,
+        enabled: false,
         shared: true,
         intersect: false,
         fillSeriesColor: false,

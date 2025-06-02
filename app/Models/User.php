@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'becario_id',
+        'personal_id',
     ];
 
     /**
@@ -49,6 +50,10 @@ class User extends Authenticatable
     public function Becario()
     {
         return $this->belongsTo(Becario::class);
+    }
+     public function Personal()
+    {
+        return $this->belongsTo(Personal::class);
     }
     public function notifications()
     {
