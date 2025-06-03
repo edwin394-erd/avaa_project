@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Becario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use App\Mail\UsuarioCreado;
 
 class UserController extends Controller
 {
@@ -24,11 +27,10 @@ class UserController extends Controller
             'becario_nombre'   => ['required', 'max:100', 'min:1', 'regex:/^[\pL\s\-]+$/u'],
             'becario_apellido' => ['required', 'max:100', 'min:1', 'regex:/^[\pL\s\-]+$/u'],
             'becario_email'    => ['required', 'max:30', 'min:5', 'unique:users,email', 'email'],
-            'becario_password' => ['required', 'max:30', 'min:6'],
             'becario_cedula'   => [
                 'required',
                 'max:20',
-                'min:1',
+                'min:7',
                 'regex:/^[\d\s\-]+$/u',
                 function ($attribute, $value, $fail) {
                     if (\DB::table('becarios')->where('cedula', $value)->exists()) {
@@ -36,6 +38,8 @@ class UserController extends Controller
                     }
                 }
             ],
+            'becario_telefono' => ['required', 'min:11'],
+
         ], [
             'required'                      => 'Este campo es obligatorio.',
             'max'                           => 'Máximo :max carac.',
@@ -43,6 +47,7 @@ class UserController extends Controller
             'unique'                        => 'Ya está registrado.',
             'email'                         => 'Formato incorrecto.',
             'regex'                         => 'Formato incorrecto.',
+            'confirmed'                     => 'Las contraseñas no coinciden.',
 
         ]);
 
@@ -53,21 +58,44 @@ class UserController extends Controller
                 ->with('tab', 'becario');
         }
 
+        // Generar contraseña aleatoria
+        $password = Str::random(10);
+
+        file_put_contents(
+            storage_path('usuarios_creados.txt'),
+            "Tipo: Becario | Email: {$request->becario_email} | Contraseña: {$password} | Fecha de creación: " . now()->format('Y-m-d H:i:s') . "\n",
+            FILE_APPEND
+        );
+
         $becario = \App\Models\Becario::create([
             'nombre'   => $request->becario_nombre,
             'apellido' => $request->becario_apellido,
             'cedula'   => $request->becario_cedula,
+            'carrera'  => $request->becario_carrera,
+            'semestre' => $request->becario_semestre,
+            'telefono' => $request->becario_telefono,
+            'direccion' => $request->becario_direccion,
+            'meta_taller' => $request->becario_meta_taller ?? 0,
+            'meta_chat' => $request->becario_meta_chat ?? 0,
+            'meta_volin' => $request->becario_meta_volin ?? 0,
+            'meta_volex' => $request->becario_meta_volex ?? 0,
+            'nivel_cevaz' => $request->becario_nivel_cevaz ?? 1,
+            'fecha_nacimiento' => $request->becario_fecha_nacimiento,
+
+        ]);
+
+        $usuario = \App\Models\User::create([
+            'becario_id' => $becario->id,
+            'email'      => $request->becario_email,
+            'role'       => $request->becario_role ?? 'user',
+            'password'    => \Hash::make($password),
             'activo'   => 1,
         ]);
 
-        \App\Models\User::create([
-            'becario_id' => $becario->id,
-            'email'      => $request->becario_email,
-            'role'       => 'user',
-            'password'   => \Hash::make($request->becario_password),
-        ]);
+        // Enviar correo con la contraseña generada
+        Mail::to($request->becario_email)->send(new UsuarioCreado($password));
 
-        return redirect()->route('users.index')->with('success', 'Usuario becario creado correctamente');
+        return redirect()->route('users.index')->with('success', 'Usuario becario creado correctamente y contraseña enviada por correo');
     }
 
     // PERSONAL
@@ -76,11 +104,10 @@ class UserController extends Controller
             'personal_nombre'   => ['required', 'max:100', 'min:1', 'regex:/^[\pL\s\-]+$/u'],
             'personal_apellido' => ['required', 'max:100', 'min:1', 'regex:/^[\pL\s\-]+$/u'],
             'personal_email'    => ['required', 'max:30', 'min:5', 'unique:users,email', 'email'],
-            'personal_password' => ['required', 'max:30', 'min:6'],
             'personal_cedula'   => [
                 'required',
                 'max:20',
-                'min:1',
+                'min:7',
                 'regex:/^[\d\s\-]+$/u',
                 function ($attribute, $value, $fail) {
                     if (\DB::table('personals')->where('cedula', $value)->exists()) {
@@ -88,6 +115,7 @@ class UserController extends Controller
                     }
                 }
             ],
+            'personal_telefono' => ['required', 'min:11'],
         ], [
             'required'                      => 'Este campo es obligatorio.',
             'max'                           => 'Máximo :max carac.',
@@ -95,6 +123,7 @@ class UserController extends Controller
             'unique'                        => 'Ya está registrado.',
             'email'                         => 'Formato incorrecto.',
             'regex'                         => 'Formato incorrecto.',
+            'confirmed'                     => 'Las contraseñas no coinciden.',
 
         ]);
 
@@ -104,22 +133,41 @@ class UserController extends Controller
                 ->withInput()
                 ->with('tab', 'personal');
         }
+        // Generar contraseña aleatoria
+        $password = Str::random(10);
+
+       file_put_contents(
+            storage_path('usuarios_creados.txt'),
+            "Tipo: Personal | Email: {$request->personal_email} | Contraseña: {$password} | Fecha de creación: " . now()->format('Y-m-d H:i:s') . "\n",
+            FILE_APPEND
+        );
+
 
         $personal = \App\Models\Personal::create([
             'nombre'   => $request->personal_nombre,
             'apellido' => $request->personal_apellido,
             'cedula'   => $request->personal_cedula,
-            'activo'   => 1,
+            'correo'   => $request->personal_email,
+            'fecha_nacimiento' => $request->personal_fecha_nacimiento,
+            'cargo'    => $request->personal_cargo,
+            'telefono' => $request->personal_telefono,
+            'direccion' => $request->personal_direccion,
+
         ]);
+
 
         \App\Models\User::create([
             'personal_id' => $personal->id,
             'email'       => $request->personal_email,
-            'role'        => 'admin',
-            'password'    => \Hash::make($request->personal_password),
+            'role'       => $request->personal_role ?? 'admin',
+            'password'    => \Hash::make($password),
+            'activo'   => 1,
         ]);
 
-        return redirect()->route('users.index')->with('success', 'Usuario personal creado correctamente');
+        // Enviar correo con la contraseña generada
+        Mail::to($request->personal_email)->send(new UsuarioCreado($password));
+
+        return redirect()->route('users.index')->with('success', 'Usuario personal creado correctamente')->with('tab', 'personal');
     }
 
     // Si no es ninguno, redirige

@@ -12,6 +12,8 @@ class Personal extends Model
         'user_id',
         'nombre',
         'apellido',
+        'correo',
+        'fecha_nacimiento',
         'cedula',
         'cargo',
         'telefono',

@@ -12,7 +12,7 @@
         <div class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0">
             <div class="flex flex-col bg-white border shadow-xl shadow-gray-100 rounded-l-xl p-4 h-full">
                 <h1 id="form-title" class="text-lg 2xl:text-xl font-bold text-gray-700 text-center mb-4">Agregar Becario</h1>
-
+                <br>
                 <form id="form-becario" action="{{ route('users.store') }}" method="POST" class="flex flex-col flex-1" novalidate>
                     @csrf
                     <input type="hidden" name="tipo" value="becario">
@@ -21,7 +21,8 @@
                             <div class="relative z-0 w-full mb-5 group">
                                 <input type="text" name="becario_nombre" id="becario_nombre"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('becario_nombre') border-red-500 @enderror"
-                                    placeholder=" " required value="{{ old('becario_nombre') }}">
+                                    placeholder=" " required value="{{ old('becario_nombre') }}"
+                                    oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')">
                                 <label for="becario_nombre" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                     Nombre
                                 </label>
@@ -34,7 +35,8 @@
                             <div class="relative z-0 w-full mb-5 group">
                                 <input type="text" name="becario_apellido" id="becario_apellido"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('becario_apellido') border-red-500 @enderror"
-                                    placeholder=" " required value="{{ old('becario_apellido') }}">
+                                    placeholder=" " required value="{{ old('becario_apellido') }}"
+                                    oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')">
                                 <label for="becario_apellido" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                     Apellido
                                 </label>
@@ -71,9 +73,10 @@
                         </div>
                         <div class="w-full md:w-1/2">
                             <div class="relative z-0 w-full mb-5 group">
-                                <input type="text" name="becario_cedula" id="becario_cedula"
+                                <input type="text" name="becario_cedula" id="becario_cedula" maxlength="8" minlength="7"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('becario_cedula') border-red-500 @enderror"
-                                    placeholder=" " required value="{{ old('becario_cedula') }}">
+                                    placeholder=" " required value="{{ old('becario_cedula') }}"
+                                    oninput="this.value = this.value.replace(/[^0-9\-]/g, '')">
                                 <label for="becario_cedula" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                     Cédula
                                 </label>
@@ -83,8 +86,8 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="role" value="user">
-                    <div class="flex flex-col md:flex-row md:space-x-2">
+                    <input type="hidden" name="becario_role" value="user">
+                    {{-- <div class="flex flex-col md:flex-row md:space-x-2">
                         <div class="w-full md:w-1/2">
                             <div class="relative z-0 w-full mb-5 group">
                                 <input type="password" name="becario_password" id="becario_password"
@@ -108,7 +111,7 @@
                                 </label>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="flex flex-col md:flex-row md:space-x-2">
                         <div class="w-full md:w-1/2">
                             <div class="relative z-0 w-full mb-5 group">
@@ -145,6 +148,17 @@
                             Dirección
                         </label>
                         @error('becario_direccion')
+                            <span class="text-xs text-red-600">{{ $message }}</span>
+                        @enderror
+                    </div>
+                       <div class="relative z-0 w-full mb-5 group">
+                        <input type="date" name="becario_fecha_nacimiento" id="becario_fecha_nacimiento"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_fecha_nacimiento') border-red-500 @enderror"
+                            placeholder=" " value="{{ old('becario_fecha_nacimiento') }}">
+                        <label for="becario_fecha_nacimiento" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                            Fecha de Nacimiento
+                        </label>
+                        @error('personal_fecha_nacimiento')
                             <span class="text-xs text-red-600">{{ $message }}</span>
                         @enderror
                     </div>
@@ -225,14 +239,17 @@
                             <span class="text-xs text-red-600">{{ $message }}</span>
                         @enderror
                     </div>
+
                     <button type="submit"
                         class="mt-auto w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                         Agregar
                     </button>
                 </form>
-                <form id="form-personal" action="" method="POST" class="flex flex-col flex-1 hidden" novalidate>
+
+                <form id="form-personal" action="{{ route('users.store') }}" method="POST" class="flex flex-col flex-1 hidden" novalidate>
                     @csrf
                     <input type="hidden" name="tipo" value="personal">
+                    <input type="hidden" name="user_id" value="{{ old('user_id') }}">
                     <div class="flex flex-col md:flex-row md:space-x-2">
                         <div class="w-full md:w-1/2">
                             <div class="relative z-0 w-full mb-5 group">
@@ -283,18 +300,76 @@
                             <span class="text-xs text-red-600">{{ $message }}</span>
                         @enderror
                     </div>
-                    <input type="hidden" name="role" value="admin">
                     <div class="relative z-0 w-full mb-5 group">
-                        <input type="password" name="personal_password" id="personal_password"
-                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_password') border-red-500 @enderror"
-                            placeholder=" " required>
-                        <label for="personal_password" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                            Contraseña
+                        <input type="text" name="personal_cargo" id="personal_cargo"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_cargo') border-red-500 @enderror"
+                            placeholder=" " value="{{ old('personal_cargo') }}">
+                        <label for="personal_cargo" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                            Cargo
                         </label>
-                        @error('personal_password')
+                        @error('personal_cargo')
                             <span class="text-xs text-red-600">{{ $message }}</span>
                         @enderror
                     </div>
+                    <div class="relative z-0 w-full mb-5 group">
+                        <input type="text" name="personal_telefono" id="personal_telefono"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_telefono') border-red-500 @enderror"
+                            placeholder=" " value="{{ old('personal_telefono') }}">
+                        <label for="personal_telefono" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                            Teléfono
+                        </label>
+                        @error('personal_telefono')
+                            <span class="text-xs text-red-600">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="relative z-0 w-full mb-5 group">
+                        <input type="text" name="personal_direccion" id="personal_direccion"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_direccion') border-red-500 @enderror"
+                            placeholder=" " value="{{ old('personal_direccion') }}">
+                        <label for="personal_direccion" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                            Dirección
+                        </label>
+                        @error('personal_direccion')
+                            <span class="text-xs text-red-600">{{ $message }}</span>
+                        @enderror
+                    </div>
+                     <div class="relative z-0 w-full mb-5 group">
+                        <input type="date" name="personal_fecha_nacimiento" id="personal_fecha_nacimiento"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_fecha_nacimiento') border-red-500 @enderror"
+                            placeholder=" " value="{{ old('personal_fecha_nacimiento') }}">
+                        <label for="personal_fecha_nacimiento" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                            Fecha de Nacimiento
+                        </label>
+                        @error('personal_fecha_nacimiento')
+                            <span class="text-xs text-red-600">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <input type="hidden" name="personal_role" value="admin">
+                    {{-- <div class="flex flex-col md:flex-row md:space-x-2">
+                        <div class="w-full md:w-1/2">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input type="password" name="personal_password" id="personal_password"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_password') border-red-500 @enderror"
+                                    placeholder=" " required>
+                                <label for="personal_password" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                                    Contraseña
+                                </label>
+                                @error('personal_password')
+                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input type="password" name="personal_password_confirmation" id="personal_password_confirmation"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    placeholder=" " required>
+                                <label for="personal_password_confirmation" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                                    Confirmar Contraseña
+                                </label>
+                            </div>
+                        </div>
+                    </div> --}}
                     <button type="submit"
                         class="mt-auto w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                         Agregar
@@ -313,10 +388,15 @@
                             <button id="tab-becarios" class="tab-btn px-6 py-2 rounded-t-lg font-semibold text-slate-800 bg-white border-b-2 border-slate-800 focus:outline-none">Becarios</button>
                             <button id="tab-personal" class="tab-btn px-6 py-2 rounded-t-lg font-semibold text-slate-800 bg-gray-100 border-b-2 border-transparent focus:outline-none ml-2">Personal</button>
 
-                        {{-- <button type="button" id="btn-ver-todo"
-                            class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5">
-                            Ver todo
-                        </button> --}}
+                            <button type="button" id="btn-reporte-becarios"
+                                class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 mb-2">
+                                Generar reporte becarios
+                            </button>
+                            <button type="button" id="btn-reporte-personal"
+                                class="inline-flex items-center text-gray-700 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 mb-2 ml-2">
+                                Generar reporte personal
+                            </button>
+
                     </div>
                     <label for="table-search" class="sr-only text-sm">Buscar</label>
                     <div class="relative">
@@ -340,7 +420,8 @@
                                 <th class="px-3 py-3 text-center">ID</th>
                                 <th class="px-3 py-3 text-center">Nombre</th>
                                 <th class="px-3 py-3 text-center">Correo</th>
-                                <th class="px-3 py-3 text-center">Rol</th>
+                                <th class="px-3 py-3 text-center">Cédula</th>
+                                <th class="px-3 py-3 text-center">Teléfono</th>
                                 <th class="px-3 py-3 text-center">Estado</th>
                                 <th class="px-3 py-3 text-center">Acciones</th>
                             </tr>
@@ -356,7 +437,10 @@
                                         {{ $user->becario->apellido ?? $user->personal->apellido ?? '' }}
                                     </td>
                                     <td class="px-3 py-4 text-center">{{ $user->email }}</td>
-                                    <td class="px-3 py-4 text-center">{{ ucfirst($user->role) }}</td>
+                                    <td class="px-3 py-4 text-center">
+                                        {{ $user->becario->cedula ?? $user->personal->cedula ?? '-' }}
+                                    </td>
+                                    <td class="px-3 py-4 text-center">{{ $user->becario->telefono ?? $user->personal->telefono ?? '-'}}</td>
                                     <td class="px-3 py-4 text-center">
                                         @if ($user->activo == '1')
                                             <span class="bg-green-200 p-2 rounded text-green-800">Activo</span>
@@ -365,16 +449,88 @@
                                         @endif
                                     </td>
                                     <td class="px-3 py-4 text-center">
-                                        <a href="" class="text-blue-600 hover:underline">Editar</a>
-                                    </td>
+                                    <!-- Botón que abre el modal único de este usuario -->
+                                   <button
+                                        class="text-blue-600 hover:underline text-center mx-auto"
+                                        onclick="abrirModal('modal-detalle-{{ $user->id }}')">
+                                        Ver Detalle
+                                    </button>
+                                 <!-- Modal único para este usuario -->
+                                <div id="modal-detalle-{{ $user->id }}" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden text-left transition-opacity duration-200">
+                                     <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative transition-transform transition-opacity duration-200">
+                                        <button onclick="cerrarModal('modal-detalle-{{ $user->id }}')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl">&times;</button>
+                                        <h2 class="text-xl font-bold mb-4 text-gray-800 text-center">Detalle de Usuario</h2>
+                                        <hr>
+                                        <div class="space-y-2 px-4">
+                                            <!-- Los datos quedan alineados a la izquierda por defecto -->
+                                            <div><span class="font-semibold">Nombre:</span> {{ $user->becario->nombre ?? $user->personal->nombre ?? '-' }} {{ $user->becario->apellido ?? $user->personal->apellido ?? '' }}</div>
+                                            <div><span class="font-semibold">Correo:</span> {{ $user->email }}</div>
+                                            <div><span class="font-semibold">Cédula:</span> {{ $user->becario->cedula ?? $user->personal->cedula ?? '-' }}</div>
+                                            <div><span class="font-semibold">Rol:</span> {{ ucfirst($user->role) }}</div>
+                                            <div><span class="font-semibold">Estado:</span> {{ $user->activo == '1' ? 'Activo' : 'Inactivo' }}</div>
+                                            @if($user->role == 'user')
+                                                <div><span class="font-semibold">Teléfono:</span> {{ $user->becario->telefono ?? '-' }}</div>
+                                                <div><span class="font-semibold">Dirección:</span> {{ $user->becario->direccion ?? '-' }}</div>
+                                                <div><span class="font-semibold">Fecha de Nacimiento:</span> {{ $user->becario->fecha_nacimiento ?? '-' }}</div>
+                                                <div><span class="font-semibold">Carrera:</span> {{ $user->becario->carrera ?? '-' }}</div>
+                                                <div><span class="font-semibold">Semestre/Trimestre:</span> {{ $user->becario->semestre ?? '-' }}</div>
+                                                <div><span class="font-semibold">Nivel Cevaz:</span> {{ $user->becario->nivel_cevaz ?? '-' }}</div>
+                                                <div><span class="font-semibold">Meta Taller:</span> {{ $user->becario->meta_taller ?? '-' }}</div>
+                                                <div><span class="font-semibold">Meta Chat:</span> {{ $user->becario->meta_chat ?? '-' }}</div>
+                                                <div><span class="font-semibold">Meta Volin:</span> {{ $user->becario->meta_volin ?? '-' }}</div>
+                                                <div><span class="font-semibold">Meta Volex:</span> {{ $user->becario->meta_volex ?? '-' }}</div>
+                                            @elseif($user->role == 'admin')
+                                                <div><span class="font-semibold">Cargo:</span> {{ $user->personal->cargo ?? '-' }}</div>
+                                                <div><span class="font-semibold">Teléfono:</span> {{ $user->personal->telefono ?? '-' }}</div>
+                                                <div><span class="font-semibold">Dirección:</span> {{ $user->personal->direccion ?? '-' }}</div>
+                                                <div><span class="font-semibold">Fecha de Nacimiento:</span> {{ $user->personal->fecha_nacimiento ?? '-' }}</div>
+                                            @endif
+                                        </div>
+                                    </div>
+</div>
+                                </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="p-10 text-center uppercase text-gray-500 align-middle">No hay usuarios registrados</td>
+                                    <td colspan="7" class="p-10 text-center uppercase text-gray-500 align-middle">No hay usuarios registrados</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
+
+                    <!-- Modal Detalle Usuario -->
+                    <div id="modal-detalle" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
+                        <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+                            <button id="cerrar-modal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl">&times;</button>
+                            <h2 class="text-xl font-bold mb-4 text-gray-800">Detalle de Usuario</h2>
+                            <hr>
+                            <div class="space-y-2">
+                                <div><span class="font-semibold">Nombre:</span> <span id="detalle-nombre"></span> <span id="detalle-apellido"></span></div>
+                                <div><span class="font-semibold">Correo:</span> <span id="detalle-email"></span></div>
+                                <div><span class="font-semibold">Cédula:</span> <span id="detalle-cedula"></span></div>
+                                <div><span class="font-semibold">Rol:</span> <span id="detalle-role"></span></div>
+                                <div><span class="font-semibold">Estado:</span> <span id="detalle-activo"></span></div>
+                                {{-- Mostrar campos solo si es becario --}}
+                                @if(request()->input('modal_tipo') == 'becario')
+                                    <div><span class="font-semibold">Teléfono:</span> <span id="detalle-telefono"></span></div>
+                                    <div><span class="font-semibold">Dirección:</span> <span id="detalle-direccion"></span></div>
+                                    <div><span class="font-semibold">Fecha de Nacimiento:</span> <span id="detalle-fecha_nacimiento"></span></div>
+                                    <div><span class="font-semibold">Carrera:</span> <span id="detalle-carrera"></span></div>
+                                    <div><span class="font-semibold">Semestre/Trimestre:</span> <span id="detalle-semestre"></span></div>
+                                    <div><span class="font-semibold">Nivel Cevaz:</span> <span id="detalle-nivel_cevaz"></span></div>
+                                    <div><span class="font-semibold">Meta Taller:</span> <span id="detalle-meta_taller"></span></div>
+                                    <div><span class="font-semibold">Meta Chat:</span> <span id="detalle-meta_chat"></span></div>
+                                    <div><span class="font-semibold">Meta Volin:</span> <span id="detalle-meta_volin"></span></div>
+                                    <div><span class="font-semibold">Meta Volex:</span> <span id="detalle-meta_volex"></span></div>
+                                @elseif(request()->input('modal_tipo') == 'personal')
+                                    <div><span class="font-semibold">Cargo:</span> <span id="detalle-cargo"></span></div>
+                                    <div><span class="font-semibold">Teléfono:</span> <span id="detalle-telefono"></span></div>
+                                    <div><span class="font-semibold">Dirección:</span> <span id="detalle-direccion"></span></div>
+                                    <div><span class="font-semibold">Fecha de Nacimiento:</span> <span id="detalle-fecha_nacimiento"></span></div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="mt-4">
                     {{ $users->links('pagination::tailwind') }}
@@ -430,13 +586,6 @@ document.getElementById('tab-personal').addEventListener('click', function() {
         });
     });
 
-    document.getElementById('btn-ver-todo').addEventListener('click', function() {
-        document.querySelectorAll('#myTable tbody tr').forEach(row => {
-            row.style.display = '';
-        });
-        document.getElementById('table-search').value = '';
-    });
-
     // Inicializar en becarios
     document.getElementById('tab-becarios').click();
 </script>
@@ -451,5 +600,174 @@ document.getElementById('tab-personal').addEventListener('click', function() {
             document.getElementById('tab-becarios').click();
         });
     @endif
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- jsPDF AutoTable -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+document.querySelectorAll('.btn-detalle').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.getElementById('detalle-nombre').textContent = this.dataset.nombre || '-';
+        document.getElementById('detalle-apellido').textContent = this.dataset.apellido || '';
+        document.getElementById('detalle-email').textContent = this.dataset.email || '-';
+        document.getElementById('detalle-cedula').textContent = this.dataset.cedula || '-';
+        document.getElementById('detalle-telefono').textContent = this.dataset.telefono || '-';
+        document.getElementById('detalle-direccion').textContent = this.dataset.direccion || '-';
+        document.getElementById('detalle-fecha_nacimiento').textContent = this.dataset.fecha_nacimiento || '-';
+        document.getElementById('detalle-carrera').textContent = this.dataset.carrera || '-';
+        document.getElementById('detalle-semestre').textContent = this.dataset.semestre || '-';
+        document.getElementById('detalle-nivel_cevaz').textContent = this.dataset.nivel_cevaz || '-';
+        document.getElementById('detalle-meta_taller').textContent = this.dataset.meta_taller || '-';
+        document.getElementById('detalle-meta_chat').textContent = this.dataset.meta_chat || '-';
+        document.getElementById('detalle-meta_volin').textContent = this.dataset.meta_volin || '-';
+        document.getElementById('detalle-meta_volex').textContent = this.dataset.meta_volex || '-';
+        document.getElementById('detalle-cargo').textContent = this.dataset.cargo || '-';
+        document.getElementById('detalle-role').textContent = this.dataset.role || '-';
+        document.getElementById('detalle-activo').textContent = this.dataset.activo || '-';
+        abrirModal('modal-detalle');
+    });
+});
+document.getElementById('cerrar-modal').addEventListener('click', function() {
+    cerrarModal('modal-detalle');
+});
+window.addEventListener('click', function(e) {
+    const modal = document.getElementById('modal-detalle');
+    if (e.target === modal) {
+        cerrarModal('modal-detalle');
+    }
+});
+
+
+function abrirModal(id) {
+    const modal = document.getElementById(id);
+    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
+    modal.style.opacity = 0;
+    const content = modal.querySelector('div.bg-white');
+    if (content) {
+        content.style.transform = 'scale(0.95)';
+        content.style.opacity = 0;
+        content.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+    }
+    setTimeout(() => {
+        modal.style.opacity = 1;
+        if (content) {
+            content.style.transform = 'scale(1)';
+            content.style.opacity = 1;
+        }
+    }, 10);
+}
+
+function cerrarModal(id) {
+    const modal = document.getElementById(id);
+    const content = modal.querySelector('div.bg-white');
+    if (content) {
+        content.style.transform = 'scale(0.95)';
+        content.style.opacity = 0;
+    }
+    modal.style.opacity = 0;
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+        if (content) {
+            content.style.transform = '';
+            content.style.opacity = '';
+        }
+    }, 200);
+}
+
+// Máscara para teléfono venezolano: 0412-1234567
+function maskVenezuelaPhone(input) {
+    input.addEventListener('input', function(e) {
+        let value = this.value.replace(/\D/g, ''); // Solo números
+        if (value.length > 11) value = value.slice(0, 11);
+        if (value.length > 4) {
+            value = value.slice(0, 4) + '-' + value.slice(4, 11);
+        }
+        this.value = value;
+    });
+}
+
+maskVenezuelaPhone(document.getElementById('becario_telefono'));
+maskVenezuelaPhone(document.getElementById('personal_telefono'));
+
+window.usuariosParaReporte = @json($users->items() ?? $users);
+
+// Requiere jsPDF y autoTable incluidos en tu proyecto
+<!-- jsPDF -->
+
+
+function generarReporteUsuarios(tipo) {
+    const usuarios = window.usuariosParaReporte.filter(u => u.role === tipo);
+    const rows = usuarios.map(user => {
+        const becario = user.becario || {};
+        const personal = user.personal || {};
+        if (tipo === 'user') {
+            return [
+                user.id,
+                (becario.nombre || '-') + ' ' + (becario.apellido || ''),
+                user.email || '-',
+                becario.cedula || '-',
+                becario.telefono || '-',
+                becario.direccion || '-',
+                becario.fecha_nacimiento || '-',
+                becario.carrera || '-',
+                becario.semestre || '-',
+                becario.nivel_cevaz || '-',
+                becario.meta_taller || '-',
+                becario.meta_chat || '-',
+                becario.meta_volin || '-',
+                becario.meta_volex || '-',
+                user.activo == 1 ? 'Activo' : 'Inactivo'
+            ];
+        } else {
+            return [
+                user.id,
+                (personal.nombre || '-') + ' ' + (personal.apellido || ''),
+                user.email || '-',
+                personal.cedula || '-',
+                personal.telefono || '-',
+                personal.cargo || '-',
+                personal.direccion || '-',
+                personal.fecha_nacimiento || '-',
+                user.activo == 1 ? 'Activo' : 'Inactivo'
+            ];
+        }
+    });
+
+    let headers, filename;
+    if (tipo === 'user') {
+        headers = [[
+            'ID', 'Nombre', 'Correo', 'Cédula', 'Teléfono', 'Dirección', 'Fecha Nac.', 'Carrera', 'Semestre',
+            'Nivel Cevaz', 'Meta Taller', 'Meta Chat', 'Meta Volin', 'Meta Volex', 'Estado'
+        ]];
+        filename = 'Reporte_Becarios_';
+    } else {
+        headers = [[
+            'ID', 'Nombre', 'Correo', 'Cédula', 'Teléfono', 'Cargo', 'Dirección', 'Fecha Nac.', 'Estado'
+        ]];
+        filename = 'Reporte_Personal_';
+    }
+
+    const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+    doc.autoTable({
+        head: headers,
+        body: rows,
+        startY: 20,
+        styles: { fontSize: 8 },
+        headStyles: { fillColor: [30, 41, 59] },
+        alternateRowStyles: { fillColor: [243, 244, 246] }
+    });
+    doc.save(filename + new Date().toLocaleString() + '.pdf');
+}
+
+document.getElementById('btn-reporte-becarios').addEventListener('click', function() {
+    generarReporteUsuarios('user');
+});
+document.getElementById('btn-reporte-personal').addEventListener('click', function() {
+    generarReporteUsuarios('admin');
+});
+
 </script>
 @endsection

@@ -1060,7 +1060,7 @@
         <script>
             document.getElementById('btn-generar-reporte').addEventListener('click', function() {
                 // Obtener logo (ajusta la ruta si es necesario)
-                let becario = "{{ $user->becario->nombre }}";;
+                let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
                 const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
                 const doc = new window.jspdf.jsPDF({
                     orientation: 'landscape'
@@ -1082,7 +1082,7 @@
                     // Datos del becario y fecha
                     doc.setFontSize(10);
                     doc.setFont('helvetica', 'normal');
-                    doc.text('Becario: ' + becario, 10, 32);
+                    doc.text('Becario: ' + nombreUsuario, 10, 32);
                     doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
 
                     // Línea divisoria
@@ -1127,7 +1127,7 @@
                         }, // bg-gray-100
                     });
 
-                    doc.save('Reporte_Actividades_' + becario + '_' + new Date().toLocaleString() + '.pdf');
+                    doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
                 });
 
                 // Función para convertir imagen a base64
@@ -1156,7 +1156,7 @@
         <script>
             document.getElementById('btn-generar-reporte-admin').addEventListener('click', function() {
                 // Obtener logo (ajusta la ruta si es necesario)
-                let becario = "{{ $user->becario->nombre }}";;
+                let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
                 const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
                 const doc = new window.jspdf.jsPDF({
                     orientation: 'landscape'
@@ -1178,7 +1178,7 @@
                     // Datos del becario y fecha
                     doc.setFontSize(10);
                     doc.setFont('helvetica', 'normal');
-                    doc.text('Generado por: ' + becario, 10, 32);
+                    doc.text('Generado por: ' + nombreUsuario, 10, 32);
                     doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
 
                     // Línea divisoria
@@ -1226,7 +1226,7 @@
                         }, // bg-gray-100
                     });
 
-                    doc.save('Reporte_Actividades_' + becario + '_' + new Date().toLocaleString() + '.pdf');
+                    doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
                 });
 
                 // Función para convertir imagen a base64

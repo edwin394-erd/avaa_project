@@ -21,7 +21,9 @@ class Becario extends Model
         'meta_taller',
         'meta_chat',
         'meta_volin',
-        'meta_volex'
+        'meta_volex',
+        'nivel_cevaz',
+        'fecha_nacimiento',
     ];
     protected $casts = [
         'meta_taller' => 'float',

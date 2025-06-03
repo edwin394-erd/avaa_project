@@ -18,11 +18,27 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('apellido');
             $table->string('cedula')->unique();
+            $table->string('correo')->unique();
             $table->string('telefono')->nullable();
             $table->string('direccion')->nullable();
             $table->string('cargo')->nullable();
             $table->timestamps();
+            $table->date('fecha_nacimiento')->nullable();
         });
+
+         // Insertar un registro por defecto
+        \DB::table('personals')->insert([
+            'nombre' => 'Admin',
+            'apellido' => 'Principal',
+            'cedula' => '00000000',
+            'correo' => 'admin@gmail.com',
+            'telefono' => null,
+            'direccion' => null,
+            'cargo' => 'Administrador',
+            'created_at' => now(),
+            'updated_at' => now(),
+            'fecha_nacimiento' => null,
+        ]);
     }
 
     /**
@@ -32,6 +48,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('personal');
+        Schema::dropIfExists('personals');
     }
 };

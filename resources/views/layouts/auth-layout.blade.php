@@ -63,7 +63,7 @@ window.createNotification = function({ type = 'success', title = '', message = '
     notification.innerHTML = `
         ${icon}
         <div class="flex-1">
-            <p class="font-semibold text-sm" style="color: ${type === 'error' ? '#d11f1f' : 'text-green-700'};">${title}</p>
+            <p class="${color} font-semibold text-sm">${title}</p>
             <p class="text-gray-600 text-xs">${message}</p>
         </div>
         <button class="closeBtn text-gray-400 hover:text-gray-600 transition">

@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\RecuperarController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StatController;
 use App\Http\Controllers\LoginController;
@@ -11,6 +13,11 @@ use App\Http\Controllers\EvidenciaController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+
+
+
+
 
 
 /*
@@ -34,6 +41,8 @@ Route::post('/register',[RegisterController::class, 'store']);
 Route::post('/Logout',[LogoutController::class, 'store'])->name('logout');
 Route::get('/login',[LoginController::class, 'index'])->name('login');
 Route::post('/login',[LoginController::class, 'store']);
+Route::get('/recuperar-contrasena',[RecuperarController::class, 'index'])->name('recuperar.contrasena');
+Route::post('/recuperar-contrasena', [RecuperarController::class, 'store'])->name('recuperar.contrasena.enviar');
 
 Route::post('/actividades/crear',[StatController::class, 'store'])->name('stat.store');
 Route::post('/actividades/{stat}/anular', [StatController::class, 'anular'])->name('stat.anular');
@@ -59,6 +68,8 @@ Route::post('/Usuarios',[UserController::class, 'store'])->name('users.store');
 
 Route::get('/AdminActividades',[ActivityController::class, 'index'])->name('activities.index');
 
+Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 Route::get('/notificaciones/json', function () {
     $notificaciones = auth()->user()

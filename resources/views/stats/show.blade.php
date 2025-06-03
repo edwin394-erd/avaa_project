@@ -1113,7 +1113,7 @@ if (document.getElementById("bar-chart") && typeof ApexCharts !== 'undefined') {
 document.getElementById('btn-generar-reporte').addEventListener('click', function() {
     // Obtener logo (ajusta la ruta si es necesario)
     let modalidad = "{{ $n_actividad }}";
-    let becario ="{{ $user->becario->nombre }}";;
+    let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
     const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
     const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
 
@@ -1131,7 +1131,7 @@ document.getElementById('btn-generar-reporte').addEventListener('click', functio
         // Datos del becario y fecha
         doc.setFontSize(10);
         doc.setFont('helvetica', 'normal');
-        doc.text('Becario: ' + becario, 10, 32);
+        doc.text('Becario: ' + nombreUsuario, 10, 32);
         doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
 
         // Línea divisoria
@@ -1168,7 +1168,7 @@ document.getElementById('btn-generar-reporte').addEventListener('click', functio
             alternateRowStyles: { fillColor: [243, 244, 246] }, // bg-gray-100
         });
 
-        doc.save('Reporte_Actividades_' + becario + '_' + new Date().toLocaleString() + '.pdf');
+        doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
 
     });
 
@@ -1196,7 +1196,7 @@ document.getElementById('btn-generar-reporte').addEventListener('click', functio
             document.getElementById('btn-generar-reporte-admin').addEventListener('click', function() {
                 // Obtener logo (ajusta la ruta si es necesario)
                 let modalidad = "{{ $n_actividad }}";
-                let becario = "{{ $user->becario->nombre }}";;
+                let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
                 const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
                 const doc = new window.jspdf.jsPDF({
                     orientation: 'landscape'
@@ -1217,7 +1217,7 @@ document.getElementById('btn-generar-reporte').addEventListener('click', functio
                     // Datos del becario y fecha
                     doc.setFontSize(10);
                     doc.setFont('helvetica', 'normal');
-                    doc.text('Generado por: ' + becario, 10, 32);
+                    doc.text('Generado por: ' + nombreUsuario, 10, 32);
                     doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
 
                     // Línea divisoria

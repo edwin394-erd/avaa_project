@@ -25,8 +25,8 @@ class HomeController extends Controller
             $meta_volex = \App\Models\Becario::sum('meta_volex');
             $meta_taller = \App\Models\Becario::sum('meta_taller');
             $meta_chat = \App\Models\Becario::sum('meta_chat');
-            $nombre_user= $user->becario->nombre;
-            $cedula_becario= $user->becario->cedula;
+            $nombre_user= $user->personal->nombre;
+            $cedula_becario= $user->personal->cedula;
 
             //VOLUNTARIADO INTERNO
             $stats_volin = Stat::where('actividad', 'volin')
@@ -35,7 +35,7 @@ class HomeController extends Controller
                 ->where('fecha', '>=', $startOfYear)
                 ->get();
             $total_volin = $stats_volin->sum('duracion'); //TOTAL HORAS
-            $porcen_volin = ($total_volin / $meta_volin) * 100;
+            $porcen_volin = ($meta_volin > 0) ? ($total_volin / $meta_volin) * 100 : 0;
             $porcen_volin = number_format($porcen_volin, 2); //PORCENTAJE
             if ($porcen_volin > 100) {
                 $porcen_volin = 100;
@@ -48,7 +48,7 @@ class HomeController extends Controller
                 ->where('fecha', '>=', $startOfYear)
                 ->get();
             $total_volex = $stats_volex->sum('duracion'); //TOTAL HORAS
-            $porcen_volex = ($total_volex / $meta_volex) * 100;
+            $porcen_volex = ($meta_volex > 0) ? ($total_volex / $meta_volex) * 100 : 0;
             $porcen_volex = number_format($porcen_volex, 2); //PORCENTAJE
             if ($porcen_volex > 100) {
                 $porcen_volex = 100;
@@ -61,7 +61,7 @@ class HomeController extends Controller
                 ->where('fecha', '>=', $startOfYear)
                 ->get();
             $total_taller = $stats_taller->sum('duracion'); //TOTAL HORAS
-            $porcen_taller = ($total_taller / $meta_taller) * 100;
+            $porcen_taller = ($meta_taller > 0) ? ($total_taller / $meta_taller) * 100 : 0;
             $porcen_taller = number_format($porcen_taller, 2); //PORCENTAJE
             if ($porcen_taller > 100) {
                 $porcen_taller = 100;
@@ -74,7 +74,7 @@ class HomeController extends Controller
                 ->where('fecha', '>=', $startOfYear)
                 ->get();
             $total_chat = $stats_chat->sum('duracion'); //TOTAL HORAS
-            $porcen_chat = ($total_chat / $meta_chat) * 100;
+            $porcen_chat = ($meta_chat > 0) ? ($total_chat / $meta_chat) * 100 : 0;
             $porcen_chat = number_format($porcen_chat, 2); //PORCENTAJE
             if ($porcen_chat > 100) {
                 $porcen_chat = 100;

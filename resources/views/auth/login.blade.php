@@ -72,8 +72,8 @@
                         class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500 focus:outline-none">
                     <label for="remember" class="ml-2 block text-sm text-gray-700">Recuérdame</label>
                 </div>
-                <a href="#"
-                    class="text-xs text-gray-600 hover:text-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">¡Olvidaste tu Contraseña?</a>
+                <a href="{{ route('recuperar.contrasena') }}"
+                    class="text-xs text-gray-600 hover:text-slate-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">¡Olvidaste tu Contraseña?</a>
             </div>
             <br>
             <div class="flex justify-center items-center mb-2">
@@ -83,10 +83,10 @@
                     Iniciar Sesión
                 </button>
             </div>
-            <div class="flex justify-center">
+            {{-- <div class="flex justify-center">
                 <a href="{{ route('register') }}"
                     class="text-xs text-green-700 hover:text-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Registrarse</a>
-            </div>
+            </div> --}}
         </form>
         <br>
     </div>

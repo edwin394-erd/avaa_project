@@ -31,6 +31,17 @@ return new class extends Migration
             (becario_id IS NOT NULL AND personal_id IS NULL) OR
             (becario_id IS NULL AND personal_id IS NOT NULL)
         )");
+
+        // Insertar usuario admin por defecto (asumiendo que el personal con id=1 existe)
+        \DB::table('users')->insert([
+        'personal_id' => 1,
+        'role'        => 'admin',
+        'email'       => 'admin@gmail.com',
+        'password'    => bcrypt('123456'), // Cambia la contraseña si lo deseas
+        'activo'      => '1',
+        'created_at'  => now(),
+        'updated_at'  => now(),
+    ]);
     }
 
     public function down()
