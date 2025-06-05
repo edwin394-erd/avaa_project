@@ -25,7 +25,7 @@ class PerfilController extends Controller
         $request->validate([
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'required',
-            'new_password' => 'nullable|min:6',
+            'new_password' => 'nullable|min:8',
             'confirm_password' => 'same:new_password',
         ]);
 

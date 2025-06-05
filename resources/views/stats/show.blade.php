@@ -54,11 +54,12 @@
 
 @section('contenido')
 <div class="2xl:w-6/6 mx-auto py-5 px-0 md:px-5">
-    <div class="flex flex-wrap p-0 min-h-[calc(90vh-4rem)]">
+    <div class="flex flex-wrap xl:flex-nowrap p-0 min-h-[calc(90vh-4rem)] h-[80vh]">
+         <!-- Columna izquierda -->
         <div class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0">
-            <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 rounded-l-xl p-4 h-full">
+            <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 rounded-l-xl p-4 h-full overflow-y-auto">
                 <div class="flex items-center space-x-3 mb-3 text-center">
-                    <img src="{{ asset('imgs/' . $icono)}}" alt="icono" class="w-12 h-12">
+                    <img src="{{ asset('imgs/' . $icono)}}" alt="icono" class="w-10 h-10 2xl:w-12 2xl:h-12">
                     <h1 class="text-lg 2xl:text-xl font-bold {{ $color }} mb-0 flex items-center"> {{ $n_actividad }}</h1>
                 </div>
                 @php
@@ -69,11 +70,11 @@
                 <div class="flex flex-col gap-2">
                     <div class="flex items-center justify-between">
                         <span class="text-gray-600 dark:text-gray-300 text-sm">Total actividades realizadas:</span>
-                        <span class="font-bold text-lg text-gray-900 dark:text-gray-100">{{ $totalRealizadas }}</span>
+                        <span class="font-bold text-md 2xl:text-lg text-gray-900 dark:text-gray-100">{{ $totalRealizadas }}</span>
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-gray-600 dark:text-gray-300 text-sm">Total horas realizadas:</span>
-                        <span class="font-bold text-lg text-gray-900 dark:text-gray-100">{{ $totalHoras }}h</span>
+                        <span class="font-bold text-md 2xl:text-lg text-gray-900 dark:text-gray-100">{{ $totalHoras }}h</span>
                     </div>
                     <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-4 overflow-hidden">
                         <div class="h-4 rounded-full {{ $bgcolor2 }} transition-all duration-700 ease-in-out" style="width: 0%" id="barra-progreso"></div>
@@ -87,35 +88,38 @@
                 </div>
                 <br>
                 <hr class="dark:border-slate-700">
-                <div class="flex items-center">
+                <div class="flex items-center 2xl:mb-4">
                     <img src="{{ asset('imgs/icon-progen.png') }}" alt="icono" class="w-12 h-12">
-                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 ml-2">Estadísticas mensuales</h3>
+                    <h3 class="text-md 2xl:text-lg font-bold text-gray-800 dark:text-gray-100 ml-2 ">Estadísticas mensuales</h3>
                 </div>
-                <br>
+
                 <div id="bar-chart"></div>
             </div>
         </div>
+         <!-- Columna derecha -->
         <div class="w-full xl:w-3/4 p-0 flex flex-col">
             <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 xl:rounded-r-xl p-5 h-full">
                 <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
-                    <div>
+                    <div class="flex flex-wrap gap-2 items-center">
                         <button type="button" id="abrir-modal-filtrar-fecha"
-                            class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5"
-                            onclick="document.getElementById('modal-filtrar-fecha').classList.remove('hidden')">
+                            class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5">
                             Filtrar por fecha
                         </button>
-                        <button type="button" id="btn-ver-todo"
-                            class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2">
-                            Ver todo
-                        </button>
+                        <form method="GET" action="{{ route('stats.modalidadindex', $modalidad) }}" class="flex items-center mb-0">
+                            <input type="hidden" name="search" value="">
+                            <button type="submit" id="btn-ver-todo"
+                                class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5">
+                                Ver todo
+                            </button>
+                        </form>
                         @if ($user->role == 'admin')
                             <button type="button" id="btn-generar-reporte-admin"
-                                class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2">
+                                class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5">
                                 Generar reporte
                             </button>
                         @else
                             <button type="button" id="btn-generar-reporte"
-                                class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2">
+                                class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5">
                                 Generar reporte
                             </button>
                         @endif
@@ -144,23 +148,27 @@
                             </form>
                         </div>
                     </div>
-                    <label for="table-search" class="sr-only text-sm">Buscar</label>
+                 <form method="GET" action="{{ route('stats.modalidadindex', $modalidad) }}" class="flex items-center mb-2">
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 flex items-center ps-3 pointer-events-none">
                             <svg class="w-5 h-5 text-gray-500 dark:text-gray-300" aria-hidden="true" fill="currentColor"
-                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
+                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
                         </div>
-                        <input type="text" id="table-search"
+                        <input type="text" name="search" id="table-search"
+                            value="{{ request('search') }}"
                             class="block p-2 ps-10 text-sm text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-slate-700 rounded-lg w-80 bg-gray-50 dark:bg-slate-800 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Buscar">
                     </div>
+                    <button type="submit" class="ml-2 px-3 py-1 bg-slate-800 text-white rounded">Buscar</button>
+                 </form>
+
                 </div>
-                <div class="overflow-y-auto h-[calc(80vh-4rem)]">
-                    <table class="w-full text-sm text-left rtl:text-right text-black dark:text-gray-100 table-auto bg-white dark:bg-slate-900" id="myTable">
+                <div class="flex-1 min-h-0 overflow-y-auto">
+                     <table class="w-full text-sm text-left rtl:text-right text-black dark:text-gray-100 table-auto bg-white dark:bg-slate-900" id="myTable">
                         <thead class="text-gray-700 dark:text-gray-200 text-md uppercase border-b border-gray-200 dark:border-slate-700">
                             <tr>
                                 @if ($user->role == 'admin')
@@ -178,7 +186,7 @@
                         </thead>
                         <tbody>
 @forelse ($stats as $stat)
-    <tr class="bg-white dark:bg-slate-900 text-sm border-b border-gray-200 dark:border-slate-700 transition duration-300 ease-in-out {{ $hover }}">
+    <tr id="stat-{{ $stat->id }}" class="bg-white dark:bg-slate-900 text-sm border-b border-gray-200 dark:border-slate-700 transition duration-300 ease-in-out {{ $hover }}">
         @if ($user->role == 'admin')
             <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ $stat->user->becario->nombre }}</td>
         @endif
@@ -445,6 +453,27 @@
 @endforelse
                         </tbody>
                     </table>
+
+                </div>
+                {{-- PAGINACION --}}
+                <div class="mt-2 flex flex-col items-center">
+                    <div class="flex gap-1 mb-1">
+                        @if ($stats->onFirstPage())
+                            <button class="px-2 py-1 bg-gray-300 dark:bg-gray-700 text-gray-400 rounded text-xs" disabled>&laquo;</button>
+                        @else
+                            <a href="{{ $stats->previousPageUrl() }}" class="px-2 py-1 bg-slate-800 text-white rounded text-xs hover:bg-slate-700">&laquo;</a>
+                        @endif
+
+                        <span class="px-2 py-1 text-xs text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-slate-800 rounded">
+                            {{ $stats->currentPage() }}/{{ $stats->lastPage() }}
+                        </span>
+
+                        @if ($stats->hasMorePages())
+                            <a href="{{ $stats->nextPageUrl() }}" class="px-2 py-1 bg-slate-800 text-white rounded text-xs hover:bg-slate-700">&raquo;</a>
+                        @else
+                            <button class="px-2 py-1 bg-gray-300 dark:bg-gray-700 text-gray-400 rounded text-xs" disabled>&raquo;</button>
+                        @endif
+                    </div>
                 </div>
                 <!-- Modal para evidencias (fuera del loop) -->
                 <div id="modal-evidencias" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
@@ -473,22 +502,6 @@
 
 @section('scripts')
 <script>
-
-document.getElementById('table-search').addEventListener('keyup', function() {
-    const search = this.value.toLowerCase();
-    const rows = document.querySelectorAll('#myTable tbody tr');
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-        let found = false;
-        cells.forEach(cell => {
-            if (cell.textContent.toLowerCase().includes(search)) {
-                found = true;
-            }
-        });
-        row.style.display = found ? '' : 'none';
-    });
-});
-
 // Enviar ambos formularios con el btn_enviar
 function enviarFormularios() {
     document.querySelector('form[action="{{ route('stat.store') }}"]').submit();
@@ -671,14 +684,6 @@ document.getElementById('modal-img-ampliada').addEventListener('click', function
 </script>
 
  <script>
-document.getElementById('btn-ver-todo').addEventListener('click', function() {
-    // Mostrar todas las filas de la tabla
-    document.querySelectorAll('#myTable tbody tr').forEach(row => {
-        row.style.display = '';
-    });
-    // Limpiar el filtro de búsqueda
-    document.getElementById('table-search').value = '';
-});
 
  document.querySelector('button[onclick="enviarFormularios()"]').addEventListener('click', function(e) {
                 // Si Dropzone está subiendo archivos o hay archivos en cola
@@ -804,7 +809,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 width: "100%",
                 height: document.getElementById("bar-chart")
                     ? Math.max(100, Math.round(document.getElementById("bar-chart").offsetHeight || document.getElementById("bar-chart").offsetWidth * 0.95))
-                    : (window.innerWidth >= 1280 ? 500 : window.innerWidth >= 900 ? 300 : window.innerWidth >= 640 ? 200 : 140),
+                    : (window.innerWidth >= 1280 ? 400 : window.innerWidth >= 900 ? 200 : window.innerWidth >= 640 ? 200 : 140),
                 toolbar: { show: false },
                 background: isDark ? "#0f172a" : "#fff"
             },
@@ -884,183 +889,148 @@ document.addEventListener("DOMContentLoaded", function() {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script>
-document.getElementById('btn-generar-reporte').addEventListener('click', function() {
-    // Obtener logo (ajusta la ruta si es necesario)
-    let modalidad = "{{ $n_actividad }}";
-    let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
-    const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
-    const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+let allStats = [];
+let filteredStats = [];
+let isAdmin = @json($user->role === 'admin');
 
-    // Cargar logo como base64 y luego generar el PDF
-    toDataURL(logoUrl, function(logoBase64) {
-        // Logo
-        // Logo
-        doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
-
-        // Título principal
-        doc.setFontSize(16);
-        doc.setFont('helvetica', 'bold');
-        doc.text('Reporte de '+ modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
-
-        // Datos del becario y fecha
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        doc.text('Becario: ' + nombreUsuario, 10, 32);
-        doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
-
-        // Línea divisoria
-        doc.setDrawColor(200, 200, 200);
-        doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
-
-        // Obtener datos de la tabla
-        const rows = [];
-        document.querySelectorAll('#myTable tbody tr').forEach(tr => {
-            if (tr.style.display === 'none') return; // Solo filas visibles
-            const cells = tr.querySelectorAll('td');
-            if (cells.length) {
-                rows.push([
-                    cells[0].innerText.trim(), // Titulo
-                    cells[2].innerText.trim(), // Fecha
-                    cells[3].innerText.trim(), // Modalidad
-                    cells[4].innerText.trim(), // Duración
-                    cells[6].innerText.trim(), // Estatus
-
-                ]);
-            }
-        });
-
-        // Encabezados
-        const headers = [['Título', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
-
-        // Tabla
-        doc.autoTable({
-            head: headers,
-            body: rows,
-            startY: 50,
-            styles: { fontSize: 10 },
-            headStyles: { fillColor: [30, 41, 59] }, // bg-slate-800
-            alternateRowStyles: { fillColor: [243, 244, 246] }, // bg-gray-100
-        });
-
-        doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
-
+// Cargar todos los registros al cargar la página
+fetch("{{ route('stats.all') }}")
+    .then(res => res.json())
+    .then(data => {
+        allStats = data;
+        filteredStats = data;
     });
 
-    // Función para convertir imagen a base64
-    function toDataURL(url, callback) {
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function() {
-            const reader = new FileReader();
-            reader.onloadend = function() {
-                callback(reader.result);
-            }
-            reader.readAsDataURL(xhr.response);
-        };
-        xhr.onerror = function() {
-            alert('No se pudo cargar el logo para el reporte. El PDF se generará sin logo.');
-            callback('');
-        };
-        xhr.open('GET', url);
-        xhr.responseType = 'blob';
-        xhr.send();
-    }
+
+// Botón "Ver todo" para limpiar el filtro y mostrar todas las filas
+document.getElementById('btn-ver-todo').addEventListener('click', function() {
+    document.getElementById('table-search').value = '';
+    document.querySelectorAll('#myTable tbody tr').forEach(row => {
+        row.style.display = '';
+    });
+});
+
+// Botón "Ver todo"
+document.getElementById('btn-ver-todo').addEventListener('click', function() {
+    filteredStats = allStats;
+    document.getElementById('table-search').value = '';
+    document.querySelectorAll('#myTable tbody tr').forEach(row => {
+        row.style.display = '';
+    });
+});
+
+// Reporte PDF usando todos los registros
+function toDataURL(url, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        const reader = new FileReader();
+        reader.onloadend = function() {
+            callback(reader.result);
+        }
+        reader.readAsDataURL(xhr.response);
+    };
+    xhr.onerror = function() {
+        alert('No se pudo cargar el logo para el reporte. El PDF se generará sin logo.');
+        callback('');
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+}
+
+document.getElementById('btn-generar-reporte').addEventListener('click', function() {
+    fetch("{{ route('stats.all') }}")
+        .then(res => res.json())
+        .then(data => {
+            let modalidad = "{{ $n_actividad }}";
+            let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
+            const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
+            const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+
+            toDataURL(logoUrl, function(logoBase64) {
+                doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
+                doc.setFontSize(16);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Reporte de ' + modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Becario: ' + nombreUsuario, 10, 32);
+                doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
+                doc.setDrawColor(200, 200, 200);
+                doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
+
+                // Construir filas desde data
+                const rows = data.map(stat => [
+                    stat.titulo,
+                    stat.actividad,
+                    stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
+                    stat.modalidad,
+                    stat.duracion,
+                    stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
+                ]);
+
+                const headers = [['Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
+                doc.autoTable({
+                    head: headers,
+                    body: rows,
+                    startY: 50,
+                    styles: { fontSize: 10 },
+                    headStyles: { fillColor: [30, 41, 59] },
+                    alternateRowStyles: { fillColor: [243, 244, 246] },
+                });
+
+                doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
+            });
+        });
+});
+
+// Reporte PDF ADMIN (todos los registros)
+document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', function() {
+    fetch("{{ route('stats.all') }}")
+        .then(res => res.json())
+        .then(data => {
+            let modalidad = "{{ $n_actividad }}";
+            let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
+            const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
+            const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+
+            toDataURL(logoUrl, function(logoBase64) {
+                doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
+                doc.setFontSize(16);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Reporte general de ' + modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Generado por: ' + nombreUsuario, 10, 32);
+                doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
+                doc.setDrawColor(200, 200, 200);
+                doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
+
+                // Construir filas desde data
+                const rows = data.map(stat => [
+                    stat.user?.becario?.nombre || '',
+                    stat.titulo,
+                    stat.actividad,
+                    stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
+                    stat.modalidad,
+                    stat.duracion,
+                    stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
+                ]);
+
+                const headers = [['Becario', 'Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
+                doc.autoTable({
+                    head: headers,
+                    body: rows,
+                    startY: 50,
+                    styles: { fontSize: 10 },
+                    headStyles: { fillColor: [30, 41, 59] },
+                    alternateRowStyles: { fillColor: [243, 244, 246] },
+                });
+
+                doc.save('Reporte_General_Actividades_' + new Date().toLocaleString() + '.pdf');
+            });
+        });
 });
 </script>
-  <script>
-            document.getElementById('btn-generar-reporte-admin').addEventListener('click', function() {
-                // Obtener logo (ajusta la ruta si es necesario)
-                let modalidad = "{{ $n_actividad }}";
-                let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
-                const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
-                const doc = new window.jspdf.jsPDF({
-                    orientation: 'landscape'
-                });
-
-                // Cargar logo como base64 y luego generar el PDF
-                toDataURL(logoUrl, function(logoBase64) {
-                    // Logo
-                    // Logo
-                    doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
-
-                    // Título principal
-                    doc.setFontSize(16);
-                    doc.setFont('helvetica', 'bold');
-                    doc.text('Reporte general de '+ modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
-
-
-                    // Datos del becario y fecha
-                    doc.setFontSize(10);
-                    doc.setFont('helvetica', 'normal');
-                    doc.text('Generado por: ' + nombreUsuario, 10, 32);
-                    doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
-
-                    // Línea divisoria
-                    doc.setDrawColor(200, 200, 200);
-                    doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
-
-                    // Obtener datos de la tabla
-                    const rows = [];
-                    document.querySelectorAll('#myTable tbody tr').forEach(tr => {
-                        if (tr.style.display === 'none') return; // Solo filas visibles
-                        const cells = tr.querySelectorAll('td');
-                        if (cells.length) {
-                            rows.push([
-                                cells[0].innerText.trim(), // Becario
-                                cells[1].innerText.trim(), // Titulo
-                                cells[2].innerText.trim(), // Actividad
-                                cells[3].innerText.trim(), // Fecha
-                                cells[4].innerText.trim(), // Modalidad
-                                cells[5].innerText.trim(), // Duracion
-                                cells[7].innerText.trim(), // Estatus
-                            ]);
-                        }
-                    });
-
-                    // Encabezados
-                    const headers = [
-                        ['Becario', 'Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)',
-                            'Estatus'
-                        ]
-                    ];
-
-                    // Tabla
-                    doc.autoTable({
-                        head: headers,
-                        body: rows,
-                        startY: 50,
-                        styles: {
-                            fontSize: 10
-                        },
-                        headStyles: {
-                            fillColor: [30, 41, 59]
-                        }, // bg-slate-800
-                        alternateRowStyles: {
-                            fillColor: [243, 244, 246]
-                        }, // bg-gray-100
-                    });
-
-                    doc.save('Reporte_General_Actividades_' + new Date().toLocaleString() + '.pdf');
-                });
-
-                // Función para convertir imagen a base64
-                function toDataURL(url, callback) {
-                    const xhr = new XMLHttpRequest();
-                    xhr.onload = function() {
-                        const reader = new FileReader();
-                        reader.onloadend = function() {
-                            callback(reader.result);
-                        }
-                        reader.readAsDataURL(xhr.response);
-                    };
-                    xhr.onerror = function() {
-                        alert('No se pudo cargar el logo para el reporte. El PDF se generará sin logo.');
-                        callback('');
-                    };
-                    xhr.open('GET', url);
-                    xhr.responseType = 'blob';
-                    xhr.send();
-                }
-            });
-        </script>
 @endsection
 

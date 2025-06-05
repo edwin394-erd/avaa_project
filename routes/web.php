@@ -84,6 +84,8 @@ Route::post('/notificaciones/marcar-leidas', function () {
     auth()->user()->notifications()->where('leida', false)->update(['leida' => true]);
     return response()->json(['ok' => true]);
 })->name('notificaciones.marcarLeidas')->middleware('auth');
+Route::get('/stats/all', [StatController::class, 'allStats'])->name('stats.all');
+Route::get('/stats/{modalidad}', [StatController::class, 'modalidadindex'])->name('stats.modalidadindex');
 
 
 

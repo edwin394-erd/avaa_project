@@ -241,6 +241,7 @@ Inicio
 
 @section('scripts')
 <script>
+// filepath: c:\Users\DELL\Downloads\TESIS\avaa_project\resources\views\dashboard.blade.php
 document.addEventListener("DOMContentLoaded", () => {
     const total_anual_por_mes = @json($total_por_mes);
     const total_volin_por_mes = @json($total_volin_por_mes);
@@ -248,16 +249,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const total_taller_por_mes = @json($total_taller_por_mes);
     const total_chat_por_mes = @json($total_chat_por_mes);
 
-    console.log("anual:" + total_anual_por_mes);
-    console.log("volin:" + total_volin_por_mes);
-    console.log("volex:" + total_volex_por_mes);
-    console.log("taller:" + total_taller_por_mes);
-    console.log("chat:" + total_chat_por_mes);
-
-    // Obtener la fecha actual
     const currentDate = new Date();
 
-    // Función para obtener los índices de los últimos 6 meses
     function getLastSixMonthIndexes() {
         const indexes = [];
         for (let i = 5; i >= 0; i--) {
@@ -267,26 +260,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const lastSixMonthIndexes = getLastSixMonthIndexes();
-    console.log("lastSixMonthIndexes:" + lastSixMonthIndexes);
 
-    // Extraer los últimos 6 meses de cada actividad
     let horasUltimos6MesesVolin = lastSixMonthIndexes.map(index => total_volin_por_mes[(index + 1) % 12] ?? 0);
     let horasUltimos6MesesVolex = lastSixMonthIndexes.map(index => total_volex_por_mes[(index + 1) % 12] ?? 0);
     let horasUltimos6MesesTaller = lastSixMonthIndexes.map(index => total_taller_por_mes[(index + 1) % 12] ?? 0);
     let horasUltimos6MesesChat = lastSixMonthIndexes.map(index => total_chat_por_mes[(index + 1) % 12] ?? 0);
 
-    // Obtener los nombres de los últimos 6 meses
     function getLastSixMonths() {
         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         return lastSixMonthIndexes.map(index => months[index]);
     }
 
-    let months = getLastSixMonths(); // Obtenemos los últimos 6 meses dinámicamente
-
-    // Detectar si el gráfico será horizontal
+    let months = getLastSixMonths();
     const isHorizontal = window.innerWidth < 640;
 
-    // Si es horizontal, invertir el orden de los datos y los meses
     if (isHorizontal) {
         months = months.slice().reverse();
         horasUltimos6MesesVolin = horasUltimos6MesesVolin.slice().reverse();
@@ -295,161 +282,158 @@ document.addEventListener("DOMContentLoaded", () => {
         horasUltimos6MesesChat = horasUltimos6MesesChat.slice().reverse();
     }
 
-    console.log("horasUltimos6MesesVolin:" + horasUltimos6MesesVolin);
-    console.log("horasUltimos6MesesVolex:" + horasUltimos6MesesVolex);
-    console.log("horasUltimos6MesesTaller:" + horasUltimos6MesesTaller);
-    console.log("horasUltimos6MesesChat:" + horasUltimos6MesesChat);
-
-    // Alternar sombreado de fondo para cada mes según el modo (claro/dark)
     function getBarColors() {
-        // Detecta el modo usando la clase 'dark' en <html> (Tailwind)
         const isDark = document.documentElement.classList.contains('dark');
         if (isDark) {
-            return months.map((_, i) => i % 2 === 0 ? "#1e293b" : "#0f172a"); // slate-800 y slate-900
+            return months.map((_, i) => i % 2 === 0 ? "#1e293b" : "#0f172a");
         } else {
-            return months.map((_, i) => i % 2 === 0 ? "#E5E7EB" : "#FFFFFF"); // gris claro y blanco
+            return months.map((_, i) => i % 2 === 0 ? "#E5E7EB" : "#FFFFFF");
         }
     }
-    let barColors = getBarColors();
 
-    // Observa cambios en la clase 'dark' para actualizar los colores dinámicamente
-    const observer = new MutationObserver(() => {
-        barColors = getBarColors();
+    function renderChart() {
+        let barColors = getBarColors();
+        const isDark = document.documentElement.classList.contains('dark');
+        const options2 = {
+            series: [
+                {
+                    name: "Voluntariado Interno",
+                    color: "#16A34A",
+                    data: horasUltimos6MesesVolin,
+                },
+                {
+                    name: "Voluntariado Externo",
+                    color: "#dc2626",
+                    data: horasUltimos6MesesVolex,
+                },
+                {
+                    name: "Chat",
+                    color: "#f97316",
+                    data: horasUltimos6MesesChat,
+                },
+                {
+                    name: "Talleres",
+                    color: "#2563EB",
+                    data: horasUltimos6MesesTaller,
+                },
+            ],
+            chart: {
+                sparkline: { enabled: false },
+                type: "bar",
+                width: "100%",
+                height: window.innerWidth >= 640 ? 300 : 800,
+                toolbar: { show: false },
+                background: isDark ? "#0f172a" : "#fff",
+                events: {
+                    mounted: function(chartContext, config) {
+                        if (typeof addBarHoverEffect === "function") addBarHoverEffect();
+                    },
+                    updated: function(chartContext, config) {
+                        if (typeof addBarHoverEffect === "function") addBarHoverEffect();
+                    }
+                }
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: isHorizontal,
+                    columnWidth: "90%",
+                    borderRadiusApplication: "end",
+                    borderRadius: 6,
+                    dataLabels: {
+                        position: window.innerWidth >= 640 ? "top" : "center",
+                    },
+                },
+            },
+            legend: {
+                show: true,
+                position: "top",
+                horizontalAlign: "center",
+                floating: false,
+                fontSize: "14px",
+                fontFamily: "Inter, sans-serif",
+                fontWeight: 400,
+                width: "100%",
+                height: 40,
+                offsetX: 0,
+                offsetY: 0,
+            },
+            tooltip: {
+                enabled: false,
+                shared: true,
+                intersect: false,
+                fillSeriesColor: false,
+                x: { show: true },
+                y: {
+                    formatter: function (value, { seriesIndex, w }) {
+                        return `${w.config.series[seriesIndex].name}: ${value} Horas`;
+                    }
+                },
+            },
+            xaxis: {
+                categories: months,
+                labels: {
+                    show: true,
+                    style: {
+                        fontFamily: "Inter, sans-serif",
+                        cssClass: 'text-xs font-normal fill-gray-500'
+                    }
+                },
+                axisTicks: { show: false },
+                axisBorder: { show: false },
+            },
+            yaxis: {
+                labels: {
+                    show: true,
+                    style: {
+                        fontFamily: "Inter, sans-serif",
+                        cssClass: 'text-xs font-normal fill-gray-500'
+                    }
+                },
+            },
+            grid: {
+                show: true,
+                strokeDashArray: 4,
+                padding: { left: 2, right: 2, top: -20 },
+                row: {
+                    colors: isHorizontal ? barColors : undefined,
+                },
+                column: {
+                    colors: !isHorizontal ? barColors : undefined,
+                },
+            },
+            fill: { opacity: 1 },
+        };
+
         if (window.chart) {
-            window.chart.updateOptions({
-                grid: {
-                    row: { colors: isHorizontal ? barColors : undefined },
-                    column: { colors: !isHorizontal ? barColors : undefined }
-                }
-            }, true, true);
+            window.chart.destroy();
         }
-    });
-
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-
-    const options2 = {
-        series: [
-            {
-                name: "Voluntariado Interno",
-                color: "#16A34A",
-                data: horasUltimos6MesesVolin,
-            },
-            {
-                name: "Voluntariado Externo",
-                color: "#dc2626",
-                data: horasUltimos6MesesVolex,
-            },
-            {
-                name: "Chat",
-                color: "#f97316",
-                data: horasUltimos6MesesChat,
-            },
-            {
-                name: "Talleres",
-                color: "#2563EB",
-                data: horasUltimos6MesesTaller,
-            },
-        ],
-        chart: {
-            sparkline: { enabled: false },
-            type: "bar",
-            width: "100%",
-            height: window.innerWidth >= 640 ? 300 : 800,
-            toolbar: { show: false },
-            events: {
-                mounted: function(chartContext, config) {
-                    if (typeof addBarHoverEffect === "function") addBarHoverEffect();
-                },
-                updated: function(chartContext, config) {
-                    if (typeof addBarHoverEffect === "function") addBarHoverEffect();
-                }
-            }
-        },
-        plotOptions: {
-            bar: {
-                horizontal: isHorizontal,
-                columnWidth: "90%",
-                borderRadiusApplication: "end",
-                borderRadius: 6,
-                dataLabels: {
-                    position: window.innerWidth >= 640 ? "top" : "center",
-                },
-            },
-        },
-        legend: {
-            show: true,
-            position: "top",
-            horizontalAlign: "center",
-            floating: false,
-            fontSize: "14px",
-            fontFamily: "Inter, sans-serif",
-            fontWeight: 400,
-            width: "100%",
-            height: 40,
-            offsetX: 0,
-            offsetY: 0,
-        },
-        tooltip: {
-            enabled: false,
-            shared: true,
-            intersect: false,
-            fillSeriesColor: false,
-            x: { show: true },
-            y: {
-                formatter: function (value, { seriesIndex, w }) {
-                    return `${w.config.series[seriesIndex].name}: ${value} Horas`;
-                }
-            },
-        },
-        xaxis: {
-            categories: months,
-            labels: {
-                show: true,
-                style: {
-                    fontFamily: "Inter, sans-serif",
-                    cssClass: 'text-xs font-normal fill-gray-500'
-                }
-            },
-            axisTicks: { show: false },
-            axisBorder: { show: false },
-        },
-        yaxis: {
-            labels: {
-                show: true,
-                style: {
-                    fontFamily: "Inter, sans-serif",
-                    cssClass: 'text-xs font-normal fill-gray-500'
-                }
-            },
-        },
-        grid: {
-            show: true,
-            strokeDashArray: 4,
-            padding: { left: 2, right: 2, top: -20 },
-            row: {
-                colors: isHorizontal ? barColors : undefined, // para barras horizontales
-            },
-            column: {
-                colors: !isHorizontal ? barColors : undefined, // para barras verticales
-            },
-        },
-        fill: { opacity: 1 },
-    };
-
-    if (document.getElementById("bar-chart") && typeof ApexCharts !== 'undefined') {
         window.chart = new ApexCharts(document.getElementById("bar-chart"), options2);
         window.chart.render();
+    }
+
+    // Renderiza el gráfico al cargar
+    renderChart();
+
+    // Vuelve a renderizar el gráfico al cambiar el modo claro/oscuro
+    const observer = new MutationObserver(() => {
+        renderChart();
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+    // Si tienes un botón toggle-dark, también vuelve a renderizar al hacer click
+    const toggleDark = document.getElementById('toggle-dark');
+    if (toggleDark) {
+        toggleDark.addEventListener('click', function() {
+            setTimeout(renderChart, 300); // Espera a que cambie el tema
+        });
     }
 
     // Animación de los círculos de progreso
     document.querySelectorAll(".progress-circle").forEach(circle => {
         const finalOffset = circle.getAttribute("data-final-offset");
         circle.style.setProperty("--final-offset", finalOffset);
-        // Quita la animación si existe
         circle.style.animation = "none";
-        // Fuerza el reflow
         void circle.offsetWidth;
-        // Ahora aplica la animación
         circle.style.animation = "progressAnimation 1.5s forwards";
     });
 });

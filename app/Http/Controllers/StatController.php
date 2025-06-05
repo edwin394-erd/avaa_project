@@ -25,7 +25,8 @@ class StatController extends Controller
             $stats = Stat::with('evidencias')
             ->where('anulado', 'NO')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(8);
+
             $meta_volin = \App\Models\Becario::sum('meta_volin');
             $meta_volex = \App\Models\Becario::sum('meta_volex');
             $meta_taller = \App\Models\Becario::sum('meta_taller');
@@ -111,7 +112,7 @@ class StatController extends Controller
             $stats = Stat::with('evidencias')
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(8);
 
              return view('stats.index')->with([
             'user' => $user,
@@ -138,19 +139,50 @@ class StatController extends Controller
 
     }
 
-    public function modalidadindex(String $modalidad){
-        $startOfYear = Carbon::now()->startOfYear();
-        $endOfYear = Carbon::now()->endOfYear();
-        $user = auth()->user();
+public function modalidadindex(String $modalidad, Request $request)
+{
+    $startOfYear = Carbon::now()->startOfYear();
+    $endOfYear = Carbon::now()->endOfYear();
+    $user = auth()->user();
 
-        if ($user->role === 'admin') {
-            // Para admin, obtener metas y stats de todos los usuarios
-            $meta_volin = \App\Models\Becario::sum('meta_volin');
-            $meta_volex = \App\Models\Becario::sum('meta_volex');
-            $meta_taller = \App\Models\Becario::sum('meta_taller');
-            $meta_chat = \App\Models\Becario::sum('meta_chat');
+    // Filtro base
+    $query = Stat::with(['evidencias', 'user.becario'])
+        ->where('actividad', $modalidad);
 
-            $stats_anual = Stat::where('anulado', 'NO')
+    // Filtro por usuario si no es admin
+    if ($user->role !== 'admin') {
+        $query->where('user_id', $user->id);
+    }
+
+    // Filtro por búsqueda
+    if ($request->filled('search')) {
+        $search = $request->input('search');
+        $query->where(function($q) use ($search, $user) {
+            $q->where('titulo', 'like', "%$search%")
+              ->orWhere('actividad', 'like', "%$search%")
+              ->orWhere('modalidad', 'like', "%$search%")
+              ->orWhere('duracion', 'like', "%$search%")
+              ->orWhere('estado', 'like', "%$search%");
+            // Si es admin, buscar también por nombre de becario
+            if ($user->role === 'admin') {
+                $q->orWhereHas('user.becario', function($q2) use ($search) {
+                    $q2->where('nombre', 'like', "%$search%");
+                });
+            }
+        });
+    }
+
+    // Paginación y orden
+    $stats = $query->orderBy('created_at', 'desc')->paginate(8);
+
+    // Estadísticas y metas
+    if ($user->role === 'admin') {
+        $meta_volin = \App\Models\Becario::sum('meta_volin');
+        $meta_volex = \App\Models\Becario::sum('meta_volex');
+        $meta_taller = \App\Models\Becario::sum('meta_taller');
+        $meta_chat = \App\Models\Becario::sum('meta_chat');
+
+        $stats_anual = Stat::where('anulado', 'NO')
             ->where('estado', 'aprobado')
             ->whereBetween('fecha', [$startOfYear, $endOfYear])
             ->selectRaw('
@@ -165,67 +197,39 @@ class StatController extends Controller
             ->get()
             ->keyBy('month');
 
-            $stats_realizado = Stat::where('actividad', $modalidad)
+        $stats_realizado = Stat::where('actividad', $modalidad)
             ->where('estado', 'aprobado')
             ->where('anulado', 'NO')
             ->get();
 
-            // VOLUNTARIADO INTERNO
-            $stats_volin = Stat::where('actividad', 'volin')
-            ->where('estado', 'aprobado')
-            ->where('anulado', 'NO')
-            ->where('fecha', '>=', $startOfYear)
-            ->get();
-            $total_volin = $stats_volin->sum('duracion');
-            $porcen_volin = 0;
+        // Totales y porcentajes por modalidad
+        $total_volin = Stat::where('actividad', 'volin')->where('estado', 'aprobado')->where('anulado', 'NO')->where('fecha', '>=', $startOfYear)->sum('duracion');
+        $total_volex = Stat::where('actividad', 'volex')->where('estado', 'aprobado')->where('anulado', 'NO')->where('fecha', '>=', $startOfYear)->sum('duracion');
+        $total_taller = Stat::where('actividad', 'taller')->where('estado', 'aprobado')->where('anulado', 'NO')->where('fecha', '>=', $startOfYear)->sum('duracion');
+        $total_chat = Stat::where('actividad', 'chat')->where('estado', 'aprobado')->where('anulado', 'NO')->where('fecha', '>=', $startOfYear)->sum('duracion');
 
-            // VOLUNTARIADO EXTERNO
-            $stats_volex = Stat::where('actividad', 'volex')
-            ->where('estado', 'aprobado')
-            ->where('anulado', 'NO')
-            ->where('fecha', '>=', $startOfYear)
-            ->get();
-            $total_volex = $stats_volex->sum('duracion');
-            $porcen_volex = 0;
+        $porcen_volin = 0;
+        $porcen_volex = 0;
+        $porcen_taller = 0;
+        $porcen_chat = 0;
 
-            // TALLER
-            $stats_taller = Stat::where('actividad', 'taller')
-            ->where('estado', 'aprobado')
-            ->where('anulado', 'NO')
-            ->where('fecha', '>=', $startOfYear)
-            ->get();
-            $total_taller = $stats_taller->sum('duracion');
-            $porcen_taller = 0;
+        // Arrays por mes
+        $total_volin_por_mes = array_fill(0, 11, 0);
+        $total_volex_por_mes = array_fill(0, 11, 0);
+        $total_taller_por_mes = array_fill(0, 11, 0);
+        $total_chat_por_mes = array_fill(0, 11, 0);
 
-            // CHAT
-            $stats_chat = Stat::where('actividad', 'chat')
-            ->where('estado', 'aprobado')
-            ->where('anulado', 'NO')
-            ->where('fecha', '>=', $startOfYear)
-            ->get();
-            $total_chat = $stats_chat->sum('duracion');
-            $porcen_chat = 0;
-
-            // Arrays por mes
-            $total_volin_por_mes = array_fill(0, 11, 0);
-            $total_volex_por_mes = array_fill(0, 11, 0);
-            $total_taller_por_mes = array_fill(0, 11, 0);
-            $total_chat_por_mes = array_fill(0, 11, 0);
-
-            foreach ($stats_anual as $mes => $datos) {
+        foreach ($stats_anual as $mes => $datos) {
             $total_volin_por_mes[$mes] = $datos->total_volin_duracion ?? 0;
             $total_volex_por_mes[$mes] = $datos->total_volex_duracion ?? 0;
             $total_taller_por_mes[$mes] = $datos->total_taller_duracion ?? 0;
             $total_chat_por_mes[$mes] = $datos->total_chat_duracion ?? 0;
-            }
+        }
 
-            return view('stats.show')->with([
+        return view('stats.show')->with([
             'user' => $user,
             'modalidad' => $modalidad,
-            'stats' => Stat::with('evidencias')
-                ->where('actividad', $modalidad)
-                ->orderBy('created_at', 'desc')
-                ->get(),
+            'stats' => $stats,
             'meta_volin' => $meta_volin,
             'meta_volex' => $meta_volex,
             'meta_taller' => $meta_taller,
@@ -243,15 +247,15 @@ class StatController extends Controller
             'total_volex_por_mes' => $total_volex_por_mes,
             'total_taller_por_mes' => $total_taller_por_mes,
             'total_chat_por_mes' => $total_chat_por_mes,
-            ]);
-        } else {
-            // Usuario normal (como estaba)
-            $meta_volin = $user->becario->meta_volin;
-            $meta_volex = $user->becario->meta_volex;
-            $meta_taller = $user->becario->meta_taller;
-            $meta_chat = $user->becario->meta_chat;
+        ]);
+    } else {
+        // Usuario normal
+        $meta_volin = $user->becario->meta_volin;
+        $meta_volex = $user->becario->meta_volex;
+        $meta_taller = $user->becario->meta_taller;
+        $meta_chat = $user->becario->meta_chat;
 
-            $stats_anual = Stat::where('user_id', $user->id)
+        $stats_anual = Stat::where('user_id', $user->id)
             ->where('anulado', 'NO')
             ->where('estado', 'aprobado')
             ->whereBetween('fecha', [$startOfYear, $endOfYear])
@@ -267,76 +271,39 @@ class StatController extends Controller
             ->get()
             ->keyBy('month');
 
-            $stats_realizado = Stat::where('user_id', $user->id)
+        $stats_realizado = Stat::where('user_id', $user->id)
             ->where('actividad', $modalidad)
             ->where('estado', 'aprobado')
             ->where('anulado', 'NO')
             ->get();
 
-            //VOLUNTARIADO INTERNO
-            $stats_volin = Stat::where('user_id', $user->id)
-            ->where('actividad', 'volin')
-            ->where('estado', 'aprobado')
-            ->where('anulado', 'NO')
-            ->where('fecha', '>=', $startOfYear)
-            ->get();
-            $total_volin = $stats_volin->sum('duracion');
-            $porcen_volin = ($meta_volin > 0) ? ($total_volin / $meta_volin) * 100 : 0;
-            $porcen_volin = number_format(min($porcen_volin, 100), 2);
+        // Totales y porcentajes por modalidad
+        $total_volin = Stat::where('user_id', $user->id)->where('actividad', 'volin')->where('estado', 'aprobado')->where('anulado', 'NO')->where('fecha', '>=', $startOfYear)->sum('duracion');
+        $total_volex = Stat::where('user_id', $user->id)->where('actividad', 'volex')->where('estado', 'aprobado')->where('anulado', 'NO')->where('fecha', '>=', $startOfYear)->sum('duracion');
+        $total_taller = Stat::where('user_id', $user->id)->where('actividad', 'taller')->where('estado', 'aprobado')->where('anulado', 'NO')->where('fecha', '>=', $startOfYear)->sum('duracion');
+        $total_chat = Stat::where('user_id', $user->id)->where('actividad', 'chat')->where('estado', 'aprobado')->where('anulado', 'NO')->where('fecha', '>=', $startOfYear)->sum('duracion');
 
-            //VOLUNTARIADO EXTERNO
-            $stats_volex = Stat::where('user_id', $user->id)
-            ->where('actividad', 'volex')
-            ->where('estado', 'aprobado')
-            ->where('anulado', 'NO')
-            ->where('fecha', '>=', $startOfYear)
-            ->get();
-            $total_volex = $stats_volex->sum('duracion');
-            $porcen_volex = ($meta_volex > 0) ? ($total_volex / $meta_volex) * 100 : 0;
-            $porcen_volex = number_format(min($porcen_volex, 100), 2);
+        $porcen_volin = ($meta_volin > 0) ? number_format(min(($total_volin / $meta_volin) * 100, 100), 2) : 0;
+        $porcen_volex = ($meta_volex > 0) ? number_format(min(($total_volex / $meta_volex) * 100, 100), 2) : 0;
+        $porcen_taller = ($meta_taller > 0) ? number_format(min(($total_taller / $meta_taller) * 100, 100), 2) : 0;
+        $porcen_chat = ($meta_chat > 0) ? number_format(min(($total_chat / $meta_chat) * 100, 100), 2) : 0;
 
-            //TALLER
-            $stats_taller = Stat::where('user_id', $user->id)
-            ->where('actividad', 'taller')
-            ->where('estado', 'aprobado')
-            ->where('anulado', 'NO')
-            ->where('fecha', '>=', $startOfYear)
-            ->get();
-            $total_taller = $stats_taller->sum('duracion');
-            $porcen_taller = ($meta_taller > 0) ? ($total_taller / $meta_taller) * 100 : 0;
-            $porcen_taller = number_format(min($porcen_taller, 100), 2);
+        $total_volin_por_mes = array_fill(0, 11, 0);
+        $total_volex_por_mes = array_fill(0, 11, 0);
+        $total_taller_por_mes = array_fill(0, 11, 0);
+        $total_chat_por_mes = array_fill(0, 11, 0);
 
-            //CHAT
-            $stats_chat = Stat::where('user_id', $user->id)
-            ->where('actividad', 'chat')
-            ->where('estado', 'aprobado')
-            ->where('anulado', 'NO')
-            ->where('fecha', '>=', $startOfYear)
-            ->get();
-            $total_chat = $stats_chat->sum('duracion');
-            $porcen_chat = ($meta_chat > 0) ? ($total_chat / $meta_chat) * 100 : 0;
-            $porcen_chat = number_format(min($porcen_chat, 100), 2);
-
-            $total_volin_por_mes = array_fill(0, 11, 0);
-            $total_volex_por_mes = array_fill(0, 11, 0);
-            $total_taller_por_mes = array_fill(0, 11, 0);
-            $total_chat_por_mes = array_fill(0, 11, 0);
-
-            foreach ($stats_anual as $mes => $datos) {
+        foreach ($stats_anual as $mes => $datos) {
             $total_volin_por_mes[$mes] = $datos->total_volin_duracion ?? 0;
             $total_volex_por_mes[$mes] = $datos->total_volex_duracion ?? 0;
             $total_taller_por_mes[$mes] = $datos->total_taller_duracion ?? 0;
             $total_chat_por_mes[$mes] = $datos->total_chat_duracion ?? 0;
-            }
+        }
 
-            return view('stats.show')->with([
+        return view('stats.show')->with([
             'user' => $user,
             'modalidad' => $modalidad,
-            'stats' => Stat::with('evidencias')
-                ->where('user_id', $user->id)
-                ->where('actividad', $modalidad)
-                ->orderBy('created_at', 'desc')
-                ->get(),
+            'stats' => $stats,
             'meta_volin' => $meta_volin,
             'meta_volex' => $meta_volex,
             'meta_taller' => $meta_taller,
@@ -354,9 +321,9 @@ class StatController extends Controller
             'total_volex_por_mes' => $total_volex_por_mes,
             'total_taller_por_mes' => $total_taller_por_mes,
             'total_chat_por_mes' => $total_chat_por_mes,
-            ]);
-        }
+        ]);
     }
+}
     public function anular(Stat $stat)
     {
         if ($stat->estado === 'pendiente') {
@@ -467,6 +434,17 @@ class StatController extends Controller
 
         return redirect()->route('stats.index')->with('success', 'La actividad se ha registrado exitosamente');
 
+    }
+
+    public function allStats(Request $request)
+    {
+        $user = auth()->user();
+        if ($user->role === 'admin') {
+            $stats = Stat::with(['evidencias', 'user.becario'])->where('anulado', 'NO')->orderBy('created_at', 'desc')->get();
+        } else {
+            $stats = Stat::with('evidencias')->where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        }
+        return response()->json($stats);
     }
 
 

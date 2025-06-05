@@ -10,10 +10,10 @@
 @endphp
 
 <div class="2xl:w-6/6 mx-auto py-5 px-0 md:px-5">
-    <div class="flex flex-wrap p-0 min-h-[calc(90vh-4rem)]">
-        <!-- Formulario para agregar actividad -->
+    <div class="flex flex-wrap xl:flex-nowrap p-0 min-h-[calc(90vh-4rem)] h-[80vh]">
+         <!-- Columna izquierda -->
         <div class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0">
-            <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 rounded-l-xl p-4 h-full">
+            <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 rounded-l-xl p-4 h-full overflow-y-auto">
                 @if ($user->role == 'user')
                     <h1 class="text-lg 2xl:text-xl font-bold text-gray-700 dark:text-gray-100 text-center mb-4">Agregar Actividad</h1>
                     <hr class="mb-2 dark:border-slate-700">
@@ -191,8 +191,7 @@
                 @endif
             </div>
         </div>
-
-        <!-- Tabla de estadísticas -->
+        <!-- Columna derecha -->
         <div class="w-full xl:w-3/4 p-0 flex flex-col">
             <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 xl:rounded-r-xl p-5 h-full">
                 <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
@@ -257,7 +256,7 @@
                             placeholder="Buscar">
                     </div>
                 </div>
-                <div class="overflow-y-auto h-[calc(80vh-4rem)]">
+                <div class="overflow-y-auto h-[calc(85vh-4rem)]">
                     <table class="w-full text-sm text-left rtl:text-right text-black dark:text-gray-100 table-auto bg-white dark:bg-slate-900"
                         id="myTable">
                         <thead class="text-gray-700 dark:text-gray-200 text-md uppercase border-b border-gray-200 dark:border-slate-700">
@@ -277,14 +276,15 @@
                         </thead>
                            <tbody>
 @forelse ($stats as $stat)
-  <tr
+<tr
     id="stat-{{ $stat->id }}"
-    class="text-sm border-b border-gray-200 dark:border-slate-700 transition duration-300 ease-in-out
-        @if((string)$highlightId === (string)$stat->id)
-            bg-yellow-200 dark:bg-yellow-700/40 hover:bg-yellow-100 dark:hover:bg-yellow-800/60
-        @else
-            bg-white dark:bg-slate-900 hover:bg-blue-100 dark:hover:bg-blue-900/40
-        @endif"
+    class="text-sm border-b border-gray-200 dark:border-slate-700 transition duration-300 ease-in-out align-middle
+            @if((string)$highlightId === (string)$stat->id)
+                    bg-yellow-200 dark:bg-yellow-700/40 hover:bg-yellow-100 dark:hover:bg-yellow-800/60
+            @else
+                    bg-white dark:bg-slate-900 hover:bg-blue-100 dark:hover:bg-blue-900/40
+            @endif"
+    style="height: 20px;"
 >
         @if ($user->role == 'admin')
             <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ $stat->user->becario->nombre }}</td>
@@ -576,21 +576,29 @@
     <button onclick="cerrarModalImgAmpliada()" class="absolute top-4 right-6 text-white text-4xl font-bold">&times;</button>
 </div>
 </tbody>
-                    </table>
-                </div>
+</table>
+</div>
+<div class="mt-2 flex flex-col items-center">
+    <div class="flex gap-1 mb-1">
+        @if ($stats->onFirstPage())
+            <button class="px-2 py-1 bg-gray-300 dark:bg-gray-700 text-gray-400 rounded text-xs" disabled>&laquo;</button>
+        @else
+            <a href="{{ $stats->previousPageUrl() }}" class="px-2 py-1 bg-slate-800 text-white rounded text-xs hover:bg-slate-700">&laquo;</a>
+        @endif
 
-                </div>
-                {{-- <div class="mt-4">
-                    <p class="text-sm text-gray-700 text-center mt-2">Mostrando
-                        {{ $stats->lastItem() }} de {{ $stats->total() }} resultados
-                        (Página
-                        {{ $stats->currentPage() }} de {{ $stats->lastPage() }})</p>
-                    <br>
-                    <p class="text-sm text-gray-700">
-                        {{ $stats->links('pagination::tailwind') }}
-                    </p>
+        <span class="px-2 py-1 text-xs text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-slate-800 rounded">
+            {{ $stats->currentPage() }}/{{ $stats->lastPage() }}
+        </span>
 
-                </div> --}}
+        @if ($stats->hasMorePages())
+            <a href="{{ $stats->nextPageUrl() }}" class="px-2 py-1 bg-slate-800 text-white rounded text-xs hover:bg-slate-700">&raquo;</a>
+        @else
+            <button class="px-2 py-1 bg-gray-300 dark:bg-gray-700 text-gray-400 rounded text-xs" disabled>&raquo;</button>
+        @endif
+    </div>
+</div>
+</div>
+
             </div>
         </div>
         </div>
@@ -824,198 +832,118 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
         {{-- REPORTE PDF BECARIO --}}
-        <script>
-            document.getElementById('btn-generar-reporte').addEventListener('click', function() {
-                // Obtener logo (ajusta la ruta si es necesario)
-                let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
-                const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
-                const doc = new window.jspdf.jsPDF({
-                    orientation: 'landscape'
+       <script>
+function toDataURL(url, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        const reader = new FileReader();
+        reader.onloadend = function() {
+            callback(reader.result);
+        }
+        reader.readAsDataURL(xhr.response);
+    };
+    xhr.onerror = function() {
+        alert('No se pudo cargar el logo para el reporte. El PDF se generará sin logo.');
+        callback('');
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+}
+
+// REPORTE PDF BECARIO (todos los registros)
+document.getElementById('btn-generar-reporte').addEventListener('click', function() {
+    fetch("{{ route('stats.all') }}")
+        .then(res => res.json())
+        .then(data => {
+            let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
+            const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
+            const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+
+            toDataURL(logoUrl, function(logoBase64) {
+                doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
+                doc.setFontSize(16);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Reporte de Actividades', doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Becario: ' + nombreUsuario, 10, 32);
+                doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
+                doc.setDrawColor(200, 200, 200);
+                doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
+
+                // Construir filas desde data
+                const rows = data.map(stat => [
+                    stat.titulo,
+                    stat.actividad,
+                    (stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : ''),
+                    stat.modalidad,
+                    stat.duracion,
+                    stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
+                ]);
+
+                const headers = [['Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
+                doc.autoTable({
+                    head: headers,
+                    body: rows,
+                    startY: 50,
+                    styles: { fontSize: 10 },
+                    headStyles: { fillColor: [30, 41, 59] },
+                    alternateRowStyles: { fillColor: [243, 244, 246] },
                 });
 
-                // Cargar logo como base64 y luego generar el PDF
-                toDataURL(logoUrl, function(logoBase64) {
-                    // Logo
-                    // Logo
-                    doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
-
-                    // Título principal
-                    doc.setFontSize(16);
-                    doc.setFont('helvetica', 'bold');
-                    doc.text('Reporte de Actividades', doc.internal.pageSize.getWidth() / 2, 44, {
-                        align: 'center'
-                    });
-
-                    // Datos del becario y fecha
-                    doc.setFontSize(10);
-                    doc.setFont('helvetica', 'normal');
-                    doc.text('Becario: ' + nombreUsuario, 10, 32);
-                    doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
-
-                    // Línea divisoria
-                    doc.setDrawColor(200, 200, 200);
-                    doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
-
-                    // Obtener datos de la tabla
-                    const rows = [];
-                    document.querySelectorAll('#myTable tbody tr').forEach(tr => {
-                        if (tr.style.display === 'none') return; // Solo filas visibles
-                        const cells = tr.querySelectorAll('td');
-                        if (cells.length) {
-                            rows.push([
-                                cells[0].innerText.trim(), // Titulo
-                                cells[1].innerText.trim(), // Actividad
-                                cells[2].innerText.trim(), // Fecha
-                                cells[3].innerText.trim(), // Modalidad
-                                cells[4].innerText.trim(), // Duración
-                                cells[6].innerText.trim(), // Estatus
-                            ]);
-                        }
-                    });
-
-                    // Encabezados
-                    const headers = [
-                        ['Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']
-                    ];
-
-                    // Tabla
-                    doc.autoTable({
-                        head: headers,
-                        body: rows,
-                        startY: 50,
-                        styles: {
-                            fontSize: 10
-                        },
-                        headStyles: {
-                            fillColor: [30, 41, 59]
-                        }, // bg-slate-800
-                        alternateRowStyles: {
-                            fillColor: [243, 244, 246]
-                        }, // bg-gray-100
-                    });
-
-                    doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
-                });
-
-                // Función para convertir imagen a base64
-                function toDataURL(url, callback) {
-                    const xhr = new XMLHttpRequest();
-                    xhr.onload = function() {
-                        const reader = new FileReader();
-                        reader.onloadend = function() {
-                            callback(reader.result);
-                        }
-                        reader.readAsDataURL(xhr.response);
-                    };
-                    xhr.onerror = function() {
-                        alert('No se pudo cargar el logo para el reporte. El PDF se generará sin logo.');
-                        callback('');
-                    };
-                    xhr.open('GET', url);
-                    xhr.responseType = 'blob';
-                    xhr.send();
-                }
+                doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
             });
-        </script>
+        });
+});
 
-        {{-- REPORTE PDF ADMIN --}}
+// REPORTE PDF ADMIN (todos los registros)
+document.getElementById('btn-generar-reporte-admin').addEventListener('click', function() {
+    fetch("{{ route('stats.all') }}")
+        .then(res => res.json())
+        .then(data => {
+            let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
+            const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
+            const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
 
-        <script>
-            document.getElementById('btn-generar-reporte-admin').addEventListener('click', function() {
-                // Obtener logo (ajusta la ruta si es necesario)
-                let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
-                const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
-                const doc = new window.jspdf.jsPDF({
-                    orientation: 'landscape'
+            toDataURL(logoUrl, function(logoBase64) {
+                doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
+                doc.setFontSize(16);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Reporte General de Actividades', doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Generado por: ' + nombreUsuario, 10, 32);
+                doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
+                doc.setDrawColor(200, 200, 200);
+                doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
+
+                // Construir filas desde data
+                const rows = data.map(stat => [
+                    stat.user?.becario?.nombre || '',
+                    stat.titulo,
+                    stat.actividad,
+                    (stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : ''),
+                    stat.modalidad,
+                    stat.duracion,
+                    stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
+                ]);
+
+                const headers = [['Becario', 'Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
+                doc.autoTable({
+                    head: headers,
+                    body: rows,
+                    startY: 50,
+                    styles: { fontSize: 10 },
+                    headStyles: { fillColor: [30, 41, 59] },
+                    alternateRowStyles: { fillColor: [243, 244, 246] },
                 });
 
-                // Cargar logo como base64 y luego generar el PDF
-                toDataURL(logoUrl, function(logoBase64) {
-                    // Logo
-                    // Logo
-                    doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
-
-                    // Título principal
-                    doc.setFontSize(16);
-                    doc.setFont('helvetica', 'bold');
-                    doc.text('Reporte General de Actividades', doc.internal.pageSize.getWidth() / 2, 44, {
-                        align: 'center'
-                    });
-
-                    // Datos del becario y fecha
-                    doc.setFontSize(10);
-                    doc.setFont('helvetica', 'normal');
-                    doc.text('Generado por: ' + nombreUsuario, 10, 32);
-                    doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
-
-                    // Línea divisoria
-                    doc.setDrawColor(200, 200, 200);
-                    doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
-
-                    // Obtener datos de la tabla
-                    const rows = [];
-                    document.querySelectorAll('#myTable tbody tr').forEach(tr => {
-                        if (tr.style.display === 'none') return; // Solo filas visibles
-                        const cells = tr.querySelectorAll('td');
-                        if (cells.length) {
-                            rows.push([
-                                cells[0].innerText.trim(), // Becario
-                                cells[1].innerText.trim(), // Titulo
-                                cells[2].innerText.trim(), // Actividad
-                                cells[3].innerText.trim(), // Fecha
-                                cells[4].innerText.trim(), // Modalidad
-                                cells[5].innerText.trim(), // Duracion
-                                cells[7].innerText.trim(), // Estatus
-                            ]);
-                        }
-                    });
-
-                    // Encabezados
-                    const headers = [
-                        ['Becario', 'Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)',
-                            'Estatus'
-                        ]
-                    ];
-
-                    // Tabla
-                    doc.autoTable({
-                        head: headers,
-                        body: rows,
-                        startY: 50,
-                        styles: {
-                            fontSize: 10
-                        },
-                        headStyles: {
-                            fillColor: [30, 41, 59]
-                        }, // bg-slate-800
-                        alternateRowStyles: {
-                            fillColor: [243, 244, 246]
-                        }, // bg-gray-100
-                    });
-
-                    doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
-                });
-
-                // Función para convertir imagen a base64
-                function toDataURL(url, callback) {
-                    const xhr = new XMLHttpRequest();
-                    xhr.onload = function() {
-                        const reader = new FileReader();
-                        reader.onloadend = function() {
-                            callback(reader.result);
-                        }
-                        reader.readAsDataURL(xhr.response);
-                    };
-                    xhr.onerror = function() {
-                        alert('No se pudo cargar el logo para el reporte. El PDF se generará sin logo.');
-                        callback('');
-                    };
-                    xhr.open('GET', url);
-                    xhr.responseType = 'blob';
-                    xhr.send();
-                }
+                doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
             });
-        </script>
+        });
+});
+</script>
         <script>
       document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.barra-progreso').forEach(barra => {
@@ -1040,4 +968,5 @@
             });
         </script>
         @endif
+
     @endsection
