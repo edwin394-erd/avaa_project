@@ -9,10 +9,10 @@
     $highlightId = request('highlight');
 @endphp
 
-<div class="2xl:w-6/6 mx-auto py-5 px-0 md:px-5">
-    <div class="flex flex-wrap xl:flex-nowrap p-0 min-h-[calc(90vh-4rem)] h-[80vh]">
+<<div class="2xl:w-6/6 mx-auto pt-0 pb-5 px-0 md:px-5">
+    <div class="flex flex-wrap xl:flex-nowrap p-0 h-full">
          <!-- Columna izquierda -->
-        <div class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0">
+        <div class="w-full xl:w-1/5 2xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0">
             <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 rounded-l-xl p-4 h-full overflow-y-auto">
                 @if ($user->role == 'user')
                     <h1 class="text-lg 2xl:text-xl font-bold text-gray-700 dark:text-gray-100 text-center mb-4">Agregar Actividad</h1>
@@ -191,8 +191,8 @@
                 @endif
             </div>
         </div>
-        <!-- Columna derecha -->
-        <div class="w-full xl:w-3/4 p-0 flex flex-col">
+           <!-- Columna derecha -->
+        <div class="w-full xl:w-4/5 2xl:w-3/4 p-0 flex flex-col">
             <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 xl:rounded-r-xl p-5 h-full">
                 <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
                     <div>
@@ -256,9 +256,8 @@
                             placeholder="Buscar">
                     </div>
                 </div>
-                <div class="overflow-y-auto h-[calc(85vh-4rem)]">
-                    <table class="w-full text-sm text-left rtl:text-right text-black dark:text-gray-100 table-auto bg-white dark:bg-slate-900"
-                        id="myTable">
+                <div class="flex-1 min-h-0 overflow-y-auto">
+                    <table class="w-full text-sm text-left rtl:text-right text-black   <table class="w-full text-sm text-left rtl:text-right text-black dark:text-gray-100 table-auto bg-white dark:bg-slate-900" id="myTable">
                         <thead class="text-gray-700 dark:text-gray-200 text-md uppercase border-b border-gray-200 dark:border-slate-700">
                             <tr>
                                 @if ($user->role == 'admin')

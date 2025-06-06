@@ -16,8 +16,8 @@
                 style="min-width:32px;min-height:32px;">
                 <span id="toggle-form-icon">⮜</span>
             </button>
-                <h1 id="form-title" class="text-lg 2xl:text-xl font-bold text-gray-700 dark:text-gray-100 text-center mb-4">Agregar Becario</h1>
-                <br>
+                <h1 id="form-title" class="text-lg 2xl:text-xl font-bold text-gray-700 dark:text-gray-100 text-center mb-2">Agregar Becario</h1>
+                
                 <form id="form-becario" action="{{ route('users.store') }}" method="POST" class="flex flex-col flex-1" novalidate>
                     @csrf
                     <input type="hidden" name="tipo" value="becario">
@@ -804,28 +804,22 @@ function setFormState(open) {
     if (open) {
         formDiv.classList.remove('xl:w-[56px]', 'w-[56px]', 'overflow-hidden');
         formDiv.classList.add('xl:w-1/4', 'w-full');
-        formDiv.style.minWidth = '';
-        formDiv.style.maxWidth = '';
-        formDiv.style.opacity = '';
-        Array.from(innerDiv.children).forEach(child => {
-            child.style.display = '';
-        });
         tablaDiv.classList.remove('xl:w-[calc(100%-56px)]');
         tablaDiv.classList.add('xl:w-3/4');
         btnIcon.textContent = '⮜';
+        Array.from(innerDiv.children).forEach(child => {
+            child.style.display = '';
+        });
     } else {
         formDiv.classList.remove('xl:w-1/4', 'w-full');
         formDiv.classList.add('xl:w-[56px]', 'w-[56px]', 'overflow-hidden');
-        formDiv.style.minWidth = '56px';
-        formDiv.style.maxWidth = '56px';
-        formDiv.style.opacity = '1';
+        tablaDiv.classList.remove('xl:w-3/4');
+        tablaDiv.classList.add('xl:w-[calc(100%-56px)]');
+        btnIcon.textContent = '+';
         Array.from(innerDiv.children).forEach((child) => {
             if (child !== btn) child.style.display = 'none';
             else child.style.display = '';
         });
-        tablaDiv.classList.remove('xl:w-3/4');
-        tablaDiv.classList.add('xl:w-[calc(100%-56px)]');
-        btnIcon.textContent = '+';
     }
 }
 

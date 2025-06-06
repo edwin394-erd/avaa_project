@@ -436,16 +436,11 @@ public function modalidadindex(String $modalidad, Request $request)
 
     }
 
-    public function allStats(Request $request)
-    {
-        $user = auth()->user();
-        if ($user->role === 'admin') {
-            $stats = Stat::with(['evidencias', 'user.becario'])->where('anulado', 'NO')->orderBy('created_at', 'desc')->get();
-        } else {
-            $stats = Stat::with('evidencias')->where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
-        }
-        return response()->json($stats);
-    }
+   public function allStats()
+{
+    $stats = Stat::with(['user.becario'])->get();
+    return response()->json($stats);
+}
 
 
 }

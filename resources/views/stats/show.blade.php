@@ -1,4 +1,3 @@
-{{-- filepath: c:\Users\DELL\Downloads\TESIS\avaa_project\resources\views\stats\show.blade.php --}}
 @extends('layouts.layout')
 
 @section('titulo-tab')
@@ -54,13 +53,18 @@
 
 @section('contenido')
 <div class="2xl:w-6/6 mx-auto py-5 px-0 md:px-5">
-    <div class="flex flex-wrap xl:flex-nowrap p-0 min-h-[calc(90vh-4rem)] h-[80vh]">
+    <div id="contenedor-principal" class="flex flex-wrap xl:flex-nowrap p-0 h-full">
          <!-- Columna izquierda -->
-        <div class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0">
-            <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 rounded-l-xl p-4 h-full overflow-y-auto">
+       <div id="formulario-izquierda" class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0 order-2 xl:order-1 transition-all duration-500">
+              <div class="relative flex flex-col bg-white dark:bg-slate-900 border dark:border-gray-700 shadow-xl shadow-gray-100 dark:shadow-gray-900 rounded-l-xl p-4 h-full">
+            <button id="toggle-form-btn"
+                class="absolute top-2 right-2 z-20 px-2 py-1 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 dark:bg-slate-700 dark:text-gray-100 dark:border-slate-700 dark:hover:bg-slate-800 rounded transition-all duration-300 hidden xl:block"
+                style="min-width:32px;min-height:32px;">
+                <span id="toggle-form-icon">⮜</span>
+            </button>
                 <div class="flex items-center space-x-3 mb-3 text-center">
                     <img src="{{ asset('imgs/' . $icono)}}" alt="icono" class="w-10 h-10 2xl:w-12 2xl:h-12">
-                    <h1 class="text-lg 2xl:text-xl font-bold {{ $color }} mb-0 flex items-center"> {{ $n_actividad }}</h1>
+                    <h1 class="text-sm 2xl:text-xl font-bold {{ $color }} mb-0 flex items-center"> {{ $n_actividad }}</h1>
                 </div>
                 @php
                     $totalRealizadas = $stats_realizado->count();
@@ -89,15 +93,15 @@
                 <br>
                 <hr class="dark:border-slate-700">
                 <div class="flex items-center 2xl:mb-4">
-                    <img src="{{ asset('imgs/icon-progen.png') }}" alt="icono" class="w-12 h-12">
-                    <h3 class="text-md 2xl:text-lg font-bold text-gray-800 dark:text-gray-100 ml-2 ">Estadísticas mensuales</h3>
+                    <img src="{{ asset('imgs/icon-progen.png') }}" alt="icono" class="w-10 h-10 2xl:w-12 2xl:h-12">
+                    <h3 class="text-sm 2xl:text-lg font-bold text-gray-800 dark:text-gray-100 ml-2 ">Estadísticas mensuales</h3>
                 </div>
 
                 <div id="bar-chart"></div>
             </div>
         </div>
          <!-- Columna derecha -->
-        <div class="w-full xl:w-3/4 p-0 flex flex-col">
+        <div id="tabla-derecha" class="w-full xl:w-3/4 p-0 flex flex-col order-1 xl:order-2 transition-all duration-500">
             <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 xl:rounded-r-xl p-5 h-full">
                 <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
                     <div class="flex flex-wrap gap-2 items-center">
@@ -172,21 +176,21 @@
                         <thead class="text-gray-700 dark:text-gray-200 text-md uppercase border-b border-gray-200 dark:border-slate-700">
                             <tr>
                                 @if ($user->role == 'admin')
-                                    <th class="px-3 py-3 text-center">BECARIO</th>
+                                    <th class="p-1 2xl:px-3 2xl:py-3 text-center">BECARIO</th>
                                 @endif
-                                <th scope="col" class="px-3 py-3 text-center">Titulo</th>
-                                <th scope="col" class="px-3 py-3 text-center">Actividad</th>
-                                <th scope="col" class="px-3 py-3 text-center">Fecha</th>
-                                <th scope="col" class="px-3 py-3 text-center">Modalidad</th>
-                                <th scope="col" class="px-3 py-3 text-center">Duración</th>
-                                <th scope="col" class="px-3 py-3 text-center">Ver evidencias</th>
-                                <th scope="col" class="px-3 py-3 text-center">Estatus</th>
-                                <th scope="col" class="px-3 py-3"> Opciones</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-center">Titulo</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-center">Actividad</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-center">Fecha</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-center">Modalidad</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-center">Duración</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-center">Ver evidencias</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-center">Estatus</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md"> Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
 @forelse ($stats as $stat)
-    <tr id="stat-{{ $stat->id }}" class="bg-white dark:bg-slate-900 text-sm border-b border-gray-200 dark:border-slate-700 transition duration-300 ease-in-out {{ $hover }}">
+    <tr id="stat-{{ $stat->id }}" class="bg-white dark:bg-slate-900 text-sm border-b border-gray-200 dark:border-slate-700 transition duration-300 ease-in-out {{ $hover }} text-sm">
         @if ($user->role == 'admin')
             <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ $stat->user->becario->nombre }}</td>
         @endif
@@ -214,7 +218,7 @@
         <td class="px-3 py-4 text-center">
             <button class="rounded p-2 text-white bg-white ver-evidencias-btn hover:bg-blue-100 dark:bg-transparent"
                 data-evidencias='@json($stat->evidencias->pluck('ruta_imagen'))' type="button">
-                <svg width="30px" height="30px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+                <svg width="25px" height="25px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="#000000">
                     <g>
                         <defs>
                             <style>
@@ -230,19 +234,19 @@
         </td>
         <td class="px-3 py-4 text-center">
             @if ($stat->anulado == 'SI')
-                <span class="bg-gray-300 dark:bg-gray-700 p-2 text-bold rounded text-gray-900 dark:text-gray-100">ANULADO</span>
+                <span class="bg-gray-300 dark:bg-gray-700 p-1 text-bold rounded text-gray-900 dark:text-gray-100">ANULADO</span>
             @elseif ($stat->estado == 'pendiente')
-                <span class="bg-yellow-200 dark:bg-yellow-700 p-2 text-bold rounded text-gray-900 dark:text-gray-100">PENDIENTE</span>
+                <span class="bg-yellow-200 dark:bg-yellow-700 p-1 text-bold rounded text-gray-900 dark:text-gray-100">PENDIENTE</span>
             @elseif ($stat->estado == 'rechazado')
-                <span class="bg-red-300 dark:bg-red-700 p-2 text-bold rounded cursor-pointer text-gray-900 dark:text-gray-100"
+                <span class="bg-red-300 dark:bg-red-700 p-1 text-bold rounded cursor-pointer text-gray-900 dark:text-gray-100"
                     onclick="abrirModal('modal-motivo-rechazo-{{ $stat->id }}')" title="Ver motivo de rechazo">
                     RECHAZADO
                 </span>
             @else
-                <span class="bg-green-200 dark:bg-green-700 p-2 text-bold rounded text-gray-900 dark:text-gray-100">APROBADO</span>
+                <span class="bg-green-200 dark:bg-green-700 p-1 text-bold rounded text-gray-900 dark:text-gray-100">APROBADO</span>
             @endif
         </td>
-        <td class="px-3 py-4 text-center">
+        <td class="px-2 py-2 text-center">
             @if ($user->role == 'admin')
                 <div class="flex p-0">
                     @if ($stat->estado == 'aprobado')
@@ -807,9 +811,24 @@ document.addEventListener("DOMContentLoaded", function() {
                 sparkline: { enabled: false },
                 type: "bar",
                 width: "100%",
-                height: document.getElementById("bar-chart")
-                    ? Math.max(100, Math.round(document.getElementById("bar-chart").offsetHeight || document.getElementById("bar-chart").offsetWidth * 0.95))
-                    : (window.innerWidth >= 1280 ? 400 : window.innerWidth >= 900 ? 200 : window.innerWidth >= 640 ? 200 : 140),
+                height: (() => {
+                    const el = document.getElementById("bar-chart");
+                    const ww = window.innerWidth;
+                    if (el) {
+                        // Usa un valor base pero limita el máximo y mínimo
+                        if (ww >= 1536) return 390;
+                        if (ww >= 1280) return 280;
+                        if (ww >= 900) return 250;
+                        if (ww >= 640) return 200;
+                        return 160;
+                    }
+                    // Fallback si no existe el elemento
+                    if (ww >= 1536) return 420;
+                    if (ww >= 1280) return 350;
+                    if (ww >= 900) return 300;
+                    if (ww >= 640) return 220;
+                    return 160;
+                })(),
                 toolbar: { show: false },
                 background: isDark ? "#0f172a" : "#fff"
             },
@@ -1030,6 +1049,70 @@ document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', 
                 doc.save('Reporte_General_Actividades_' + new Date().toLocaleString() + '.pdf');
             });
         });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('toggle-form-btn');
+    const btnIcon = document.getElementById('toggle-form-icon');
+    const formDiv = document.getElementById('formulario-izquierda');
+    const innerDiv = btn.parentElement;
+    const tablaDiv = document.getElementById('tabla-derecha');
+
+    function isDesktop() {
+        return window.matchMedia('(min-width: 1280px)').matches;
+    }
+
+    let visible = true;
+
+    function setFormState(open) {
+        if (open) {
+            formDiv.classList.remove('xl:w-[56px]', 'w-[56px]', 'overflow-hidden');
+            formDiv.classList.add('xl:w-1/4', 'w-full');
+            tablaDiv.classList.remove('xl:w-[calc(100%-56px)]');
+            tablaDiv.classList.add('xl:w-3/4');
+            btnIcon.textContent = '⮜';
+            Array.from(innerDiv.children).forEach(child => {
+                child.style.display = '';
+            });
+        } else {
+            formDiv.classList.remove('xl:w-1/4', 'w-full');
+            formDiv.classList.add('xl:w-[56px]', 'w-[56px]', 'overflow-hidden');
+            tablaDiv.classList.remove('xl:w-3/4');
+            tablaDiv.classList.add('xl:w-[calc(100%-56px)]');
+            btnIcon.textContent = '+';
+            Array.from(innerDiv.children).forEach((child) => {
+                if (child !== btn) child.style.display = 'none';
+                else child.style.display = '';
+            });
+        }
+        // Ya no uses setTimeout aquí
+    }
+
+    setFormState(visible);
+
+    // Redimensiona el chart justo al terminar la transición de ancho
+    tablaDiv.addEventListener('transitionend', function(e) {
+        if (e.propertyName === 'width' && window.chart && typeof window.chart.resize === 'function') {
+            window.chart.resize();
+        }
+    });
+
+    window.addEventListener('resize', function() {
+        if (!isDesktop()) {
+            visible = true;
+            setFormState(true);
+        } else {
+            setFormState(visible);
+        }
+    });
+
+    btn.addEventListener('click', function() {
+        if (!isDesktop()) return;
+        visible = !visible;
+        setFormState(visible);
+    });
 });
 </script>
 @endsection

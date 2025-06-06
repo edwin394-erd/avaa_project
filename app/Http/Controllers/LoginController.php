@@ -29,7 +29,7 @@ class LoginController extends Controller
         ]);
 
         if(!auth()->attempt($request->only('email','password'),$request->remember)){
-            return back()->with('error', 'Email o contraseña incorrectos');
+            return back()->withInput()->with('error', 'Email o contraseña incorrectos');
         }
 
         return redirect(route('home'));
