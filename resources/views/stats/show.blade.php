@@ -53,7 +53,7 @@
 
 @section('contenido')
 <div class="2xl:w-6/6 mx-auto py-5 px-0 md:px-5">
-    <div id="contenedor-principal" class="flex flex-wrap xl:flex-nowrap p-0 h-full">
+    <div id="contenedor-principal" class="flex flex-wrap min-h-[calc(90vh-4rem)] xl:flex-nowrap p-0 h-full">
          <!-- Columna izquierda -->
        <div id="formulario-izquierda" class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0 order-2 xl:order-1 transition-all duration-500">
               <div class="relative flex flex-col bg-white dark:bg-slate-900 border dark:border-gray-700 shadow-xl shadow-gray-100 dark:shadow-gray-900 rounded-l-xl p-4 h-full">
@@ -167,7 +167,7 @@
                             class="block p-2 ps-10 text-sm text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-slate-700 rounded-lg w-80 bg-gray-50 dark:bg-slate-800 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Buscar">
                     </div>
-                    <button type="submit" class="ml-2 px-3 py-1 bg-slate-800 text-white rounded">Buscar</button>
+                    <button type="submit" class="ml-2 px-3 py-1 bg-ehite text-slate rounded border  dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700-">Buscar</button>
                  </form>
 
                 </div>
@@ -1064,7 +1064,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return window.matchMedia('(min-width: 1280px)').matches;
     }
 
-    let visible = true;
+    // Leer el estado guardado en localStorage (por defecto false)
+    let visible = localStorage.getItem('formularioIzquierdaVisible');
+    visible = visible === null ? false : (visible === 'true');
+
+    // Quitar transición temporalmente
+    formDiv.classList.add('notransition');
+    tablaDiv.classList.add('notransition');
 
     function setFormState(open) {
         if (open) {
@@ -1076,23 +1082,31 @@ document.addEventListener('DOMContentLoaded', function() {
             Array.from(innerDiv.children).forEach(child => {
                 child.style.display = '';
             });
+              if (window.renderChart) {
+            renderChart();
+        }
         } else {
             formDiv.classList.remove('xl:w-1/4', 'w-full');
             formDiv.classList.add('xl:w-[56px]', 'w-[56px]', 'overflow-hidden');
             tablaDiv.classList.remove('xl:w-3/4');
             tablaDiv.classList.add('xl:w-[calc(100%-56px)]');
-            btnIcon.textContent = '+';
+            btnIcon.textContent = '⮞';
             Array.from(innerDiv.children).forEach((child) => {
                 if (child !== btn) child.style.display = 'none';
                 else child.style.display = '';
             });
         }
-        // Ya no uses setTimeout aquí
     }
 
+    // Aplica el estado SIN transición
     setFormState(visible);
 
-    // Redimensiona el chart justo al terminar la transición de ancho
+    // Forzar reflow y quitar la clase notransition para que las siguientes veces sí haya animación
+    setTimeout(() => {
+        formDiv.classList.remove('notransition');
+        tablaDiv.classList.remove('notransition');
+    }, 10);
+
     tablaDiv.addEventListener('transitionend', function(e) {
         if (e.propertyName === 'width' && window.chart && typeof window.chart.resize === 'function') {
             window.chart.resize();
@@ -1112,8 +1126,17 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!isDesktop()) return;
         visible = !visible;
         setFormState(visible);
+        // Guardar el estado en localStorage
+        localStorage.setItem('formularioIzquierdaVisible', visible);
     });
 });
 </script>
+<style>
+/* Quita la transición solo cuando tiene la clase notransition */
+#formulario-izquierda.notransition,
+#tabla-derecha.notransition {
+    transition: none !important;
+}
+</style>
 @endsection
 

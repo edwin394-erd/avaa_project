@@ -17,7 +17,7 @@
                 <span id="toggle-form-icon">⮜</span>
             </button>
                 <h1 id="form-title" class="text-lg 2xl:text-xl font-bold text-gray-700 dark:text-gray-100 text-center mb-2">Agregar Becario</h1>
-                
+
                 <form id="form-becario" action="{{ route('users.store') }}" method="POST" class="flex flex-col flex-1" novalidate>
                     @csrf
                     <input type="hidden" name="tipo" value="becario">
