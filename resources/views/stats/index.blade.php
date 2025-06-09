@@ -12,7 +12,7 @@
 <div class="2xl:w-6/6 mx-auto py-5 px-0 md:px-5">
     <div id="contenedor-principal" class="flex flex-wrap min-h-[calc(90vh-4rem)] xl:flex-nowrap p-0 h-full">
          <!-- Columna izquierda -->
-       <div id="formulario-izquierda" class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0 order-2 xl:order-1 transition-all duration-500">
+       <div id="formulario-izquierda" class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0  transition-all duration-500">
               <div class="relative flex flex-col bg-white dark:bg-slate-900 border dark:border-gray-700 shadow-xl shadow-gray-100 dark:shadow-gray-900 rounded-l-xl p-4 h-full">
                 <button id="toggle-form-btn"
                     class="absolute top-2 right-2 z-20 px-2 py-1 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 dark:bg-slate-700 dark:text-gray-100 dark:border-slate-700 dark:hover:bg-slate-800 rounded transition-all duration-300 hidden xl:block"
@@ -197,29 +197,29 @@
                 @endif
             </div>
                 </div>
-               
+
         </div>
            <!-- Columna derecha -->
-        <div id="tabla-derecha" class="w-full xl:w-3/4 p-0 flex flex-col order-1 xl:order-2 transition-all duration-500">
+        <div id="tabla-derecha" class="w-full xl:w-3/4 p-0 flex flex-col transition-all duration-500">
             <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 xl:rounded-r-xl p-5 h-full">
-                <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
-                    <div>
+                <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4 gap-2">
+                    <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                         <button type="button" id="abrir-modal-filtrar-fecha"
-                            class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 dark:focus:ring-slate-700 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5">
+                            class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 dark:focus:ring-slate-700 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 w-full sm:w-auto">
                             Filtrar por fecha
                         </button>
-                       <a href="{{ route('stats.index') }}" id="btn-ver-todo"
-                            class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2">
+                        <a href="{{ route('stats.index') }}" id="btn-ver-todo"
+                            class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 w-full sm:w-auto">
                             Ver todo
                         </a>
                         @if ($user->role == 'admin')
                             <button type="button" id="btn-generar-reporte-admin"
-                                class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2">
+                                class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 w-full sm:w-auto">
                                 Generar reporte
                             </button>
                         @else
                             <button type="button" id="btn-generar-reporte"
-                                class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2">
+                                class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 w-full sm:w-auto">
                                 Generar reporte
                             </button>
                         @endif
@@ -249,25 +249,25 @@
                             </form>
                         </div>
                     </div>
-                        <!-- Reemplaza el buscador actual por este formulario -->
-                        <form method="GET" action="{{ route('stats.index') }}" class="flex items-center mb-2">
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 flex items-center ps-3 pointer-events-none">
-                                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-300" aria-hidden="true" fill="currentColor"
-                                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <input type="text" name="search" id="table-search"
-                                    value="{{ request('search') }}"
-                                    class="block p-2 ps-10 text-sm text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-slate-700 rounded-lg w-80 bg-gray-50 dark:bg-slate-800 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="Buscar">
+                    <!-- Buscador -->
+                    <form method="GET" action="{{ route('stats.index') }}" class="flex items-center w-full sm:w-auto mt-2 sm:mt-0">
+                        <div class="relative w-full">
+                            <div class="absolute inset-y-0 left-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-500 dark:text-gray-300" aria-hidden="true" fill="currentColor"
+                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
                             </div>
-                            <button type="submit" class="ml-2 px-3 py-1 text-slate rounded border dark:text-gray-100 bg-white dark:bg-slate-800  border-gray-300 dark:border-slate-700">Buscar</button>
-                        </form>
-                    </div>
+                            <input type="text" name="search" id="table-search"
+                                value="{{ request('search') }}"
+                                class="block p-2 ps-10 text-sm text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-slate-700 rounded-lg w-full sm:w-80 bg-gray-50 dark:bg-slate-800 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Buscar">
+                        </div>
+                        <button type="submit" class="ml-2 px-3 py-1 text-slate rounded border dark:text-gray-100 bg-white dark:bg-slate-800 border-gray-300 dark:border-slate-700">Buscar</button>
+                    </form>
+                </div>
                 <div class="flex-1 min-h-0 overflow-y-auto">
                     <table class="w-full text-sm text-left rtl:text-right text-black   <table class="w-full text-sm text-left rtl:text-right text-black dark:text-gray-100 table-auto bg-white dark:bg-slate-900" id="myTable">
                         <thead class="text-gray-700 dark:text-gray-200 text-md uppercase border-b border-gray-200 dark:border-slate-700">
@@ -298,7 +298,7 @@
     style="height: 20px;"
 >
         @if ($user->role == 'admin')
-            <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ $stat->user->becario->nombre }}</td>
+            <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ $stat->user->becario->nombre }} {{$stat->user->becario->apellido}}</td>
         @endif
         <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ $stat->titulo }}</td>
         <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">
@@ -509,7 +509,7 @@
                 <div class="text-center">
                     <form action="{{ route('stat.aprobar', $stat) }}" method="POST" class="w-full flex flex-col items-center">
                         @csrf
-                        <button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white font-medium rounded px-2 py-2 mt-2 mx-3">Sí, estoy seguro</button>
+                        <button type="submit" class="bg-green-700 hover:bg-green-800 text-white font-medium rounded px-2 py-2 mt-2 mx-1">Sí, estoy seguro</button>
                     </form>
                     <button type="button" onclick="cerrarModal('modal-aprobar-{{ $stat->id }}')" class="py-2 px-2 mt-2 text-sm font-medium text-gray-900 dark:text-gray-100 focus:outline-none bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-700 mx-3">No, cancelar</button>
                 </div>
@@ -533,12 +533,12 @@
                         <label for="observacion" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 text-left">Motivo</label>
                         <textarea name="observacion" id="observacion" class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-400 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300" placeholder="Escribe el motivo del rechazo" rows="3">{{ $stat->observacion }}</textarea>
                     </div>
-                    <div class="text-center">
+                    <div class="text-center flex justify-center gap-2">
                         @csrf
-                        <button type="submit" class="bg-slate-700 hover:bg-slate-800 text-white font-medium rounded px-2 py-2 mt-2 mx-3">Sí, estoy seguro</button>
+                        <button type="submit" class="bg-red-700 hover:bg-red-800 text-white font-medium rounded px-2 py-2 mt-2 mx-1">Sí, estoy seguro</button>
+                        <button type="button" onclick="cerrarModal('modal-rechazar-{{ $stat->id }}')" class="py-2 px-2 mt-2 text-sm font-medium text-gray-900 dark:text-gray-100 focus:outline-none bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-700 mx-3">No, cancelar</button>
                     </div>
                 </form>
-                <button type="button" onclick="cerrarModal('modal-rechazar-{{ $stat->id }}')" class="py-2 px-2 mt-2 text-sm font-medium text-gray-900 dark:text-gray-100 focus:outline-none bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-700 mx-3">No, cancelar</button>
             </div>
         </div>
     </div>
@@ -942,8 +942,15 @@ document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', 
     }
 
     // Leer el estado guardado en localStorage (por defecto false)
-    let visible = localStorage.getItem('formularioIzquierdaVisible');
-    visible = visible === null ? false : (visible === 'true');
+    let visible;
+    if (window.matchMedia('(max-width: 639px)').matches) {
+        // sm o menor: siempre visible
+        visible = true;
+    } else {
+        // md en adelante: usa localStorage
+        visible = localStorage.getItem('formularioIzquierdaVisible');
+        visible = visible === null ? false : (visible === 'true');
+    }
 
     // Quitar transición temporalmente
     formDiv.classList.add('notransition');
@@ -993,6 +1000,47 @@ function setFormState(open) {
         setFormState(visible);
         // Guardar el estado en localStorage
         localStorage.setItem('formularioIzquierdaVisible', visible);
+    });
+});
+
+document.querySelectorAll('.ver-evidencias-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const evidencias = JSON.parse(this.dataset.evidencias);
+        const contenedor = document.getElementById('contenedor-evidencias');
+        contenedor.innerHTML = '';
+        if (evidencias.length === 0) {
+            const mensaje = document.createElement('p');
+            mensaje.textContent = 'Esta actividad no tiene evidencias';
+            mensaje.className = 'text-gray-500 text-center w-full';
+            contenedor.appendChild(mensaje);
+        } else {
+            evidencias.forEach(ruta => {
+                const img = document.createElement('img');
+                img.src = '/' + ruta;
+                img.className = 'w-24 h-24 object-cover rounded border';
+                contenedor.appendChild(img);
+            });
+        }
+        const modal = document.getElementById('modal-evidencias');
+        modal.style.display = 'flex';
+        modal.classList.add('transition', 'duration-200', 'ease-out');
+        modal.style.opacity = 0;
+        const content = modal.querySelector('div.bg-white');
+        if (content) {
+            content.style.transform = 'scale(0.95)';
+            content.style.opacity = 0;
+            content.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+        }
+        setTimeout(() => {
+            // ESTO ES UN ERROR:
+            // formDiv.classList.remove('notransition');
+            // tablaDiv.classList.remove('notransition');
+            modal.style.opacity = 1;
+            if (content) {
+                content.style.transform = 'scale(1)';
+                content.style.opacity = 1;
+            }
+        }, 10);
     });
 });
         </script>

@@ -173,4 +173,93 @@ class UserController extends Controller
     // Si no es ninguno, redirige
     return redirect()->route('users.index')->with('error', 'Tipo de usuario no válido');
 }
+
+public function update(Request $request, $id)
+{
+    $user = \App\Models\User::with(['becario', 'personal'])->findOrFail($id);
+
+    if ($user->role === 'user') {
+        // Validar datos de becario
+        $validator = \Validator::make($request->all(), [
+            'nombre'   => ['required', 'max:100', 'min:1', 'regex:/^[\pL\s\-]+$/u'],
+            'apellido' => ['required', 'max:100', 'min:1', 'regex:/^[\pL\s\-]+$/u'],
+            'email'    => ['required', 'max:30', 'min:5', 'email', 'unique:users,email,'.$user->id],
+            'cedula'   => ['required', 'max:20', 'min:7', 'regex:/^[\d\s\-]+$/u'],
+            'telefono' => ['required', 'min:11'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('users.index')->with('error', 'Error al actualizar el usuario, verifique los datos ingresados')->withErrors($validator)->withInput();
+        }
+
+        // Actualizar becario
+        $user->becario->update([
+            'nombre'   => $request->nombre,
+            'apellido' => $request->apellido,
+            'cedula'   => $request->cedula,
+            'telefono' => $request->telefono,
+            'direccion' => $request->direccion,
+            'fecha_nacimiento' => $request->fecha_nacimiento,
+            'carrera'  => $request->carrera,
+            'semestre' => $request->semestre,
+            'meta_taller' => $request->meta_taller,
+            'meta_chat' => $request->meta_chat,
+            'meta_volin' => $request->meta_volin,
+            'meta_volex' => $request->meta_volex,
+            'nivel_cevaz' => $request->nivel_cevaz,
+        ]);
+        // Actualizar email en tabla users
+        $user->update([
+            'email' => $request->email,
+        ]);
+    } else {
+        // Validar datos de personal
+        $validator = \Validator::make($request->all(), [
+            'nombre'   => ['required', 'max:100', 'min:1', 'regex:/^[\pL\s\-]+$/u'],
+            'apellido' => ['required', 'max:100', 'min:1', 'regex:/^[\pL\s\-]+$/u'],
+            'email'    => ['required', 'max:30', 'min:5', 'email', 'unique:users,email,'.$user->id],
+            'cedula'   => ['required', 'max:20', 'min:7', 'regex:/^[\d\s\-]+$/u'],
+            'telefono' => ['required', 'min:11'],
+            'cargo'    => ['nullable', 'max:100'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('users.index')->with('error', 'Error al actualizar el usuario, verifique los datos ingresados')->withErrors($validator)->withInput();
+        }
+
+        // Actualizar personal
+        $user->personal->update([
+            'nombre'   => $request->nombre,
+            'apellido' => $request->apellido,
+            'cedula'   => $request->cedula,
+            'telefono' => $request->telefono,
+            'direccion' => $request->direccion,
+            'fecha_nacimiento' => $request->fecha_nacimiento,
+            'cargo'    => $request->cargo,
+        ]);
+        // Actualizar email en tabla users
+        $user->update([
+            'email' => $request->email,
+        ]);
+    }
+
+    return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente');
+}
+public function activar($id)
+{
+    $user = \App\Models\User::findOrFail($id);
+    $user->activo = 1;
+    $user->save();
+
+    return redirect()->route('users.index')->with('success', 'Usuario activado correctamente');
+}
+
+public function desactivar($id)
+{
+    $user = \App\Models\User::findOrFail($id);
+    $user->activo = 0;
+    $user->save();
+
+    return redirect()->route('users.index')->with('success', 'Usuario desactivado correctamente');
+}
 }

@@ -30,11 +30,11 @@
 @endphp
 
 @guest
-<nav class="border-gray-200 bg-slate-800 dark:bg-slate-900">
+<nav class="border-gray-200 bg-gray-100 dark:bg-slate-900">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-0">
   <a href="{{route('home')}}" class="flex items-center space-x-3 rtl:space-x-reverse ms-2">
     <img src="{{ asset('imgs/AVAA_LOGO.png') }}" class="w-14" alt="avaa Logo" />
-    <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Stats</span>
+    <span class="self-center text:md xl:text-2xl font-semibold whitespace-nowrap text-white">Stats</span>
   </a>
   <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm rounded-lg md:hidden focus:outline-none focus:ring-2  text-gray-400 hover:bg-blue-500 focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
     <span class="sr-only">Open main menu</span>
@@ -100,35 +100,40 @@
 @endguest
 
 @auth
-<nav class="border-gray-200 bg-slate-800 dark:bg-slate-900">
+{{-- <nav class="border-gray-200 bg-slate-800 dark:bg-slate-900"> --}}
+<nav class="border-gray-200 bg-gray-100 dark:bg-slate-900">
   <div class="flex flex-wrap items-center justify-between mx-auto min-h-15 py-2 sm:px-10">
     <div class="flex items-center flex-shrink-0">
       <a href="{{route('home')}}" class="flex items-center space-x-1 rtl:space-x-reverse ms-2">
-        <img src="{{ asset('imgs/AVAA_LOGO.png') }}" class="w-24" alt="avaa Logo" />
-        <span class="self-center text-xl font-semibold whitespace-nowrap text-white dark:text-gray-100">Stats</span>
+        <img src="{{ asset('imgs/AVAA_LOGO.png') }}" class="w-24 xl:w-28 hidden dark:inline" alt="avaa Logo" />
+        <img src="{{ asset('imgs/AVAA-LOGO-SLATE.png') }}" class="w-24 xl:w-28 dark:hidden" alt="avaa Logo" />
+          {{-- <span class="self-center text-xl font-semibold whitespace-nowrap text-white dark:text-gray-100">Stats</span> --}}
+
+         <span class="self-center text-2xl font-semibold whitespace-nowrap text-slate-900 dark:text-gray-100 ">Stats</span>
+
       </a>
     </div>
     <div class="flex-grow"></div>
     <div class="w-auto flex items-center" id="navbar-default">
-      <ul class="font-medium flex flex-row items-center p-0 mt-0 border-0 rounded-lg space-x-4 md:space-x-8 rtl:space-x-reverse bg-slate-800 dark:bg-slate-900 mr-2 md:mr-0">
+      <ul class="font-medium flex flex-row items-center p-0 mt-0 border-0 rounded-lg space-x-4 md:space-x-8 rtl:space-x-reverse bg-gray-100 dark:bg-slate-900 mr-2 md:mr-0">
 
         @if(auth()->user()->role == 'admin')
           <li class="flex flex-col items-center">
             <a href="{{route('home')}}" title="Inicio"
-              class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100 hover:bg-slate-700 dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative">
+              class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100  dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative">
               <span class="flex items-center justify-center">
-                <svg fill="#ffffff" class="transition-colors duration-200 group-hover:fill-green-300" width="20px" height="20px" viewBox="0 0 495.398 495.398" stroke="#ffffff"><g><g><g><path d="M487.083,225.514l-75.08-75.08V63.704c0-15.682-12.708-28.391-28.413-28.391c-15.669,0-28.377,12.709-28.377,28.391 v29.941L299.31,37.74c-27.639-27.624-75.694-27.575-103.27,0.05L8.312,225.514c-11.082,11.104-11.082,29.071,0,40.158 c11.087,11.101,29.089,11.101,40.172,0l187.71-187.729c6.115-6.083,16.893-6.083,22.976-0.018l187.742,187.747 c5.567,5.551,12.825,8.312,20.081,8.312c7.271,0,14.541-2.764,20.091-8.312C498.17,254.586,498.17,236.619,487.083,225.514z"></path><path d="M257.561,131.836c-5.454-5.451-14.285-5.451-19.723,0L72.712,296.913c-2.607,2.606-4.085,6.164-4.085,9.877v120.401 c0,28.253,22.908,51.16,51.16,51.16h81.754v-126.61h92.299v126.61h81.755c28.251,0,51.159-22.907,51.159-51.159V306.79 c0-3.713-1.465-7.271-4.085-9.877L257.561,131.836z"></path></g></g></g></svg>
+                <svg fill="#0f172a" class="transition-colors duration-200 group-hover:fill-green-800 dark:fill-white w-[20px] h-[20px] xl:w-[25px] xl:h-[25px] " width="25px" height="25px" viewBox="0 0 495.398 495.398" stroke="#0f172a"><g><g><g><path d="M487.083,225.514l-75.08-75.08V63.704c0-15.682-12.708-28.391-28.413-28.391c-15.669,0-28.377,12.709-28.377,28.391 v29.941L299.31,37.74c-27.639-27.624-75.694-27.575-103.27,0.05L8.312,225.514c-11.082,11.104-11.082,29.071,0,40.158 c11.087,11.101,29.089,11.101,40.172,0l187.71-187.729c6.115-6.083,16.893-6.083,22.976-0.018l187.742,187.747 c5.567,5.551,12.825,8.312,20.081,8.312c7.271,0,14.541-2.764,20.091-8.312C498.17,254.586,498.17,236.619,487.083,225.514z"></path><path d="M257.561,131.836c-5.454-5.451-14.285-5.451-19.723,0L72.712,296.913c-2.607,2.606-4.085,6.164-4.085,9.877v120.401 c0,28.253,22.908,51.16,51.16,51.16h81.754v-126.61h92.299v126.61h81.755c28.251,0,51.159-22.907,51.159-51.159V306.79 c0-3.713-1.465-7.271-4.085-9.877L257.561,131.836z"></path></g></g></g></svg>
               </span>
               <span class="block w-full h-1 rounded-t mt-1 transition-all duration-200 {{ $currentRoute == 'home' ? 'bg-green-600' : 'invisible' }}"></span>
             </a>
           </li>
           <li class="flex flex-col items-center relative group">
             <button type="button"
-              class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100 hover:bg-slate-700 dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative focus:outline-none"
+              class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100  dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative focus:outline-none"
               id="adminDropdownBtn"
               title="Gestionar Actividades">
               <span class="flex items-center justify-center">
-                <svg fill="#ffffff" class="transition-colors duration-200 group-hover:fill-green-300" width="20px" height="20px" viewBox="0 0 16 16"><path d="M37.5,0h-11A2.5,2.5,0,0,0,24,2.5v11A2.5,2.5,0,0,0,26.5,16h11A2.5,2.5,0,0,0,40,13.5V2.5A2.5,2.5,0,0,0,37.5,0Zm-11,1h11A1.5,1.5,0,0,1,39,2.5V4H25V2.5A1.5,1.5,0,0,1,26.5,1ZM25,13.5V5h4V15H26.5A1.5,1.5,0,0,1,25,13.5ZM37.5,15H30V5h9v8.5A1.5,1.5,0,0,1,37.5,15ZM26,6.5a.5.5,0,0,1,.5-.5h1a.5.5,0,0,1,0,1h-1A.5.5,0,0,1,26,6.5Zm2,3a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1,0-1h1A.5.5,0,0,1,28,9.5Zm0,3a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1,0-1h1A.5.5,0,0,1,28,12.5Zm10-6a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,6.5Zm0,3a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,9.5Zm0,3a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,12.5Z" transform="translate(-24)"></path></svg>
+                <svg fill="#0f172a" class="transition-colors duration-200 group-hover:fill-green-800 dark:fill-white w-[20px] h-[20px] xl:w-[25px] xl:h-[25px]" width="25px" height="25px" viewBox="0 0 16 16"><path d="M37.5,0h-11A2.5,2.5,0,0,0,24,2.5v11A2.5,2.5,0,0,0,26.5,16h11A2.5,2.5,0,0,0,40,13.5V2.5A2.5,2.5,0,0,0,37.5,0Zm-11,1h11A1.5,1.5,0,0,1,39,2.5V4H25V2.5A1.5,1.5,0,0,1,26.5,1ZM25,13.5V5h4V15H26.5A1.5,1.5,0,0,1,25,13.5ZM37.5,15H30V5h9v8.5A1.5,1.5,0,0,1,37.5,15ZM26,6.5a.5.5,0,0,1,.5-.5h1a.5.5,0,0,1,0,1h-1A.5.5,0,0,1,26,6.5Zm2,3a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1,0-1h1A.5.5,0,0,1,28,9.5Zm0,3a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1,0-1h1A.5.5,0,0,1,28,12.5Zm10-6a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,6.5Zm0,3a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,9.5Zm0,3a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,12.5Z" transform="translate(-24)"></path></svg>
               </span>
               <span class="block w-full h-1 rounded-t mt-1 transition-all duration-200 {{ in_array($currentRoute, ['stats.index', 'stats.upcoming', 'users.manage']) ? 'bg-green-600' : 'invisible' }}"></span>
             </button>
@@ -173,18 +178,18 @@
         @else
           <li class="flex flex-col items-center">
             <a href="{{route('home')}}" title="Inicio"
-              class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100 hover:bg-slate-700 dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative">
-              <span class="flex items-center justify-center">
-                <svg fill="#ffffff" class="transition-colors duration-200 group-hover:fill-green-300" width="20px" height="20px" viewBox="0 0 495.398 495.398" stroke="#ffffff"><g><g><g><path d="M487.083,225.514l-75.08-75.08V63.704c0-15.682-12.708-28.391-28.413-28.391c-15.669,0-28.377,12.709-28.377,28.391 v29.941L299.31,37.74c-27.639-27.624-75.694-27.575-103.27,0.05L8.312,225.514c-11.082,11.104-11.082,29.071,0,40.158 c11.087,11.101,29.089,11.101,40.172,0l187.71-187.729c6.115-6.083,16.893-6.083,22.976-0.018l187.742,187.747 c5.567,5.551,12.825,8.312,20.081,8.312c7.271,0,14.541-2.764,20.091-8.312C498.17,254.586,498.17,236.619,487.083,225.514z"></path><path d="M257.561,131.836c-5.454-5.451-14.285-5.451-19.723,0L72.712,296.913c-2.607,2.606-4.085,6.164-4.085,9.877v120.401 c0,28.253,22.908,51.16,51.16,51.16h81.754v-126.61h92.299v126.61h81.755c28.251,0,51.159-22.907,51.159-51.159V306.79 c0-3.713-1.465-7.271-4.085-9.877L257.561,131.836z"></path></g></g></g></svg>
+              class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100  dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative">
+             <span class="flex items-center justify-center">
+                <svg fill="#0f172a" class="transition-colors duration-200 group-hover:fill-green-800 dark:fill-white w-[20px] h-[20px] xl:w-[25px] xl:h-[25px]" width="25px" height="25px" viewBox="0 0 495.398 495.398" stroke="#0f172a"><g><g><g><path d="M487.083,225.514l-75.08-75.08V63.704c0-15.682-12.708-28.391-28.413-28.391c-15.669,0-28.377,12.709-28.377,28.391 v29.941L299.31,37.74c-27.639-27.624-75.694-27.575-103.27,0.05L8.312,225.514c-11.082,11.104-11.082,29.071,0,40.158 c11.087,11.101,29.089,11.101,40.172,0l187.71-187.729c6.115-6.083,16.893-6.083,22.976-0.018l187.742,187.747 c5.567,5.551,12.825,8.312,20.081,8.312c7.271,0,14.541-2.764,20.091-8.312C498.17,254.586,498.17,236.619,487.083,225.514z"></path><path d="M257.561,131.836c-5.454-5.451-14.285-5.451-19.723,0L72.712,296.913c-2.607,2.606-4.085,6.164-4.085,9.877v120.401 c0,28.253,22.908,51.16,51.16,51.16h81.754v-126.61h92.299v126.61h81.755c28.251,0,51.159-22.907,51.159-51.159V306.79 c0-3.713-1.465-7.271-4.085-9.877L257.561,131.836z"></path></g></g></g></svg>
               </span>
               <span class="block w-full h-1 rounded-t mt-1 transition-all duration-200 {{ $currentRoute == 'home' ? 'bg-green-600' : 'invisible' }}"></span>
             </a>
           </li>
           <li class="flex flex-col items-center">
             <a href="{{route('stats.index')}}" title="Gestionar Actividades"
-              class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100 hover:bg-slate-700 dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative">
+              class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100  dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative">
               <span class="flex items-center justify-center">
-                <svg fill="#ffffff" class="transition-colors duration-200 group-hover:fill-green-300" width="20px" height="20px" viewBox="0 0 16 16"><path d="M37.5,0h-11A2.5,2.5,0,0,0,24,2.5v11A2.5,2.5,0,0,0,26.5,16h11A2.5,2.5,0,0,0,40,13.5V2.5A2.5,2.5,0,0,0,37.5,0Zm-11,1h11A1.5,1.5,0,0,1,39,2.5V4H25V2.5A1.5,1.5,0,0,1,26.5,1ZM25,13.5V5h4V15H26.5A1.5,1.5,0,0,1,25,13.5ZM37.5,15H30V5h9v8.5A1.5,1.5,0,0,1,37.5,15ZM26,6.5a.5.5,0,0,1,.5-.5h1a.5.5,0,0,1,0,1h-1A.5.5,0,0,1,26,6.5Zm2,3a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1,0-1h1A.5.5,0,0,1,28,9.5Zm0,3a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1,0-1h1A.5.5,0,0,1,28,12.5Zm10-6a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,6.5Zm0,3a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,9.5Zm0,3a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,12.5Z" transform="translate(-24)"></path></svg>
+               <svg fill="#0f172a" class="transition-colors duration-200 group-hover:fill-green-800 dark:fill-white w-[20px] h-[20px] xl:w-[25px] xl:h-[25px]" width="25px" height="25px" viewBox="0 0 16 16"><path d="M37.5,0h-11A2.5,2.5,0,0,0,24,2.5v11A2.5,2.5,0,0,0,26.5,16h11A2.5,2.5,0,0,0,40,13.5V2.5A2.5,2.5,0,0,0,37.5,0Zm-11,1h11A1.5,1.5,0,0,1,39,2.5V4H25V2.5A1.5,1.5,0,0,1,26.5,1ZM25,13.5V5h4V15H26.5A1.5,1.5,0,0,1,25,13.5ZM37.5,15H30V5h9v8.5A1.5,1.5,0,0,1,37.5,15ZM26,6.5a.5.5,0,0,1,.5-.5h1a.5.5,0,0,1,0,1h-1A.5.5,0,0,1,26,6.5Zm2,3a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1,0-1h1A.5.5,0,0,1,28,9.5Zm0,3a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1,0-1h1A.5.5,0,0,1,28,12.5Zm10-6a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,6.5Zm0,3a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,9.5Zm0,3a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,12.5Z" transform="translate(-24)"></path></svg>
               </span>
               <span class="block w-full h-1 rounded-t mt-1 transition-all duration-200 {{ $currentRoute == 'stats.index' ? 'bg-green-600' : 'invisible' }}"></span>
             </a>
@@ -192,13 +197,13 @@
         @endif
         <li class="flex flex-col items-center relative group">
           <button type="button"
-            class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100 hover:bg-slate-700 dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative focus:outline-none"
+            class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100  dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative focus:outline-none "
             id="notificacionesDropdownBtn"
             title="Notificaciones">
             <span class="flex items-center justify-center relative">
-              <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="19px" height="19px" viewBox="0,0,256,256">
-                <g fill="#ffffff" fill-rule="nonzero"><g transform="scale(5.12,5.12)"><path d="M25,0c-2.20703,0 -4,1.79297 -4,4c0,2.20703 1.79297,4 4,4c2.20703,0 4,-1.79297 4,-4c0,-2.20703 -1.79297,-4 -4,-4zM19.375,6.09375c-4.57031,1.95703 -7.375,6.36328 -7.375,11.90625c0,11 -3.80078,13.76172 -6.0625,15.40625c-1.00391,0.72656 -1.9375,1.40234 -1.9375,2.59375c0,4.20703 6.28125,6 21,6c14.71875,0 21,-1.79297 21,-6c0,-1.19141 -0.93359,-1.86719 -1.9375,-2.59375c-2.26172,-1.64453 -6.0625,-4.40625 -6.0625,-15.40625c0,-5.55859 -2.80078,-9.95312 -7.375,-11.90625c-0.85547,2.27344 -3.05859,3.90625 -5.625,3.90625c-2.56641,0 -4.76953,-1.63672 -5.625,-3.90625zM19,43.875c0,0.03906 0,0.08594 0,0.125c0,3.30859 2.69141,6 6,6c3.30859,0 6,-2.69141 6,-6c0,-0.03906 0,-0.08594 0,-0.125c-1.88281,0.07813 -3.88281,0.125 -6,0.125c-2.11719,0 -4.11719,-0.04687 -6,-0.125z"></path></g></g>
-              </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24px" height="24px" viewBox="0,0,256,256">
+                <g fill="currentColor" fill-rule="nonzero" class="text-slate-900 dark:text-white w-[18px] h-[18px] xl:w-[24px] xl:h-[24px]"><g transform="scale(5.12,5.12)"><path d="M25,0c-2.20703,0 -4,1.79297 -4,4c0,2.20703 1.79297,4 4,4c2.20703,0 4,-1.79297 4,-4c0,-2.20703 -1.79297,-4 -4,-4zM19.375,6.09375c-4.57031,1.95703 -7.375,6.36328 -7.375,11.90625c0,11 -3.80078,13.76172 -6.0625,15.40625c-1.00391,0.72656 -1.9375,1.40234 -1.9375,2.59375c0,4.20703 6.28125,6 21,6c14.71875,0 21,-1.79297 21,-6c0,-1.19141 -0.93359,-1.86719 -1.9375,-2.59375c-2.26172,-1.64453 -6.0625,-4.40625 -6.0625,-15.40625c0,-5.55859 -2.80078,-9.95312 -7.375,-11.90625c-0.85547,2.27344 -3.05859,3.90625 -5.625,3.90625c-2.56641,0 -4.76953,-1.63672 -5.625,-3.90625zM19,43.875c0,0.03906 0,0.08594 0,0.125c0,3.30859 2.69141,6 6,6c3.30859,0 6,-2.69141 6,-6c0,-0.03906 0,-0.08594 0,-0.125c-1.88281,0.07813 -3.88281,0.125 -6,0.125c-2.11719,0 -4.11719,-0.04687 -6,-0.125z"></path></g></g>
+            </svg>
               @php
                 $notificacionesNoLeidas = auth()->user()->notifications()->where('leida', false)->count();
               @endphp
@@ -214,17 +219,17 @@
             <div class="max-h-64 sm:max-h-80 overflow-y-auto" id="notificacionesLista">
               @forelse(auth()->user()->notifications()->latest()->take(10)->get() as $notificacion)
               <a
-  href="{{ route('stats.index', ['highlight' => $notificacion->stat_id]) }}"
-  class="block px-4 py-3 border-b last:border-b-0 {{ $notificacion->leida ? 'bg-gray-100 dark:bg-slate-800' : 'bg-yellow-100 dark:bg-yellow-900/60' }} hover:bg-gray-200 dark:hover:bg-slate-700 cursor-pointer transition-colors"
->
-  <div class="font-semibold text-sm text-gray-800 dark:text-gray-100">{{ $notificacion->titulo }}</div>
-  <div class="text-xs text-gray-600 dark:text-gray-300">{{ $notificacion->mensaje }}</div>
-  <div class="text-xs text-gray-400 dark:text-gray-400 text-right">{{ $notificacion->created_at->diffForHumans() }}</div>
-</a>
-@empty
-  <div class="px-4 py-3 text-gray-500 dark:text-gray-300 text-center">Sin notificaciones</div>
-@endforelse
-</div>
+                href="{{ route('stats.irAStat', $notificacion->stat_id) }}"
+                class="block px-4 py-3 border-b last:border-b-0 {{ $notificacion->leida ? 'bg-gray-100 dark:bg-slate-800' : 'bg-yellow-100 dark:bg-yellow-900/60' }} hover:bg-gray-200 dark:hover:bg-slate-700 cursor-pointer transition-colors"
+                >
+                <div class="font-semibold text-sm text-gray-800 dark:text-gray-100">{{ $notificacion->titulo }} {{$notificacion->stat_id}}</div>
+                <div class="text-xs text-gray-600 dark:text-gray-300">{{ $notificacion->mensaje }}</div>
+                <div class="text-xs text-gray-400 dark:text-gray-400 text-right">{{ $notificacion->created_at->diffForHumans() }}</div>
+            </a>
+            @empty
+            <div class="px-4 py-3 text-gray-500 dark:text-gray-300 text-center">Sin notificaciones</div>
+            @endforelse
+        </div>
 <div class="p-2 text-center">
   <a href="" class="text-blue-600 dark:text-blue-400 text-xs hover:underline">Ver todas</a>
 </div>
@@ -232,9 +237,9 @@
 </li>
 <!-- Dropdown Perfil -->
 <li class="relative flex flex-col items-center group">
-  <button type="button" class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100 hover:bg-slate-900 dark:hover:bg-slate-700 hover:text-white md:hover:bg-transparent group relative focus:outline-none" id="perfilDropdownBtn">
+  <button type="button" class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100 dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative focus:outline-none " id="perfilDropdownBtn">
     <span class="flex items-center justify-center relative">
-      <svg fill="currentColor" class="transition-colors duration-200 group-hover:fill-green-300 text-white dark:text-white" width="20px" height="20px" viewBox="0 0 45.532 45.532"><g><path d="M22.766,0.001C10.194,0.001,0,10.193,0,22.766s10.193,22.765,22.766,22.765c12.574,0,22.766-10.192,22.766-22.765 S35.34,0.001,22.766,0.001z M22.766,6.808c4.16,0,7.531,3.372,7.531,7.53c0,4.159-3.371,7.53-7.531,7.53 c-4.158,0-7.529-3.371-7.529-7.53C15.237,10.18,18.608,6.808,22.766,6.808z M22.761,39.579c-4.149,0-7.949-1.511-10.88-4.012 c-0.714-0.609-1.126-1.502-1.126-2.439c0-4.217,3.413-7.592,7.631-7.592h8.762c4.219,0,7.619,3.375,7.619,7.592 c0,0.938-0.41,1.829-1.125,2.438C30.712,38.068,26.911,39.579,22.761,39.579z"></path></g></svg>
+    <svg fill="currentColor" class="transition-colors duration-200 group-hover:fill-green-800 text-slate-900 dark:text-white w-[20px] h-[20px] xl:w-[25px] xl:h-[25px]" width="25px" height="25px" viewBox="0 0 45.532 45.532"><g><path d="M22.766,0.001C10.194,0.001,0,10.193,0,22.766s10.193,22.765,22.766,22.765c12.574,0,22.766-10.192,22.766-22.765 S35.34,0.001,22.766,0.001z M22.766,6.808c4.16,0,7.531,3.372,7.531,7.53c0,4.159-3.371,7.53-7.531,7.53 c-4.158,0-7.529-3.371-7.529-7.53C15.237,10.18,18.608,6.808,22.766,6.808z M22.761,39.579c-4.149,0-7.949-1.511-10.88-4.012 c-0.714-0.609-1.126-1.502-1.126-2.439c0-4.217,3.413-7.592,7.631-7.592h8.762c4.219,0,7.619,3.375,7.619,7.592 c0,0.938-0.41,1.829-1.125,2.438C30.712,38.068,26.911,39.579,22.761,39.579z"></path></g></svg>
       @if(auth()->user()->role == 'admin')
         <span class="absolute -top-1 -right-1 bg-yellow-400 border border-white rounded-full w-3 h-3 flex items-center justify-center">
           <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor" class="text-yellow-700"><path d="M10 2l2.39 4.84 5.34.78-3.87 3.77.91 5.33L10 13.27l-4.77 2.51.91-5.33-3.87-3.77 5.34-.78z"/></svg>
@@ -260,10 +265,10 @@
     <a href="javascript:void(0);" id="toggle-dark" class="flex items-center px-4 py-2 text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-slate-700" title="Cambiar tema">
       <span class="mr-3">
         <span id="icon-dark" class="hidden dark:inline">
-          <svg width="20px" height="20px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7 3V0H9V3H7Z" fill="#ffffff"></path> <path d="M9 13V16H7V13H9Z" fill="#ffffff"></path> <path d="M11 8C11 9.65685 9.65685 11 8 11C6.34315 11 5 9.65685 5 8C5 6.34315 6.34315 5 8 5C9.65685 5 11 6.34315 11 8Z" fill="#ffffff"></path> <path d="M0 9H3V7H0V9Z" fill="#ffffff"></path> <path d="M16 7H13V9H16V7Z" fill="#ffffff"></path> <path d="M3.75735 5.17157L1.63603 3.05025L3.05025 1.63603L5.17157 3.75735L3.75735 5.17157Z" fill="#ffffff"></path> <path d="M12.2426 10.8284L14.364 12.9497L12.9497 14.364L10.8284 12.2426L12.2426 10.8284Z" fill="#ffffff"></path> <path d="M3.05025 14.364L5.17157 12.2426L3.75735 10.8284L1.63603 12.9498L3.05025 14.364Z" fill="#ffffff"></path> <path d="M12.9497 1.63604L10.8284 3.75736L12.2426 5.17158L14.364 3.05026L12.9497 1.63604Z" fill="#ffffff"></path> </g></svg>
+          <svg width="25px" height="25px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7 3V0H9V3H7Z" fill="#ffffff"></path> <path d="M9 13V16H7V13H9Z" fill="#ffffff"></path> <path d="M11 8C11 9.65685 9.65685 11 8 11C6.34315 11 5 9.65685 5 8C5 6.34315 6.34315 5 8 5C9.65685 5 11 6.34315 11 8Z" fill="#ffffff"></path> <path d="M0 9H3V7H0V9Z" fill="#ffffff"></path> <path d="M16 7H13V9H16V7Z" fill="#ffffff"></path> <path d="M3.75735 5.17157L1.63603 3.05025L3.05025 1.63603L5.17157 3.75735L3.75735 5.17157Z" fill="#ffffff"></path> <path d="M12.2426 10.8284L14.364 12.9497L12.9497 14.364L10.8284 12.2426L12.2426 10.8284Z" fill="#ffffff"></path> <path d="M3.05025 14.364L5.17157 12.2426L3.75735 10.8284L1.63603 12.9498L3.05025 14.364Z" fill="#ffffff"></path> <path d="M12.9497 1.63604L10.8284 3.75736L12.2426 5.17158L14.364 3.05026L12.9497 1.63604Z" fill="#ffffff"></path> </g></svg>
         </span>
         <span id="icon-light" class="inline dark:hidden">
-            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="currentColor" class="text-[#222749] dark:text-white" xmlns="http://www.w3.org/2000/svg">
+            <svg width="25px" height="25px" viewBox="0 0 24 24" fill="currentColor" class="text-[#222749] dark:text-white" xmlns="http://www.w3.org/2000/svg">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                 <g id="SVGRepo_iconCarrier">
@@ -313,8 +318,8 @@
     @yield('contenido')
 </div>
 
-<footer class="py-4 mt-auto bg-slate-900 text-white dark:bg-slate-900">
-  <div class="container mx-auto text-center">
+<footer class="py-4 mt-auto bg-gray-200 text-white dark:bg-slate-900 ">
+  <div class="container mx-auto text-slate-900 dark:text-white text-center">
     <p>&copy; 2023 AVAA. Todos los derechos reservados.</p>
   </div>
 </footer>
@@ -493,14 +498,14 @@ function renderNotificaciones(notificaciones) {
     } else {
         notificaciones.forEach(n => {
             if (!n.leida) noLeidas++;
-            html += `
-                <a href="/tabla-actividades?highlight=${n.stat_id ?? ''}"
-                   class="block px-4 py-3 border-b last:border-b-0 ${n.leida ? 'bg-gray-100 dark:bg-slate-800' : 'bg-yellow-100 dark:bg-yellow-900/60'} hover:bg-gray-200 dark:hover:bg-slate-700 cursor-pointer transition-colors">
-                    <div class="font-semibold text-sm text-gray-800 dark:text-gray-100">${n.titulo}</div>
-                    <div class="text-xs text-gray-600 dark:text-gray-300">${n.mensaje}</div>
-                    <div class="text-xs text-gray-400 dark:text-gray-400 text-right">${dayjs(n.created_at).fromNow()}</div>
-                </a>
-            `;
+        html += `
+            <a href="/stats/ir-a-stat/${n.stat_id}"
+            class="block px-4 py-3 border-b last:border-b-0 ${n.leida ? 'bg-gray-100 dark:bg-slate-800' : 'bg-yellow-100 dark:bg-yellow-900/60'} hover:bg-gray-200 dark:hover:bg-slate-700 cursor-pointer transition-colors">
+                <div class="font-semibold text-sm text-gray-800 dark:text-gray-100">${n.titulo}</div>
+                <div class="text-xs text-gray-600 dark:text-gray-300">${n.mensaje}</div>
+                <div class="text-xs text-gray-400 dark:text-gray-400 text-right">${dayjs(n.created_at).fromNow()}</div>
+            </a>
+        `;
         });
 
         // Detectar nuevas notificaciones no leídas

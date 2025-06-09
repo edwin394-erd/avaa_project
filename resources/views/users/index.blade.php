@@ -383,81 +383,158 @@
                                 <th class="px-3 py-3 text-center">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @forelse ($users as $user)
-                                <tr class="bg-white dark:bg-slate-900 text-sm border-b border-gray-200 dark:border-gray-700 transition duration-300 ease-in-out hover:bg-blue-100 dark:hover:bg-blue-900/40
-                                    {{ $user->role == 'admin' ? 'row-personal' : 'row-becario' }}
-                                    {{ $user->role == 'admin' ? 'hidden' : '' }}">
-                                    <td class="px-3 py-4 text-center">{{ $user->id }}</td>
-                                    <td class="px-3 py-4 text-center">
-                                        {{ $user->becario->nombre ?? $user->personal->nombre ?? '-' }}
-                                        {{ $user->becario->apellido ?? $user->personal->apellido ?? '' }}
-                                    </td>
-                                    <td class="px-3 py-4 text-center">{{ $user->email }}</td>
-                                    <td class="px-3 py-4 text-center">
-                                        {{ $user->becario->cedula ?? $user->personal->cedula ?? '-' }}
-                                    </td>
-                                    <td class="px-3 py-4 text-center">{{ $user->becario->telefono ?? $user->personal->telefono ?? '-'}}</td>
-                                    <td class="px-3 py-4 text-center">
-                                        @if ($user->activo == '1')
-                                            <span class="bg-green-200 dark:bg-green-700 p-2 rounded text-green-800 dark:text-green-200">Activo</span>
-                                        @else
-                                            <span class="bg-red-200 dark:bg-red-700 p-2 rounded text-red-800 dark:text-red-200">Inactivo</span>
-                                        @endif
-                                    </td>
-                                    <td class="px-3 py-4 text-center">
-                                   <button
-                                        class="text-blue-600 dark:text-blue-400 hover:underline text-center mx-auto"
-                                        onclick="abrirModal('modal-detalle-{{ $user->id }}')">
-                                        Ver Detalle
-                                    </button>
-                                    @if($user->role == 'user')
-                                        <button class="text-yellow-600 dark:text-yellow-400 hover:underline mx-1"
-                                            onclick="abrirModalEditar('becario', {{ $user->id }})">Editar</button>
-                                    @elseif($user->role == 'admin')
-                                        <button class="text-yellow-600 dark:text-yellow-400 hover:underline mx-1"
-                                            onclick="abrirModalEditar('personal', {{ $user->id }})">Editar</button>
-                                    @endif
-                                <div id="modal-detalle-{{ $user->id }}" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden text-left transition-opacity duration-200">
-                                     <div class="bg-white dark:bg-slate-900 rounded-lg shadow-lg w-full max-w-lg p-6 relative transition-transform transition-opacity duration-200">
-                                        <button onclick="cerrarModal('modal-detalle-{{ $user->id }}')" class="absolute top-2 right-2 text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100 text-xl">&times;</button>
-                                        <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">Detalle de Usuario</h2>
-                                        <hr class="border-gray-200 dark:border-gray-700">
-                                        <div class="space-y-2 px-4">
-                                            <div><span class="font-semibold">Nombre:</span> {{ $user->becario->nombre ?? $user->personal->nombre ?? '-' }} {{ $user->becario->apellido ?? $user->personal->apellido ?? '' }}</div>
-                                            <div><span class="font-semibold">Correo:</span> {{ $user->email }}</div>
-                                            <div><span class="font-semibold">Cédula:</span> {{ $user->becario->cedula ?? $user->personal->cedula ?? '-' }}</div>
-                                            <div><span class="font-semibold">Rol:</span> {{ ucfirst($user->role) }}</div>
-                                            <div><span class="font-semibold">Estado:</span> {{ $user->activo == '1' ? 'Activo' : 'Inactivo' }}</div>
-                                            @if($user->role == 'user')
-                                                <div><span class="font-semibold">Teléfono:</span> {{ $user->becario->telefono ?? '-' }}</div>
-                                                <div><span class="font-semibold">Dirección:</span> {{ $user->becario->direccion ?? '-' }}</div>
-                                                <div><span class="font-semibold">Fecha de Nacimiento:</span> {{ $user->becario->fecha_nacimiento ?? '-' }}</div>
-                                                <div><span class="font-semibold">Carrera:</span> {{ $user->becario->carrera ?? '-' }}</div>
-                                                <div><span class="font-semibold">Semestre/Trimestre:</span> {{ $user->becario->semestre ?? '-' }}</div>
-                                                <div><span class="font-semibold">Nivel Cevaz:</span> {{ $user->becario->nivel_cevaz ?? '-' }}</div>
-                                                <div><span class="font-semibold">Meta Taller:</span> {{ $user->becario->meta_taller ?? '-' }}</div>
-                                                <div><span class="font-semibold">Meta Chat:</span> {{ $user->becario->meta_chat ?? '-' }}</div>
-                                                <div><span class="font-semibold">Meta Volin:</span> {{ $user->becario->meta_volin ?? '-' }}</div>
-                                                <div><span class="font-semibold">Meta Volex:</span> {{ $user->becario->meta_volex ?? '-' }}</div>
-                                            @elseif($user->role == 'admin')
-                                                <div><span class="font-semibold">Cargo:</span> {{ $user->personal->cargo ?? '-' }}</div>
-                                                <div><span class="font-semibold">Teléfono:</span> {{ $user->personal->telefono ?? '-' }}</div>
-                                                <div><span class="font-semibold">Dirección:</span> {{ $user->personal->direccion ?? '-' }}</div>
-                                                <div><span class="font-semibold">Fecha de Nacimiento:</span> {{ $user->personal->fecha_nacimiento ?? '-' }}</div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="p-10 text-center uppercase text-gray-500 dark:text-gray-400 align-middle">No hay usuarios registrados</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                       <tbody>
+    @forelse ($users as $user)
+        <tr class="bg-white dark:bg-slate-900 text-sm border-b border-gray-200 dark:border-gray-700 transition duration-300 ease-in-out hover:bg-blue-100 dark:hover:bg-blue-900/40
+            {{ $user->role == 'admin' ? 'row-personal' : 'row-becario' }}
+            {{ $user->role == 'admin' ? 'hidden' : '' }}">
+            <td class="px-3 py-4 text-center">{{ $user->id }}</td>
+            <td class="px-3 py-4 text-center">
+                {{ $user->becario->nombre ?? $user->personal->nombre ?? '-' }}
+                {{ $user->becario->apellido ?? $user->personal->apellido ?? '' }}
+            </td>
+            <td class="px-3 py-4 text-center">{{ $user->email }}</td>
+            <td class="px-3 py-4 text-center">
+                {{ $user->becario->cedula ?? $user->personal->cedula ?? '-' }}
+            </td>
+            <td class="px-3 py-4 text-center">{{ $user->becario->telefono ?? $user->personal->telefono ?? '-'}}</td>
+            <td class="px-3 py-4 text-center">
+                @if ($user->activo == '1')
+                    <span class="bg-green-200 dark:bg-green-700 p-2 rounded text-green-800 dark:text-green-200">Activo</span>
+                @else
+                    <span class="bg-red-200 dark:bg-red-700 p-2 rounded text-red-800 dark:text-red-200">Inactivo</span>
+                @endif
+            </td>
+            <td class="px-3 py-4 text-center">
+                <button
+                    class="text-blue-600 dark:text-blue-400 hover:underline text-center mx-auto"
+                    onclick="abrirModal('modal-detalle-{{ $user->id }}')">
+                    Ver Detalle
+                </button>
+                @if($user->role == 'user')
+                    <button class="text-yellow-600 dark:text-yellow-400 hover:underline mx-1"
+                        onclick="abrirModalEditar('becario', {{ $user->id }})">Editar</button>
+                @elseif($user->role == 'admin')
+                    <button class="text-yellow-600 dark:text-yellow-400 hover:underline mx-1"
+                        onclick="abrirModalEditar('personal', {{ $user->id }})">Editar</button>
+                @endif
+                 @if ($user->activo == '0')
+                  <button class="text-green-600 dark:text-green-400 hover:underline mx-1"
+                  onclick="abrirModal('modal-activar-{{ $user->id }}')">Activar</button>
+                @elseif ($user->activo == '1')
+                 <button class="text-red-600 dark:text-red-400 hover:underline mx-1"
+                onclick="abrirModal('modal-desactivar-{{ $user->id }}')">Desactivar</button>
+                @endif
+
+                <!-- Modal ACTIVAR USUARIO -->
+                <div id="modal-activar-{{ $user->id }}" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                    <div class="bg-white dark:bg-slate-900 rounded-lg p-6 max-w-sm w-full relative">
+                        <h2 class="text-lg font-bold mb-4 text-center text-gray-800 dark:text-gray-100">Confirmar activación</h2>
+                        <h2 class="text-sm mb-1 text-center text-gray-700 dark:text-gray-200">Usuario: {{ $user->becario->nombre ?? $user->personal->nombre }} {{ $user->becario->apellido ?? $user->personal->apellido }}</h2>
+                        <h2 class="text-sm mb-1 text-center text-gray-700 dark:text-gray-200">Correo: {{ $user->email }}</h2>
+                        <hr class="dark:border-slate-700"><br>
+                        <button type="button" onclick="cerrarModal('modal-activar-{{ $user->id }}')" class="absolute top-2 right-2 text-gray-500 hover:text-black dark:hover:text-white text-lg 2xl:text-2xl">&times;</button>
+                        <div class="flex flex-col items-center">
+                            <svg class="mx-auto mb-4 text-green-400 w-12 h-12" aria-hidden="true" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-300 text-center">¿Estás seguro de que quieres activar este usuario?</h3>
+                            <hr class="dark:border-slate-700"><br>
+                            <div class="text-center flex flex-row justify-center items-center gap-2">
+                                <form action="{{ route('users.activar', $user->id) }}" method="POST" class="flex items-center">
+                                    @csrf
+                                    <button type="submit" class="bg-green-700 hover:bg-green-800 text-white font-medium rounded px-2 py-2 mt-2 mx-1">Sí, activar</button>
+                                </form>
+                                <button type="button" onclick="cerrarModal('modal-activar-{{ $user->id }}')" class="py-2 px-2 mt-2 text-sm font-medium text-gray-900 dark:text-gray-100 focus:outline-none bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-700 mx-1">No, cancelar</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal DESACTIVAR USUARIO -->
+                <div id="modal-desactivar-{{ $user->id }}" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                    <div class="bg-white dark:bg-slate-900 rounded-lg p-6 max-w-sm w-full relative">
+                        <h2 class="text-lg font-bold mb-4 text-center text-gray-800 dark:text-gray-100">Confirmar desactivación</h2>
+                        <h2 class="text-sm mb-1 text-center text-gray-700 dark:text-gray-200">Usuario: {{ $user->becario->nombre ?? $user->personal->nombre }} {{ $user->becario->apellido ?? $user->personal->apellido }}</h2>
+                        <h2 class="text-sm mb-1 text-center text-gray-700 dark:text-gray-200">Correo: {{ $user->email }}</h2>
+                        <hr class="dark:border-slate-700"><br>
+                        <button type="button" onclick="cerrarModal('modal-desactivar-{{ $user->id }}')" class="absolute top-2 right-2 text-gray-500 hover:text-black dark:hover:text-white text-lg 2xl:text-2xl">&times;</button>
+                        <div class="flex flex-col items-center">
+                            <svg class="mx-auto mb-4 text-red-400 w-12 h-12" aria-hidden="true" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-300 text-center">¿Estás seguro de que quieres desactivar este usuario?</h3>
+                            <hr class="dark:border-slate-700"><br>
+                            <div class="text-center flex flex-row justify-center items-center gap-2">
+                                <form action="{{ route('users.desactivar', $user->id) }}" method="POST" class="flex items-center">
+                                    @csrf
+                                    <button type="submit" class="bg-red-700 hover:bg-red-800 text-white font-medium rounded px-2 py-2 mt-2 mx-1">Sí, desactivar</button>
+                                </form>
+                                <button type="button" onclick="cerrarModal('modal-desactivar-{{ $user->id }}')" class="py-2 px-2 mt-2 text-sm font-medium text-gray-900 dark:text-gray-100 focus:outline-none bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-700 mx-1">No, cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="modal-detalle-{{ $user->id }}" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden text-left transition-opacity duration-200">
+                    <div class="bg-white dark:bg-slate-900 rounded-lg shadow-lg w-full max-w-lg p-6 relative transition-transform transition-opacity duration-200">
+                        <button onclick="cerrarModal('modal-detalle-{{ $user->id }}')" class="absolute top-2 right-2 text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100 text-xl">&times;</button>
+                        <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">Detalle de Usuario</h2>
+                        <hr class="border-gray-200 dark:border-gray-700">
+                        <div class="space-y-2 px-4">
+                            <div><span class="font-semibold">Nombre:</span> {{ $user->becario->nombre ?? $user->personal->nombre ?? '-' }} {{ $user->becario->apellido ?? $user->personal->apellido ?? '' }}</div>
+                            <div><span class="font-semibold">Correo:</span> {{ $user->email }}</div>
+                            <div><span class="font-semibold">Cédula:</span> {{ $user->becario->cedula ?? $user->personal->cedula ?? '-' }}</div>
+                            <div><span class="font-semibold">Rol:</span> {{ ucfirst($user->role) }}</div>
+                            <div><span class="font-semibold">Estado:</span> {{ $user->activo == '1' ? 'Activo' : 'Inactivo' }}</div>
+                            @if($user->role == 'user')
+                                <div><span class="font-semibold">Teléfono:</span> {{ $user->becario->telefono ?? '-' }}</div>
+                                <div><span class="font-semibold">Dirección:</span> {{ $user->becario->direccion ?? '-' }}</div>
+                                <div><span class="font-semibold">Fecha de Nacimiento:</span> {{ $user->becario->fecha_nacimiento ?? '-' }}</div>
+                                <div><span class="font-semibold">Carrera:</span> {{ $user->becario->carrera ?? '-' }}</div>
+                                <div><span class="font-semibold">Semestre/Trimestre:</span> {{ $user->becario->semestre ?? '-' }}</div>
+                                <div><span class="font-semibold">Nivel Cevaz:</span> {{ $user->becario->nivel_cevaz ?? '-' }}</div>
+                                <div><span class="font-semibold">Meta Taller:</span> {{ $user->becario->meta_taller ?? '-' }}</div>
+                                <div><span class="font-semibold">Meta Chat:</span> {{ $user->becario->meta_chat ?? '-' }}</div>
+                                <div><span class="font-semibold">Meta Volin:</span> {{ $user->becario->meta_volin ?? '-' }}</div>
+                                <div><span class="font-semibold">Meta Volex:</span> {{ $user->becario->meta_volex ?? '-' }}</div>
+                            @elseif($user->role == 'admin')
+                                <div><span class="font-semibold">Cargo:</span> {{ $user->personal->cargo ?? '-' }}</div>
+                                <div><span class="font-semibold">Teléfono:</span> {{ $user->personal->telefono ?? '-' }}</div>
+                                <div><span class="font-semibold">Dirección:</span> {{ $user->personal->direccion ?? '-' }}</div>
+                                <div><span class="font-semibold">Fecha de Nacimiento:</span> {{ $user->personal->fecha_nacimiento ?? '-' }}</div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="7" class="p-10 text-center uppercase text-gray-500 dark:text-gray-400 align-middle">No hay usuarios registrados</td>
+        </tr>
+    @endforelse
+</tbody>
+</table>
+<!-- Modal Editar Usuario (reutilizable) -->
+<div id="modal-editar-usuario" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
+    <div class="bg-white dark:bg-slate-900 rounded-lg shadow-lg w-full max-w-lg p-6 relative transition-transform transition-opacity duration-200">
+        <button onclick="cerrarModalEditar()" class="absolute top-2 right-2 text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100 text-xl">&times;</button>
+        <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">Editar Usuario</h2><br>
+        <form id="form-editar-usuario" method="POST" action="">
+            @csrf
+            @method('PUT')
+            <div id="editar-campos"></div>
+            <input type="hidden" name="user_id" id="editar_user_id">
+            <input type="hidden" name="tipo" id="editar_tipo">
+            <button type="submit" class="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                Guardar Cambios
+            </button>
+        </form>
+    </div>
+</div>
+
 
                     <!-- Modal Detalle Usuario -->
                     <div id="modal-detalle" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
@@ -849,5 +926,239 @@ btn.addEventListener('click', function() {
         setFormState(false);
     }
 });
+</script>
+
+<script>
+function abrirModalEditar(tipo, id) {
+    // Busca el usuario en la variable global de usuarios
+    const usuarios = window.usuariosParaReporte || [];
+    const user = usuarios.find(u => u.id == id);
+    if (!user) return;
+
+    // Rellena el formulario según el tipo
+    let campos = '';
+    document.getElementById('editar_user_id').value = user.id;
+    document.getElementById('editar_tipo').value = tipo;
+    let actionUrl = '';
+
+   if (tipo === 'becario') {
+    const becario = user.becario || {};
+    actionUrl = `/usuarios/${user.id}`; // Ajusta según tu ruta de update
+    campos = `
+        <div class="flex flex-col md:flex-row md:space-x-2">
+            <div class="w-full md:w-1/2">
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="text" name="nombre" id="editar_nombre" value="${becario.nombre || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
+                    <label for="editar_nombre" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nombre</label>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="text" name="apellido" id="editar_apellido" value="${becario.apellido || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
+                    <label for="editar_apellido" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Apellido</label>
+                </div>
+            </div>
+        </div>
+        <div class="relative z-0 w-full mb-5 group">
+            <input type="email" name="email" id="editar_email" value="${user.email || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
+            <label for="editar_email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Correo</label>
+        </div>
+        <div class="flex flex-col md:flex-row md:space-x-2">
+            <div class="w-full md:w-1/2">
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="text" name="cedula" id="editar_cedula" value="${becario.cedula || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
+                    <label for="editar_cedula" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Cédula</label>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="text" name="telefono" id="editar_telefono" value="${becario.telefono || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
+                    <label for="editar_telefono" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Teléfono</label>
+                </div>
+            </div>
+        </div>
+        <div class="relative z-0 w-full mb-5 group">
+            <input type="text" name="direccion" id="editar_direccion" value="${becario.direccion || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" ">
+            <label for="editar_direccion" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Dirección</label>
+        </div>
+        <div class="relative z-0 w-full mb-5 group">
+            <input type="date" name="fecha_nacimiento" id="editar_fecha_nacimiento" value="${becario.fecha_nacimiento || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" ">
+            <label for="editar_fecha_nacimiento" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Fecha de Nacimiento</label>
+        </div>
+        <div class="flex flex-col md:flex-row md:space-x-2">
+            <div class="w-full md:w-1/2">
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="text" name="carrera" id="editar_carrera" value="${becario.carrera || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" ">
+                    <label for="editar_carrera" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Carrera</label>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="text" name="semestre" id="editar_semestre" value="${becario.semestre || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" ">
+                    <label for="editar_semestre" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Semestre / Trimestre</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row md:space-x-2">
+            <div class="w-full md:w-1/2">
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="number" step="0.01" name="meta_taller" id="editar_meta_taller" value="${becario.meta_taller || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" ">
+                    <label for="editar_meta_taller" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Meta Taller</label>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="number" step="0.01" name="meta_chat" id="editar_meta_chat" value="${becario.meta_chat || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" ">
+                    <label for="editar_meta_chat" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Meta Chat</label>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col md:flex-row md:space-x-2">
+            <div class="w-full md:w-1/2">
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="number" step="0.01" name="meta_volin" id="editar_meta_volin" value="${becario.meta_volin || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" ">
+                    <label for="editar_meta_volin" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Meta Volin</label>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="number" step="0.01" name="meta_volex" id="editar_meta_volex" value="${becario.meta_volex || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" ">
+                    <label for="editar_meta_volex" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Meta Volex</label>
+                </div>
+            </div>
+        </div>
+          <div class="relative z-0 w-full mb-5 group">
+            <input type="text" name="nivel_cevaz" id="editar_nivel_cevaz" value="${becario.nivel_cevaz || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" ">
+            <label for="editar_nivel_cevaz" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nivel Cevaz</label>
+        </div>
+        <!-- Agrega más campos según tu modelo -->
+    `;
+} else {
+    const personal = user.personal || {};
+    actionUrl = `/usuarios/${user.id}`; // Ajusta según tu ruta de update
+    campos = `
+        <div class="flex flex-col md:flex-row md:space-x-2">
+            <div class="w-full md:w-1/2">
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="text" name="nombre" id="editar_nombre" value="${personal.nombre || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')">
+                    <label for="editar_nombre" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nombre</label>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="text" name="apellido" id="editar_apellido" value="${personal.apellido || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
+                    <label for="editar_apellido" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Apellido</label>
+                </div>
+            </div>
+        </div>
+        <div class="relative z-0 w-full mb-5 group">
+            <input type="email" name="email" id="editar_email" value="${user.email || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
+            <label for="editar_email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Correo</label>
+        </div>
+        <div class="flex flex-col md:flex-row md:space-x-2">
+            <div class="w-full md:w-1/2">
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="text" name="cedula" id="editar_cedula" value="${personal.cedula || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
+                    <label for="editar_cedula" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Cédula</label>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="text" name="telefono" id="editar_telefono" value="${personal.telefono || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
+                    <label for="editar_telefono" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Teléfono</label>
+                </div>
+            </div>
+        </div>
+        <div class="relative z-0 w-full mb-5 group">
+            <input type="text" name="cargo" id="editar_cargo" value="${personal.cargo || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
+            <label for="editar_cargo" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Cargo</label>
+        </div>
+        <div class="relative z-0 w-full mb-5 group">
+            <input type="text" name="direccion" id="editar_direccion" value="${personal.direccion || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" ">
+            <label for="editar_direccion" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Dirección</label>
+        </div>
+        <div class="relative z-0 w-full mb-5 group">
+            <input type="date" name="fecha_nacimiento" id="editar_fecha_nacimiento" value="${personal.fecha_nacimiento || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" ">
+            <label for="editar_fecha_nacimiento" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Fecha de Nacimiento</label>
+        </div>
+        <!-- Agrega más campos según tu modelo -->
+    `;
+}
+    console.log(document.getElementById('editar-campos'));
+    document.getElementById('editar-campos').innerHTML = campos;
+    // Aplica restricción a nombre y apellido
+    document.querySelectorAll('#modal-editar-usuario input[name="nombre"], #modal-editar-usuario input[name="apellido"]').forEach(input => {
+        input.addEventListener('input', function() {
+            this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');
+        });
+    });
+
+    // Solo números y guion en cédula
+    document.querySelectorAll('#modal-editar-usuario input[name="cedula"]').forEach(input => {
+        input.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9\-]/g, '');
+        });
+    });
+
+    // Solo números y guion en teléfono + máscara venezolana
+    document.querySelectorAll('#modal-editar-usuario input[name="telefono"]').forEach(input => {
+        input.addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            if (value.length > 4) {
+                value = value.slice(0, 4) + '-' + value.slice(4, 11);
+            }
+            this.value = value;
+        });
+    });
+    document.getElementById('form-editar-usuario').action = actionUrl;
+
+    // Mostrar el modal
+    const modal = document.getElementById('modal-editar-usuario');
+    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
+    modal.style.opacity = 0;
+    const content = modal.querySelector('div.bg-white, div.dark\\:bg-slate-900');
+    if (content) {
+        content.style.transform = 'scale(0.95)';
+        content.style.opacity = 0;
+        content.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+    }
+    setTimeout(() => {
+        modal.style.opacity = 1;
+        if (content) {
+            content.style.transform = 'scale(1)';
+            content.style.opacity = 1;
+        }
+    }, 10);
+}
+
+function cerrarModalEditar() {
+    const modal = document.getElementById('modal-editar-usuario');
+    const content = modal.querySelector('div.bg-white, div.dark\\:bg-slate-900');
+    if (content) {
+        content.style.transform = 'scale(0.95)';
+        content.style.opacity = 0;
+    }
+    modal.style.opacity = 0;
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+        if (content) {
+            content.style.transform = '';
+            content.style.opacity = '';
+        }
+    }, 200);
+}
+
+document.getElementById('form-editar-usuario').addEventListener('submit', function(e) {
+    // Solo para depuración, puedes quitarlo luego
+    const data = new FormData(this);
+    for (let [key, value] of data.entries()) {
+        console.log(key, value);
+    }
+});
+
 </script>
 @endsection

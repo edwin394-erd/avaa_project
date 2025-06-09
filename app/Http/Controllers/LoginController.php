@@ -28,9 +28,17 @@ class LoginController extends Controller
             'password.required' => 'Ingresa tu contraseña.'
         ]);
 
-        if(!auth()->attempt($request->only('email','password'),$request->remember)){
+        if (!auth()->attempt($request->only('email', 'password'), $request->remember)) {
             return back()->withInput()->with('error', 'Email o contraseña incorrectos');
         }
+
+        // Verificar si el usuario está activo
+        if (auth()->user()->activo == 0) {
+            auth()->logout();
+            return back()->withInput()->with('error', 'Tu cuenta ha sido desactivada');
+        }
+
+
 
         return redirect(route('home'));
     }

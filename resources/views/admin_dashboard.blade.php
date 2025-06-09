@@ -30,7 +30,7 @@
                 'meta' => $meta_volin,
                 'percentage' => $porcen_volin,
                 'color' => 'text-[#28a745] dark:text-green-400',
-                'bgcolor' => 'bg-[#e3f7e7] dark:bg-green-900/40',
+                'bgcolor' => 'bg-green-400/40 dark:bg-green-900/40',
                 'icono' => 'icon-volin.png',
                 'name' => 'volin',
             ],
@@ -40,7 +40,7 @@
                 'meta' => $meta_volex,
                 'percentage' => $porcen_volex,
                 'color' => 'text-[#dc3545] dark:text-red-400',
-                'bgcolor' => 'bg-[#f9e5e7] dark:bg-red-900/40',
+                'bgcolor' => 'bg-red-400/40  dark:bg-red-900/40',
                 'icono' => 'icon-volex.png',
                 'name' => 'volex',
             ],
@@ -50,7 +50,7 @@
                 'meta' => $meta_chat,
                 'percentage' => $porcen_chat,
                 'color' => 'text-[#fd7e14] dark:text-orange-400',
-                'bgcolor' => 'bg-[#fcf2ea] dark:bg-orange-900/40',
+                'bgcolor' => 'bg-yellow-400/40 dark:bg-orange-900/40',
                 'icono' => 'icon-chat.png',
                 'name' => 'chat',
             ],
@@ -60,7 +60,7 @@
                 'meta' => $meta_taller,
                 'percentage' => $porcen_taller,
                 'color' => 'text-[#007bff] dark:text-blue-400',
-                'bgcolor' => 'bg-[#e0eaff] dark:bg-blue-900/40',
+                'bgcolor' => 'bg-blue-400/40 dark:bg-blue-900/40',
                 'icono' => 'icon-taller.png',
                 'name' => 'taller',
             ],
@@ -129,7 +129,8 @@
             <div class="flex flex-col bg-white dark:bg-slate-900 border shadow-lg shadow-gray-300 dark:shadow-slate-800 border-gray-200 dark:border-slate-700 rounded-xl h-full min-h-[600px]">
                 <div class="p-4 md:p-5 flex flex-col h-full">
                     <div class="flex items-center text">
-                        <img src="{{ asset('imgs/icon-actprox.png') }}" alt="icono" class="w-12 h-12">
+                        <img src="{{ asset('imgs/icon-actprox.png') }}" alt="icono" class="w-12 h-12 block dark:hidden">
+                        <img src="{{ asset('imgs/icon-actprox_blanco.png') }}" alt="icono" class="w-12 h-12 hidden dark:block">
                         <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 ml-2">Cargadas Recientemente</h3>
                     </div>
                     <hr class="dark:border-slate-700">
@@ -184,7 +185,8 @@
             <div class="flex flex-col bg-white dark:bg-slate-900 border shadow-lg shadow-gray-300 dark:shadow-slate-800 border-gray-200 dark:border-slate-700 rounded-xl h-full min-h-[600px]">
                 <div class="p-4 md:p-5 flex flex-col h-full">
                      <div class="flex items-center text">
-                        <img src="{{ asset('imgs/icon-progen.png') }}" alt="icono" class="w-12 h-12">
+                        <img src="{{ asset('imgs/icon-progen.png') }}" alt="icono" class="w-12 h-12 block dark:hidden">
+                        <img src="{{ asset('imgs/icon-progen-blanco.png') }}" alt="icono" class="w-12 h-12 hidden dark:block">
                         <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 ml-2">Progreso General</h3>
                     </div>
                     <hr class="dark:border-slate-700">

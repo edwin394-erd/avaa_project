@@ -65,8 +65,12 @@ Route::post('/Perfil/configuracion-usuario', [PerfilController::class, 'update']
 
 Route::get('/Usuarios',[UserController::class, 'index'])->name('users.index');
 Route::post('/Usuarios',[UserController::class, 'store'])->name('users.store');
+Route::put('/Usuarios/{id}', [UserController::class, 'update'])->name('users.update');
+Route::post('/usuarios/{id}/activar', [UserController::class, 'activar'])->name('users.activar');
+Route::post('/usuarios/{id}/desactivar', [UserController::class, 'desactivar'])->name('users.desactivar');
 
-Route::get('/AdminActividades',[ActivityController::class, 'index'])->name('activities.index');
+Route::get('/Eventos',[ActivityController::class, 'index'])->name('activities.index');
+Route::post('/Eventos', [ActivityController::class, 'store'])->name('activities.store');
 
 Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
@@ -86,8 +90,12 @@ Route::post('/notificaciones/marcar-leidas', function () {
 })->name('notificaciones.marcarLeidas')->middleware('auth');
 
 Route::get('/stats/all', [StatController::class, 'allStats'])->middleware('auth')->name('stats.all');
+Route::get('/stats/ir-a-stat/{statId}', [StatController::class, 'irAStat'])->name('stats.irAStat');
 Route::get('/stats/{modalidad}', [StatController::class, 'modalidadindex'])->name('stats.modalidadindex');
 Route::get('/stats/all/{modalidad}', [StatController::class, 'allStatsmodalidad'])->middleware('auth')->name('stats.all.modalidad');
+
+
+
 
 
 
