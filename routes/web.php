@@ -9,7 +9,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ImagenController;
-use App\Http\Controllers\EvidenciaController;
+// use App\Http\Controllers\EvidenciaController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ActivityController;
@@ -56,7 +56,7 @@ Route::get('/Actividades/{modalidad}/', [StatController::class, 'modalidadindex'
 
 Route::post('/imagenes',[ImagenController::class, 'store'])->name('imagenes.store');
 
-Route::post('/evidencias',[EvidenciaController::class, 'store'])->name('evidencia.store');
+// Route::post('/evidencias',[EvidenciaController::class, 'store'])->name('evidencia.store');
 
 Route::get('/Perfil/datos-personales',[PerfilController::class, 'datosindex'])->name('datos.index');
 
@@ -87,6 +87,7 @@ Route::post('/notificaciones/marcar-leidas', function () {
 
 Route::get('/stats/all', [StatController::class, 'allStats'])->middleware('auth')->name('stats.all');
 Route::get('/stats/{modalidad}', [StatController::class, 'modalidadindex'])->name('stats.modalidadindex');
+Route::get('/stats/all/{modalidad}', [StatController::class, 'allStatsmodalidad'])->middleware('auth')->name('stats.all.modalidad');
 
 
 

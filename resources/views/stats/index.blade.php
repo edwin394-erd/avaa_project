@@ -9,12 +9,18 @@
     $highlightId = request('highlight');
 @endphp
 
-<<div class="2xl:w-6/6 mx-auto pt-0 pb-5 px-0 md:px-5">
-    <div class="flex flex-wrap xl:flex-nowrap p-0 h-full">
+<div class="2xl:w-6/6 mx-auto py-5 px-0 md:px-5">
+    <div id="contenedor-principal" class="flex flex-wrap min-h-[calc(90vh-4rem)] xl:flex-nowrap p-0 h-full">
          <!-- Columna izquierda -->
-        <div class="w-full xl:w-1/5 2xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0">
-            <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 rounded-l-xl p-4 h-full overflow-y-auto">
-                @if ($user->role == 'user')
+       <div id="formulario-izquierda" class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0 order-2 xl:order-1 transition-all duration-500">
+              <div class="relative flex flex-col bg-white dark:bg-slate-900 border dark:border-gray-700 shadow-xl shadow-gray-100 dark:shadow-gray-900 rounded-l-xl p-4 h-full">
+                <button id="toggle-form-btn"
+                    class="absolute top-2 right-2 z-20 px-2 py-1 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 dark:bg-slate-700 dark:text-gray-100 dark:border-slate-700 dark:hover:bg-slate-800 rounded transition-all duration-300 hidden xl:block"
+                    style="min-width:32px;min-height:32px;">
+                    <span id="toggle-form-icon">⮜</span>
+                </button>
+                <div id="form-content">
+                    @if ($user->role == 'user')
                     <h1 class="text-lg 2xl:text-xl font-bold text-gray-700 dark:text-gray-100 text-center mb-4">Agregar Actividad</h1>
                     <hr class="mb-2 dark:border-slate-700">
 
@@ -190,9 +196,11 @@
                     </div>
                 @endif
             </div>
+                </div>
+               
         </div>
            <!-- Columna derecha -->
-        <div class="w-full xl:w-4/5 2xl:w-3/4 p-0 flex flex-col">
+        <div id="tabla-derecha" class="w-full xl:w-3/4 p-0 flex flex-col order-1 xl:order-2 transition-all duration-500">
             <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 xl:rounded-r-xl p-5 h-full">
                 <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
                     <div>
@@ -200,10 +208,10 @@
                             class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 dark:focus:ring-slate-700 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5">
                             Filtrar por fecha
                         </button>
-                        <button type="button" id="btn-ver-todo"
-                            class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 dark:focus:ring-slate-700 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2">
+                       <a href="{{ route('stats.index') }}" id="btn-ver-todo"
+                            class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2">
                             Ver todo
-                        </button>
+                        </a>
                         @if ($user->role == 'admin')
                             <button type="button" id="btn-generar-reporte-admin"
                                 class="inline-flex items-center text-gray-700 dark:text-gray-100 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 font-medium rounded-lg text-sm px-2 md:px-3 py-1.5 md:ml-2">
@@ -222,7 +230,7 @@
                             <h2 class="text-lg text-gray-700 dark:text-gray-100 font-bold mb-4 text-center">Filtrar actividades por fecha</h2>
                             <button type="button" id="cerrar-modal-filtrar-fecha"
                                 class="absolute top-2 right-2 text-gray-500 hover:text-black dark:hover:text-white text-lg 2xl:text-2xl">&times;</button>
-                            <form id="form-filtrar-fecha" class="flex flex-col gap-4">
+                            <form method="GET" action="{{ route('stats.index') }}" class="flex flex-col gap-4">
                                 <div>
                                     <label for="fecha-inicio"
                                         class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Fecha de inicio</label>
@@ -241,21 +249,25 @@
                             </form>
                         </div>
                     </div>
-                    <label for="table-search" class="sr-only text-sm">Buscar</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center ps-3 pointer-events-none">
-                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-300" aria-hidden="true" fill="currentColor"
-                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </div>
-                        <input type="text" id="table-search"
-                            class="block p-2 ps-10 text-sm text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-slate-700 rounded-lg w-80 bg-gray-50 dark:bg-slate-800 focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Buscar">
+                        <!-- Reemplaza el buscador actual por este formulario -->
+                        <form method="GET" action="{{ route('stats.index') }}" class="flex items-center mb-2">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 flex items-center ps-3 pointer-events-none">
+                                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-300" aria-hidden="true" fill="currentColor"
+                                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <input type="text" name="search" id="table-search"
+                                    value="{{ request('search') }}"
+                                    class="block p-2 ps-10 text-sm text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-slate-700 rounded-lg w-80 bg-gray-50 dark:bg-slate-800 focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="Buscar">
+                            </div>
+                            <button type="submit" class="ml-2 px-3 py-1 text-slate rounded border dark:text-gray-100 bg-white dark:bg-slate-800  border-gray-300 dark:border-slate-700">Buscar</button>
+                        </form>
                     </div>
-                </div>
                 <div class="flex-1 min-h-0 overflow-y-auto">
                     <table class="w-full text-sm text-left rtl:text-right text-black   <table class="w-full text-sm text-left rtl:text-right text-black dark:text-gray-100 table-auto bg-white dark:bg-slate-900" id="myTable">
                         <thead class="text-gray-700 dark:text-gray-200 text-md uppercase border-b border-gray-200 dark:border-slate-700">
@@ -608,20 +620,6 @@
 
     @section('scripts')
         <script>
-            document.getElementById('table-search').addEventListener('keyup', function() {
-                const search = this.value.toLowerCase();
-                const rows = document.querySelectorAll('#myTable tbody tr');
-                rows.forEach(row => {
-                    const cells = row.querySelectorAll('td');
-                    let found = false;
-                    cells.forEach(cell => {
-                        if (cell.textContent.toLowerCase().includes(search)) {
-                            found = true;
-                        }
-                    });
-                    row.style.display = found ? '' : 'none';
-                });
-            });
 
             // Enviar ambos formularios con el btn_enviar
             function enviarFormularios() {
@@ -658,6 +656,8 @@
                         content.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
                     }
                     setTimeout(() => {
+                         formDiv.classList.remove('notransition');
+                            tablaDiv.classList.remove('notransition');
                         modal.style.opacity = 1;
                         if (content) {
                             content.style.transform = 'scale(1)';
@@ -704,44 +704,6 @@
                     });
                 }
             });
-          document.getElementById('form-filtrar-fecha').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const inicio = document.getElementById('fecha-inicio').value;
-            const fin = document.getElementById('fecha-fin').value;
-            if (!inicio || !fin || inicio > fin) {
-                alert('Selecciona un rango de fechas válido.');
-                return;
-            }
-            // Filtrar filas de la tabla
-            const rows = document.querySelectorAll('#myTable tbody tr');
-            rows.forEach(row => {
-                // Busca la celda que contiene la fecha (la que tiene formato dd/mm/yyyy)
-                let fechaTd = null;
-                row.querySelectorAll('td').forEach(td => {
-                    if (/^\d{2}\/\d{2}\/\d{4}$/.test(td.textContent.trim())) {
-                        fechaTd = td;
-                    }
-                });
-                if (!fechaTd) {
-                    row.style.display = 'none';
-                    return;
-                }
-                const fechaTexto = fechaTd.textContent.trim(); // dd/mm/yyyy
-                // Convertir a yyyy-mm-dd
-                const partes = fechaTexto.split('/');
-                if (partes.length !== 3) {
-                    row.style.display = 'none';
-                    return;
-                }
-                const fechaFormateada = `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
-                if (fechaFormateada >= inicio && fechaFormateada <= fin) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-            cerrarModal('modal-filtrar-fecha');
-        });
         </script>
 
         <script>
@@ -806,15 +768,6 @@
         </script>
 
         <script>
-            document.getElementById('btn-ver-todo').addEventListener('click', function() {
-                // Mostrar todas las filas de la tabla
-                document.querySelectorAll('#myTable tbody tr').forEach(row => {
-                    row.style.display = '';
-                });
-                // Limpiar el filtro de búsqueda
-                document.getElementById('table-search').value = '';
-            });
-
             document.querySelector('button[onclick="enviarFormularios()"]').addEventListener('click', function(e) {
                 // Si Dropzone está subiendo archivos o hay archivos en cola
                 if (myDropzone.getUploadingFiles().length > 0 || myDropzone.getQueuedFiles().length > 0) {
@@ -827,11 +780,24 @@
             });
         </script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
-        {{-- REPORTE PDF BECARIO --}}
-       <script>
+{{-- REPORTE PDF BECARIO Y ADMIN --}}
+<script>
+let allStats = [];
+let filteredStats = [];
+let isAdmin = @json($user->role === 'admin');
+
+// Cargar todos los registros al cargar la página
+fetch("{{ route('stats.all') }}")
+    .then(res => res.json())
+    .then(data => {
+        allStats = data;
+        filteredStats = data;
+    });
+
+// Reporte PDF usando los datos ya cargados
 function toDataURL(url, callback) {
     const xhr = new XMLHttpRequest();
     xhr.onload = function() {
@@ -850,99 +816,94 @@ function toDataURL(url, callback) {
     xhr.send();
 }
 
-// REPORTE PDF BECARIO (todos los registros)
-document.getElementById('btn-generar-reporte').addEventListener('click', function() {
-    fetch("{{ route('stats.all') }}")
-        .then(res => res.json())
-        .then(data => {
-            let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
-            const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
-            const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+// Becario
+document.getElementById('btn-generar-reporte')?.addEventListener('click', function() {
+    let modalidad = "{{ $n_actividad ?? '' }}";
+    let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
+    const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
+    const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
 
-            toDataURL(logoUrl, function(logoBase64) {
-                doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
-                doc.setFontSize(16);
-                doc.setFont('helvetica', 'bold');
-                doc.text('Reporte de Actividades', doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
-                doc.setFontSize(10);
-                doc.setFont('helvetica', 'normal');
-                doc.text('Becario: ' + nombreUsuario, 10, 32);
-                doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
-                doc.setDrawColor(200, 200, 200);
-                doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
+    toDataURL(logoUrl, function(logoBase64) {
+        doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Reporte de ' + modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Becario: ' + nombreUsuario, 10, 32);
+        doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
+        doc.setDrawColor(200, 200, 200);
+        doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
 
-                // Construir filas desde data
-                const rows = data.map(stat => [
-                    stat.titulo,
-                    stat.actividad,
-                    (stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : ''),
-                    stat.modalidad,
-                    stat.duracion,
-                    stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
-                ]);
+        // Construir filas desde allStats
+        const rows = allStats.map(stat => [
+            stat.titulo,
+            stat.actividad,
+            stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
+            stat.modalidad,
+            stat.duracion,
+            stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
+        ]);
 
-                const headers = [['Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
-                doc.autoTable({
-                    head: headers,
-                    body: rows,
-                    startY: 50,
-                    styles: { fontSize: 10 },
-                    headStyles: { fillColor: [30, 41, 59] },
-                    alternateRowStyles: { fillColor: [243, 244, 246] },
-                });
-
-                doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
-            });
+        const headers = [['Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
+        doc.autoTable({
+            head: headers,
+            body: rows,
+            startY: 50,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [30, 41, 59] },
+            alternateRowStyles: { fillColor: [243, 244, 246] },
         });
+
+        doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
+    });
 });
 
-// REPORTE PDF ADMIN (todos los registros)
-document.getElementById('btn-generar-reporte-admin').addEventListener('click', function() {
-    fetch("{{ route('stats.all') }}")
-        .then(res => res.json())
-        .then(data => {
-            let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
-            const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
-            const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+// Admin
+document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', function() {
+    let modalidad = "{{ $n_actividad ?? '' }}";
+    let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
+    const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
+    const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
 
-            toDataURL(logoUrl, function(logoBase64) {
-                doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
-                doc.setFontSize(16);
-                doc.setFont('helvetica', 'bold');
-                doc.text('Reporte General de Actividades', doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
-                doc.setFontSize(10);
-                doc.setFont('helvetica', 'normal');
-                doc.text('Generado por: ' + nombreUsuario, 10, 32);
-                doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
-                doc.setDrawColor(200, 200, 200);
-                doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
+    toDataURL(logoUrl, function(logoBase64) {
+        doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Reporte general de ' + modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Generado por: ' + nombreUsuario, 10, 32);
+        doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
+        doc.setDrawColor(200, 200, 200);
+        doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
 
-                // Construir filas desde data
-                const rows = data.map(stat => [
-                    stat.user?.becario?.nombre || '',
-                    stat.titulo,
-                    stat.actividad,
-                    (stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : ''),
-                    stat.modalidad,
-                    stat.duracion,
-                    stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
-                ]);
+        // Construir filas desde allStats
+        const rows = allStats.map(stat => [
+            stat.user?.becario?.nombre || '',
+            stat.titulo,
+            stat.actividad,
+            stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
+            stat.modalidad,
+            stat.duracion,
+            stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
+        ]);
 
-                const headers = [['Becario', 'Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
-                doc.autoTable({
-                    head: headers,
-                    body: rows,
-                    startY: 50,
-                    styles: { fontSize: 10 },
-                    headStyles: { fillColor: [30, 41, 59] },
-                    alternateRowStyles: { fillColor: [243, 244, 246] },
-                });
-
-                doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
-            });
+        const headers = [['Becario', 'Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
+        doc.autoTable({
+            head: headers,
+            body: rows,
+            startY: 50,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [30, 41, 59] },
+            alternateRowStyles: { fillColor: [243, 244, 246] },
         });
+
+        doc.save('Reporte_General_Actividades_' + new Date().toLocaleString() + '.pdf');
+    });
 });
 </script>
+
         <script>
       document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.barra-progreso').forEach(barra => {
@@ -968,4 +929,71 @@ document.getElementById('btn-generar-reporte-admin').addEventListener('click', f
         </script>
         @endif
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('toggle-form-btn');
+    const btnIcon = document.getElementById('toggle-form-icon');
+    const formDiv = document.getElementById('formulario-izquierda');
+    const innerDiv = btn.parentElement;
+    const tablaDiv = document.getElementById('tabla-derecha');
+
+    function isDesktop() {
+        return window.matchMedia('(min-width: 1280px)').matches;
+    }
+
+    // Leer el estado guardado en localStorage (por defecto false)
+    let visible = localStorage.getItem('formularioIzquierdaVisible');
+    visible = visible === null ? false : (visible === 'true');
+
+    // Quitar transición temporalmente
+    formDiv.classList.add('notransition');
+    tablaDiv.classList.add('notransition');
+
+   const formContent = document.getElementById('form-content');
+
+function setFormState(open) {
+    if (open) {
+        formDiv.classList.remove('xl:w-[56px]', 'w-[56px]', 'overflow-hidden');
+        formDiv.classList.add('xl:w-1/4', 'w-full');
+        tablaDiv.classList.remove('xl:w-[calc(100%-56px)]');
+        tablaDiv.classList.add('xl:w-3/4');
+        btnIcon.textContent = '⮜';
+        if (formContent) formContent.style.display = '';
+    } else {
+        formDiv.classList.remove('xl:w-1/4', 'w-full');
+        formDiv.classList.add('xl:w-[56px]', 'w-[56px]', 'overflow-hidden');
+        tablaDiv.classList.remove('xl:w-3/4');
+        tablaDiv.classList.add('xl:w-[calc(100%-56px)]');
+        btnIcon.textContent = '⮞';
+        if (formContent) formContent.style.display = 'none';
+    }
+}
+
+    // Aplica el estado SIN transición
+    setFormState(visible);
+
+    // Forzar reflow y quitar la clase notransition para que las siguientes veces sí haya animación
+    setTimeout(() => {
+        formDiv.classList.remove('notransition');
+        tablaDiv.classList.remove('notransition');
+    }, 10);
+
+    window.addEventListener('resize', function() {
+        if (!isDesktop()) {
+            visible = true;
+            setFormState(true);
+        } else {
+            setFormState(visible);
+        }
+    });
+
+    btn.addEventListener('click', function() {
+        if (!isDesktop()) return;
+        visible = !visible;
+        setFormState(visible);
+        // Guardar el estado en localStorage
+        localStorage.setItem('formularioIzquierdaVisible', visible);
+    });
+});
+        </script>
     @endsection

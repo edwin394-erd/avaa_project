@@ -1,26 +1,26 @@
 @keyframes progressAnimation {
-  from {
-    stroke-dashoffset: 100;
-  }
-  to {
-    stroke-dashoffset: var(--final-offset);
-  }
+    from {
+        stroke-dashoffset: 100;
+    }
+    to {
+        stroke-dashoffset: var(--final-offset);
+    }
 }
 
 /* Para aplicar la animación con el valor final dinámico */
 .progress-circle {
-  --final-offset: 100;
-  animation-fill-mode: forwards;
-  animation-duration: 2s;
-  animation-timing-function: ease-out;
+    --final-offset: 100;
+    animation-fill-mode: forwards;
+    animation-duration: 2s;
+    animation-timing-function: ease-out;
 }
 
 /* Estilos para el dropzone */
 .dropzone {
     display: flex !important;
-    flex-wrap: wrap;             /* Permite que las imágenes bajen a otra línea */
-    max-height: 90px;            /* Ajusta según tu diseño */
-    overflow-y: auto;            /* Scroll vertical si hay muchas filas */
+    flex-wrap: wrap; /* Permite que las imágenes bajen a otra línea */
+    max-height: 90px; /* Ajusta según tu diseño */
+    overflow-y: auto; /* Scroll vertical si hay muchas filas */
     gap: 4px;
 }
 
@@ -38,4 +38,13 @@
 
 .dropzone .dz-size {
     display: none !important;
+}
+
+.dark .dropzone .dz-message {
+    color: #fff;
+}
+
+#formulario-izquierda.notransition,
+#tabla-derecha.notransition {
+    transition: none !important;
 }

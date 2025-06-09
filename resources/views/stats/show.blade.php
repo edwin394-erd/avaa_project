@@ -57,11 +57,11 @@
          <!-- Columna izquierda -->
        <div id="formulario-izquierda" class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0 order-2 xl:order-1 transition-all duration-500">
               <div class="relative flex flex-col bg-white dark:bg-slate-900 border dark:border-gray-700 shadow-xl shadow-gray-100 dark:shadow-gray-900 rounded-l-xl p-4 h-full">
-            <button id="toggle-form-btn"
-                class="absolute top-2 right-2 z-20 px-2 py-1 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 dark:bg-slate-700 dark:text-gray-100 dark:border-slate-700 dark:hover:bg-slate-800 rounded transition-all duration-300 hidden xl:block"
-                style="min-width:32px;min-height:32px;">
-                <span id="toggle-form-icon">⮜</span>
-            </button>
+                <button id="toggle-form-btn"
+                    class="absolute top-2 right-2 z-20 px-2 py-1 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 dark:bg-slate-700 dark:text-gray-100 dark:border-slate-700 dark:hover:bg-slate-800 rounded transition-all duration-300 hidden xl:block"
+                    style="min-width:32px;min-height:32px;">
+                    <span id="toggle-form-icon">⮜</span>
+                </button>
                 <div class="flex items-center space-x-3 mb-3 text-center">
                     <img src="{{ asset('imgs/' . $icono)}}" alt="icono" class="w-10 h-10 2xl:w-12 2xl:h-12">
                     <h1 class="text-sm 2xl:text-xl font-bold {{ $color }} mb-0 flex items-center"> {{ $n_actividad }}</h1>
@@ -134,7 +134,7 @@
                             <h2 class="text-lg text-gray-700 dark:text-gray-100 font-bold mb-4 text-center">Filtrar actividades por fecha</h2>
                             <button type="button" id="cerrar-modal-filtrar-fecha"
                                 class="absolute top-2 right-2 text-gray-500 hover:text-black dark:hover:text-white text-lg 2xl:text-2xl">&times;</button>
-                            <form id="form-filtrar-fecha" class="flex flex-col gap-4">
+                            <form method="GET" action="{{ route('modalidad.index', $modalidad) }}"  class="flex flex-col gap-4">
                                 <div>
                                     <label for="fecha-inicio" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Fecha de inicio</label>
                                     <input type="date" id="fecha-inicio" name="fecha_inicio"
@@ -192,7 +192,7 @@
 @forelse ($stats as $stat)
     <tr id="stat-{{ $stat->id }}" class="bg-white dark:bg-slate-900 text-sm border-b border-gray-200 dark:border-slate-700 transition duration-300 ease-in-out {{ $hover }} text-sm">
         @if ($user->role == 'admin')
-            <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ $stat->user->becario->nombre }}</td>
+            <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ $stat->user->becario->nombre }} {{$stat->user->becario->apellido}}</td>
         @endif
         <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ $stat->titulo }}</td>
         <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">
@@ -587,44 +587,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
- document.getElementById('form-filtrar-fecha').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const inicio = document.getElementById('fecha-inicio').value;
-            const fin = document.getElementById('fecha-fin').value;
-            if (!inicio || !fin || inicio > fin) {
-                alert('Selecciona un rango de fechas válido.');
-                return;
-            }
-            // Filtrar filas de la tabla
-            const rows = document.querySelectorAll('#myTable tbody tr');
-            rows.forEach(row => {
-                // Busca la celda que contiene la fecha (la que tiene formato dd/mm/yyyy)
-                let fechaTd = null;
-                row.querySelectorAll('td').forEach(td => {
-                    if (/^\d{2}\/\d{2}\/\d{4}$/.test(td.textContent.trim())) {
-                        fechaTd = td;
-                    }
-                });
-                if (!fechaTd) {
-                    row.style.display = 'none';
-                    return;
-                }
-                const fechaTexto = fechaTd.textContent.trim(); // dd/mm/yyyy
-                // Convertir a yyyy-mm-dd
-                const partes = fechaTexto.split('/');
-                if (partes.length !== 3) {
-                    row.style.display = 'none';
-                    return;
-                }
-                const fechaFormateada = `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
-                if (fechaFormateada >= inicio && fechaFormateada <= fin) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-            cerrarModal('modal-filtrar-fecha');
-        });
+
 </script>
 
 <script>
@@ -913,13 +876,12 @@ let filteredStats = [];
 let isAdmin = @json($user->role === 'admin');
 
 // Cargar todos los registros al cargar la página
-fetch("{{ route('stats.all') }}")
+fetch("{{ route('stats.all.modalidad', $modalidad) }}")
     .then(res => res.json())
     .then(data => {
         allStats = data;
         filteredStats = data;
     });
-
 
 // Botón "Ver todo" para limpiar el filtro y mostrar todas las filas
 document.getElementById('btn-ver-todo').addEventListener('click', function() {
@@ -927,18 +889,10 @@ document.getElementById('btn-ver-todo').addEventListener('click', function() {
     document.querySelectorAll('#myTable tbody tr').forEach(row => {
         row.style.display = '';
     });
-});
-
-// Botón "Ver todo"
-document.getElementById('btn-ver-todo').addEventListener('click', function() {
     filteredStats = allStats;
-    document.getElementById('table-search').value = '';
-    document.querySelectorAll('#myTable tbody tr').forEach(row => {
-        row.style.display = '';
-    });
 });
 
-// Reporte PDF usando todos los registros
+// Reporte PDF usando los datos ya cargados
 function toDataURL(url, callback) {
     const xhr = new XMLHttpRequest();
     xhr.onload = function() {
@@ -957,98 +911,89 @@ function toDataURL(url, callback) {
     xhr.send();
 }
 
-document.getElementById('btn-generar-reporte').addEventListener('click', function() {
-    fetch("{{ route('stats.all') }}")
-        .then(res => res.json())
-        .then(data => {
-            let modalidad = "{{ $n_actividad }}";
-            let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
-            const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
-            const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+document.getElementById('btn-generar-reporte')?.addEventListener('click', function() {
+    let modalidad = "{{ $n_actividad }}";
+    let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
+    const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
+    const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
 
-            toDataURL(logoUrl, function(logoBase64) {
-                doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
-                doc.setFontSize(16);
-                doc.setFont('helvetica', 'bold');
-                doc.text('Reporte de ' + modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
-                doc.setFontSize(10);
-                doc.setFont('helvetica', 'normal');
-                doc.text('Becario: ' + nombreUsuario, 10, 32);
-                doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
-                doc.setDrawColor(200, 200, 200);
-                doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
+    toDataURL(logoUrl, function(logoBase64) {
+        doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Reporte de ' + modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Becario: ' + nombreUsuario, 10, 32);
+        doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
+        doc.setDrawColor(200, 200, 200);
+        doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
 
-                // Construir filas desde data
-                const rows = data.map(stat => [
-                    stat.titulo,
-                    stat.actividad,
-                    stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
-                    stat.modalidad,
-                    stat.duracion,
-                    stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
-                ]);
+        // Construir filas desde allStats
+        const rows = allStats.map(stat => [
+            stat.titulo,
+            stat.actividad,
+            stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
+            stat.modalidad,
+            stat.duracion,
+            stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
+        ]);
 
-                const headers = [['Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
-                doc.autoTable({
-                    head: headers,
-                    body: rows,
-                    startY: 50,
-                    styles: { fontSize: 10 },
-                    headStyles: { fillColor: [30, 41, 59] },
-                    alternateRowStyles: { fillColor: [243, 244, 246] },
-                });
-
-                doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
-            });
+        const headers = [['Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
+        doc.autoTable({
+            head: headers,
+            body: rows,
+            startY: 50,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [30, 41, 59] },
+            alternateRowStyles: { fillColor: [243, 244, 246] },
         });
+
+        doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
+    });
 });
 
-// Reporte PDF ADMIN (todos los registros)
 document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', function() {
-    fetch("{{ route('stats.all') }}")
-        .then(res => res.json())
-        .then(data => {
-            let modalidad = "{{ $n_actividad }}";
-            let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
-            const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
-            const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+    let modalidad = "{{ $n_actividad }}";
+    let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
+    const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
+    const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
 
-            toDataURL(logoUrl, function(logoBase64) {
-                doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
-                doc.setFontSize(16);
-                doc.setFont('helvetica', 'bold');
-                doc.text('Reporte general de ' + modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
-                doc.setFontSize(10);
-                doc.setFont('helvetica', 'normal');
-                doc.text('Generado por: ' + nombreUsuario, 10, 32);
-                doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
-                doc.setDrawColor(200, 200, 200);
-                doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
+    toDataURL(logoUrl, function(logoBase64) {
+        doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Reporte general de ' + modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Generado por: ' + nombreUsuario, 10, 32);
+        doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
+        doc.setDrawColor(200, 200, 200);
+        doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
 
-                // Construir filas desde data
-                const rows = data.map(stat => [
-                    stat.user?.becario?.nombre || '',
-                    stat.titulo,
-                    stat.actividad,
-                    stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
-                    stat.modalidad,
-                    stat.duracion,
-                    stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
-                ]);
+        // Construir filas desde allStats
+        const rows = allStats.map(stat => [
+            stat.user?.becario?.nombre || '',
+            stat.titulo,
+            stat.actividad,
+            stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
+            stat.modalidad,
+            stat.duracion,
+            stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
+        ]);
 
-                const headers = [['Becario', 'Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
-                doc.autoTable({
-                    head: headers,
-                    body: rows,
-                    startY: 50,
-                    styles: { fontSize: 10 },
-                    headStyles: { fillColor: [30, 41, 59] },
-                    alternateRowStyles: { fillColor: [243, 244, 246] },
-                });
-
-                doc.save('Reporte_General_Actividades_' + new Date().toLocaleString() + '.pdf');
-            });
+        const headers = [['Becario', 'Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
+        doc.autoTable({
+            head: headers,
+            body: rows,
+            startY: 50,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [30, 41, 59] },
+            alternateRowStyles: { fillColor: [243, 244, 246] },
         });
+
+        doc.save('Reporte_General_Actividades_' + new Date().toLocaleString() + '.pdf');
+    });
 });
 </script>
 

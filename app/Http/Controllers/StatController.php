@@ -17,16 +17,45 @@ class StatController extends Controller
 
     public function index(Request $request){
         $user = auth()->user();
-
-        if ($user->role === 'admin') {
-            $startOfYear = Carbon::now()->startOfYear();
+         $startOfYear = Carbon::now()->startOfYear();
             $endOfYear = Carbon::now()->endOfYear();
             $user = auth()->user();
-            $stats = Stat::with('evidencias')
-            ->where('anulado', 'NO')
-            ->orderBy('created_at', 'desc')
-            ->paginate(8);
+    
 
+            // Filtro base
+            $query = Stat::with(['evidencias', 'user.becario']);
+
+            // Filtro por usuario si no es admin
+            if ($user->role !== 'admin') {
+                $query->where('user_id', $user->id);
+            }
+
+            // Filtro por búsqueda
+            if ($request->filled('search')) {
+                $search = $request->input('search');
+                $query->where(function($q) use ($search, $user) {
+                    $q->where('titulo', 'like', "%$search%")
+                    ->orWhere('actividad', 'like', "%$search%")
+                    ->orWhere('modalidad', 'like', "%$search%")
+                    ->orWhere('duracion', 'like', "%$search%")
+                    ->orWhere('estado', 'like', "%$search%");
+                    // Si es admin, buscar también por nombre de becario
+                    if ($user->role === 'admin') {
+                        $q->orWhereHas('user.becario', function($q2) use ($search) {
+                            $q2->where('nombre', 'like', "%$search%");
+                        });
+                    }
+                });
+            }
+
+            if ($request->filled('fecha_inicio') && $request->filled('fecha_fin')) {
+                $query->whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin]);
+            }
+
+            $stats = $query->with(['user.becario', 'evidencias'])->paginate(8);
+
+        if ($user->role === 'admin') {
+           
             $meta_volin = \App\Models\Becario::sum('meta_volin');
             $meta_volex = \App\Models\Becario::sum('meta_volex');
             $meta_taller = \App\Models\Becario::sum('meta_taller');
@@ -149,6 +178,8 @@ public function modalidadindex(String $modalidad, Request $request)
     $query = Stat::with(['evidencias', 'user.becario'])
         ->where('actividad', $modalidad);
 
+    
+
     // Filtro por usuario si no es admin
     if ($user->role !== 'admin') {
         $query->where('user_id', $user->id);
@@ -170,6 +201,10 @@ public function modalidadindex(String $modalidad, Request $request)
                 });
             }
         });
+    }
+
+    if ($request->filled('fecha_inicio') && $request->filled('fecha_fin')) {
+        $query->whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin]);
     }
 
     // Paginación y orden
@@ -437,10 +472,18 @@ public function modalidadindex(String $modalidad, Request $request)
     }
 
    public function allStats()
-{
-    $stats = Stat::with(['user.becario'])->get();
-    return response()->json($stats);
-}
+    {
+        $stats = Stat::with(['user.becario'])->get();
+        return response()->json($stats);
+    }
+
+    public function allStatsmodalidad(String $modalidad)
+    {
+        $stats = Stat::with(['user.becario'])
+        ->where('actividad', $modalidad)
+        ->get();
+        return response()->json($stats);
+    }
 
 
 }

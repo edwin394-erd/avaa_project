@@ -1686,17 +1686,8 @@ input:checked + .toggle-bg {
 .h-6 {
   height: 1.5rem;
 }
-.h-\[100vh\] {
-  height: 100vh;
-}
-.h-\[80vh\] {
-  height: 80vh;
-}
 .h-\[calc\(80vh-4rem\)\] {
   height: calc(80vh - 4rem);
-}
-.h-\[calc\(85vh-4rem\)\] {
-  height: calc(85vh - 4rem);
 }
 .h-full {
   height: 100%;
@@ -2542,23 +2533,23 @@ input:checked + .toggle-bg {
 .pb-4 {
   padding-bottom: 1rem;
 }
+.pb-5 {
+  padding-bottom: 1.25rem;
+}
 .ps-10 {
   padding-inline-start: 2.5rem;
 }
 .ps-3 {
   padding-inline-start: 0.75rem;
 }
+.pt-0 {
+  padding-top: 0px;
+}
 .pt-2 {
   padding-top: 0.5rem;
 }
 .pt-4 {
   padding-top: 1rem;
-}
-.pb-5 {
-  padding-bottom: 1.25rem;
-}
-.pt-0 {
-  padding-top: 0px;
 }
 .text-left {
   text-align: left;
@@ -3766,20 +3757,12 @@ input:checked + .toggle-bg {
     width: 25%;
   }
 
-  .xl\:w-1\/5 {
-    width: 20%;
-  }
-
   .xl\:w-2\/5 {
     width: 40%;
   }
 
   .xl\:w-3\/4 {
     width: 75%;
-  }
-
-  .xl\:w-4\/5 {
-    width: 80%;
   }
 
   .xl\:w-\[56px\] {
@@ -3792,6 +3775,10 @@ input:checked + .toggle-bg {
 
   .xl\:flex-nowrap {
     flex-wrap: nowrap;
+  }
+
+  .xl\:overflow-hidden {
+    overflow: hidden;
   }
 
   .xl\:rounded-r-xl {
@@ -3808,6 +3795,10 @@ input:checked + .toggle-bg {
     font-size: 1.25rem;
     line-height: 1.75rem;
   }
+
+  .xl\:transition-none {
+    transition-property: none;
+  }
 }
 @media (min-width: 1536px) {
 
@@ -3821,14 +3812,6 @@ input:checked + .toggle-bg {
 
   .\32xl\:w-12 {
     width: 3rem;
-  }
-
-  .\32xl\:w-3\/4 {
-    width: 75%;
-  }
-
-  .\32xl\:w-1\/4 {
-    width: 25%;
   }
 
   .\32xl\:gap-2 {

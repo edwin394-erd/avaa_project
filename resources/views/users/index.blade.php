@@ -9,7 +9,7 @@
 
 <div id="contenedor-principal" class="flex flex-wrap p-0 min-h-[calc(90vh-4rem)] transition-all duration-500">
         <!-- Formulario para agregar usuario -->
-    <div id="formulario-izquierda" class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0 order-2 xl:order-1 transition-all duration-500">
+    <div id="formulario-izquierda" class="w-full xl:w-[56px] p-0 flex flex-col mb-4 xl:mb-0 order-2 xl:order-1 transition-all duration-500">
         <div class="relative flex flex-col bg-white dark:bg-slate-900 border dark:border-gray-700 shadow-xl shadow-gray-100 dark:shadow-gray-900 rounded-l-xl p-4 h-full">
             <button id="toggle-form-btn"
                 class="absolute top-2 right-2 z-20 px-2 py-1 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 dark:bg-slate-700 dark:text-gray-100 dark:border-slate-700 dark:hover:bg-slate-800 rounded transition-all duration-300 hidden xl:block"
@@ -335,7 +335,7 @@
         </div>
 
         <!-- Tabla de usuarios -->
-       <div id="tabla-derecha" class="w-full xl:w-3/4 p-0 flex flex-col order-1 xl:order-2 transition-all duration-500">
+       <div id="tabla-derecha" class="w-full xl:w-[calc(100%-56px)] p-0 flex flex-col order-1 xl:order-2 transition-all duration-500">
         <div class="flex flex-col bg-white dark:bg-slate-900 border dark:border-gray-700 shadow-xl shadow-gray-100 dark:shadow-gray-900 xl:rounded-r-xl p-5 h-full">
                 <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
                     <div>
