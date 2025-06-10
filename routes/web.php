@@ -63,14 +63,19 @@ Route::get('/Perfil/datos-personales',[PerfilController::class, 'datosindex'])->
 Route::get('/Perfil/configuracion-usuario',[PerfilController::class, 'configindex'])->name('configuser.index');
 Route::post('/Perfil/configuracion-usuario', [PerfilController::class, 'update'])->name('configuser.update');
 
+
 Route::get('/Usuarios',[UserController::class, 'index'])->name('users.index');
 Route::post('/Usuarios',[UserController::class, 'store'])->name('users.store');
 Route::put('/Usuarios/{id}', [UserController::class, 'update'])->name('users.update');
 Route::post('/usuarios/{id}/activar', [UserController::class, 'activar'])->name('users.activar');
 Route::post('/usuarios/{id}/desactivar', [UserController::class, 'desactivar'])->name('users.desactivar');
 
+Route::get('/Eventos/all', [ActivityController::class, 'allEvents'])->middleware('auth')->name('events.all');
 Route::get('/Eventos',[ActivityController::class, 'index'])->name('activities.index');
 Route::post('/Eventos', [ActivityController::class, 'store'])->name('activities.store');
+Route::post('/Eventos/{id}/cancelar', [ActivityController::class, 'cancelar'])->name('activities.cancelar');
+Route::post('/Eventos/{id}/restaurar', [ActivityController::class, 'restaurar'])->name('activities.restaurar');
+Route::put('/Eventos/{id}', [ActivityController::class, 'update'])->name('activities.update');
 
 Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');

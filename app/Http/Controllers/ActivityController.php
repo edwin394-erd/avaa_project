@@ -6,23 +6,37 @@ use Illuminate\Http\Request;
 
 class ActivityController extends Controller
 {
-     public function index(){
-            $user = auth()->user();
-            $activities = Activity::paginate(8);
+    public function index(Request $request){
+    $user = auth()->user();
 
-            return view('activities.index')->with('activities', $activities)
-                                           ->with('user', $user);
+    $query = Activity::query();
 
+    // Filtro por búsqueda
+    if ($request->filled('search')) {
+        $search = $request->input('search');
+        $query->where(function($q) use ($search) {
+            $q->where('name', 'like', "%$search%")
+              ->orWhere('actividad', 'like', "%$search%")
+              ->orWhere('location', 'like', "%$search%")
+              ->orWhere('status', 'like', "%$search%")
+              ->orWhere('facilitador', 'like', "%$search%");
+        });
+    }
+
+    $activities = $query->orderBy('created_at', 'desc')->paginate(8);
+
+    return view('activities.index')->with('activities', $activities)
+                                   ->with('user', $user);
     }
 
     public function store(Request $request)
     {
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'max:255',
+            'name' => 'required|max:255',
+            'facilitador' => 'max:255',
             'duration' => 'required|numeric|min:0',
-            'location' => 'required|string|max:255',
+            'location' => 'required|max:255',
             'actividad' => 'required|in:volin,volex,chat,taller',
             'hora_inicio' => 'required',
             'fecha' => 'required|date',
@@ -37,4 +51,55 @@ class ActivityController extends Controller
 
         return redirect()->route('activities.index')->with('success', 'Evento creado correctamente.');
     }
+
+    public function cancelar($id)
+    {
+        $actividad = \App\Models\Activity::findOrFail($id);
+        $actividad->status = 'cancelada';
+        $actividad->save();
+
+        return redirect()->route('activities.index')->with('success', 'Evento cancelado correctamente.');
+    }
+
+    public function restaurar($id)
+    {
+        $actividad = \App\Models\Activity::findOrFail($id);
+        $actividad->status = 'pendiente';
+        $actividad->save();
+
+        return redirect()->route('activities.index')->with('success', 'Evento restaurado correctamente.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'facilitador' => 'max:255',
+            'duration' => 'required|numeric|min:0',
+            'location' => 'required|max:255',
+            'actividad' => 'required|in:volin,volex,chat,taller',
+            'fecha' => 'required|date',
+            'hora_inicio' => 'required',
+            'quorum_minimo' => 'nullable|integer|min:0',
+            'quorum_maximo' => 'nullable|integer|min:0',
+        ], [], [], function($validator) use ($request, $id) {
+            if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+            }
+        });
+
+        $actividad = \App\Models\Activity::findOrFail($id);
+        $actividad->update($validated);
+
+        return redirect()->route('activities.index')->with('success', 'Evento actualizado correctamente.');
+    }
+
+       public function allEvents()
+        {
+            $activities = Activity::orderBy('created_at', 'desc')->get();
+            return response()->json($activities);
+        }
+
 }

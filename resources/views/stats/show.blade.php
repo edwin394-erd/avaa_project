@@ -103,7 +103,7 @@
         </div>
          <!-- Columna derecha -->
         <div id="tabla-derecha" class="w-full xl:w-3/4 p-0 flex flex-col order-1 xl:order-2 transition-all duration-500">
-            <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 xl:rounded-r-xl p-5 h-full">
+            <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 xl:rounded-r-xl p-5 h-full">
                 <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4 gap-2">
                     <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                         <button type="button" id="abrir-modal-filtrar-fecha"
@@ -991,9 +991,36 @@ document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', 
             alternateRowStyles: { fillColor: [243, 244, 246] },
         });
 
+
         doc.save('Reporte_General_Actividades_' + new Date().toLocaleString() + '.pdf');
     });
-c(100%-56px)]');
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('toggle-form-btn');
+    const btnIcon = document.getElementById('toggle-form-icon');
+    const formDiv = document.getElementById('formulario-izquierda');
+    const innerDiv = btn.parentElement;
+    const tablaDiv = document.getElementById('tabla-derecha');
+
+    function isDesktop() {
+        return window.matchMedia('(min-width: 1280px)').matches;
+    }
+
+    // Leer el estado guardado en localStorage (por defecto false)
+    let visible = localStorage.getItem('formularioIzquierdaVisible');
+    visible = visible === null ? false : (visible === 'true');
+
+    // Quitar transición temporalmente
+    formDiv.classList.add('notransition');
+    tablaDiv.classList.add('notransition');
+
+    function setFormState(open) {
+        if (open) {
+            formDiv.classList.remove('xl:w-[56px]', 'w-[56px]', 'overflow-hidden');
+            formDiv.classList.add('xl:w-1/4', 'w-full');
+            tablaDiv.classList.remove('xl:w-[calc(100%-56px)]');
             tablaDiv.classList.add('xl:w-3/4');
             btnIcon.textContent = '⮜';
             Array.from(innerDiv.children).forEach(child => {

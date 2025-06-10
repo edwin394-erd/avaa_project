@@ -136,15 +136,15 @@
                     <hr class="dark:border-slate-700">
                     <br>
                     <!-- Lista de actividades -->
-                    <div class="space-y-4 flex-grow max-h-[520px] overflow-y-auto">
-                        @forelse($stats as $actividad)
+                    <div class="space-y-4 flex-grow max-h-[520px] overflow-y-auto ">
+                        @forelse($stats_sinfiltro as $actividad)
                             <div class="flex items-center justify-between bg-gradient-to-r from-gray-50 via-white to-gray-100 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 p-5 rounded-2xl shadow transition-all duration-200 hover:shadow-xl border border-gray-200 dark:border-slate-700 group">
                                 <div class="flex flex-col">
                                     <h4 class="font-semibold text-md md:text-lg text-gray-800 dark:text-blue-300 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
                                         {{ $actividad->titulo ?? $actividad->nombre ?? 'Actividad' }}
                                     </h4>
                                     <p class="text-sm md:text-base text-gray-500 dark:text-gray-300 mt-1 line-clamp-2">
-                                        Becario: {{ $actividad->user->Becario->nombre ?? '-' }}
+                                        Becario: {{ $actividad->user->Becario->nombre ?? '-' }} {{ $actividad->user->Becario->apellido ?? '-' }}
                                     </p>
                                 </div>
                                 <div class="text-right ml-4 flex flex-col items-end">
@@ -153,9 +153,9 @@
                                     </span>
                                     <span class="inline-block px-2 py-1 mt-2 rounded-full text-xs font-semibold
                                         @if(isset($actividad->estado))
-                                            @if($actividad->estado == 'Pendiente') bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 border border-yellow-300 dark:border-yellow-700
-                                            @elseif($actividad->estado == 'En Progreso') bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-700
-                                            @elseif($actividad->estado == 'Completada') bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border border-blue-300 dark:border-blue-700
+                                            @if($actividad->estado == 'pendiente') bg-yellow-100 dark:bg-slate-800 text-yellow-700 dark:text-yellow-300 border border-yellow-300 dark:border-yellow-700
+                                            @elseif($actividad->estado == 'aprobado') bg-green-100 dark:bg-slate-800 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-700
+                                            @elseif($actividad->estado == 'rechazado') bg-red-100 dark:bg-slate-800 text-red-700 dark:text-red-400 border border-red-300 dark:border-red-700
                                             @else bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-slate-600
                                             @endif
                                         @else

@@ -139,50 +139,46 @@ Inicio
                     <hr class="dark:border-slate-700">
                     <br>
                     <!-- Lista de actividades -->
-                    <div class="space-y-4 flex-grow">
-                        <div
-                            class="flex items-center justify-between bg-gray-50 dark:bg-slate-800 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-                            <div class="flex flex-col">
-                                <h4 class="font-semibold text-lg text-gray-800 dark:text-blue-300">Voluntariado Externo</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-300">Actividad de voluntariado en el evento de limpieza del
-                                    parque.</p>
+                    <div class="space-y-4 flex-grow max-h-[520px] overflow-y-auto ">
+                        @forelse($activities as $actividad)
+                            <div class="flex items-center justify-between bg-gradient-to-r from-gray-50 via-white to-gray-100 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 p-5 rounded-2xl shadow transition-all duration-200 hover:shadow-xl border border-gray-200 dark:border-slate-700 group">
+                                <div class="flex flex-col">
+                                    <h4 class="font-semibold text-md md:text-lg text-gray-800 dark:text-blue-300 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
+                                        {{ $actividad->name ?? $actividad->nombre ?? 'Actividad' }}
+                                    </h4>
+                                    <p class="text-sm md:text-base text-gray-500 dark:text-gray-300 mt-1 line-clamp-2">
+                                        Facilitador: {{ $actividad->facilitador ?? 'No aplica' }}
+                                    </p>
+                                </div>
+                                <div class="text-right ml-4 flex flex-col items-end">
+                                    <span class="block text-xs md:text-sm text-gray-400 dark:text-gray-300 font-medium">
+                                        {{ \Carbon\Carbon::parse($actividad->fecha ?? $actividad->created_at)->format('d M, Y') }}
+                                    </span>
+                                    <span class="inline-block px-2 py-1 mt-2 rounded-full text-xs font-semibold
+                                        @if(isset($actividad->status))
+                                            @if($actividad->status == 'pendiente') bg-yellow-100 dark:bg-slate-800 text-yellow-700 dark:text-yellow-300 border border-yellow-300 dark:border-yellow-700
+                                            @else bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-slate-600
+                                            @endif
+                                        @else
+                                            bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-slate-600
+                                        @endif
+                                    ">
+                                        {{ $actividad->status ?? 'Sin estado' }}
+                                    </span>
+                                </div>
                             </div>
-                            <div class="text-right">
-                                <span class="block text-sm text-gray-500 dark:text-gray-300">Fecha: 15 Nov, 2023</span>
-                                <span class="block text-sm text-yellow-600 dark:text-yellow-300 mt-1">Pendiente</span>
+                        @empty
+                            <div class="flex flex-col items-center justify-center text-center text-gray-400 dark:text-gray-500 mt-8">
+                                <svg class="w-12 h-12 mb-2 text-gray-200 dark:text-slate-700" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"></path>
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                </svg>
+                                <p class="text-base font-medium">No hay actividades próximas</p>
                             </div>
-                        </div>
-                        <div
-                            class="flex items-center justify-between bg-gray-50 dark:bg-slate-800 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-                            <div class="flex flex-col">
-                                <h4 class="font-semibold text-lg text-gray-800 dark:text-blue-300">Taller de Liderazgo</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-300">Taller sobre habilidades de liderazgo para jóvenes en
-                                    la comunidad.</p>
-                            </div>
-                            <div class="text-right">
-                                <span class="block text-sm text-gray-500 dark:text-gray-300">Fecha: 20 Nov, 2023</span>
-                                <span class="block text-sm text-green-600 dark:text-green-300 mt-1">En Progreso</span>
-                            </div>
-                        </div>
-                        <div
-                            class="flex items-center justify-between bg-gray-50 dark:bg-slate-800 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-                            <div class="flex flex-col">
-                                <h4 class="font-semibold text-lg text-gray-800 dark:text-blue-300">Charla sobre Medio Ambiente</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-300">Charla educativa sobre la importancia de cuidar el
-                                    medio ambiente.</p>
-                            </div>
-                            <div class="text-right">
-                                <span class="block text-sm text-gray-500 dark:text-gray-300">Fecha: 25 Nov, 2023</span>
-                                <span class="block text-sm text-red-600 dark:text-red-400 mt-1">Completada</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Si no hay actividades -->
-                    <div class="text-center text-gray-600 dark:text-gray-400 mt-4">
-                        <p>No tienes actividades próximas.</p>
-                    </div>
-                    <div class="flex-grow"></div>
+                        @endforelse
                 </div>
+                </div>
+
             </div>
         </div>
 

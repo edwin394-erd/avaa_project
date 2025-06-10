@@ -12,14 +12,18 @@
 <div class="2xl:w-6/6 mx-auto py-5 px-0 md:px-5">
     <div id="contenedor-principal" class="flex flex-wrap min-h-[calc(90vh-4rem)] xl:flex-nowrap p-0 h-full">
          <!-- Columna izquierda -->
-       <div id="formulario-izquierda" class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0  transition-all duration-500">
+    @if ($user->role == 'admin')
+        <div id="formulario-izquierda" class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0 order-1 xl:order-1 transition-all duration-500">
+    @else
+        <div id="formulario-izquierda" class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0 order-2 xl:order-1 transition-all duration-500">
+    @endif
               <div class="relative flex flex-col bg-white dark:bg-slate-900 border dark:border-gray-700 shadow-xl shadow-gray-100 dark:shadow-gray-900 rounded-l-xl p-4 h-full">
                 <button id="toggle-form-btn"
                     class="absolute top-2 right-2 z-20 px-2 py-1 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 dark:bg-slate-700 dark:text-gray-100 dark:border-slate-700 dark:hover:bg-slate-800 rounded transition-all duration-300 hidden xl:block"
                     style="min-width:32px;min-height:32px;">
                     <span id="toggle-form-icon">⮜</span>
                 </button>
-                <div id="form-content">
+                <div id="form-content" class="flex flex-col flex-1">
                     @if ($user->role == 'user')
                     <h1 class="text-lg 2xl:text-xl font-bold text-gray-700 dark:text-gray-100 text-center mb-4">Agregar Actividad</h1>
                     <hr class="mb-2 dark:border-slate-700">
@@ -98,12 +102,13 @@
                         <input type="hidden" name="user_id" value="{{ $user->id }}">
                     </form>
                     <form action="{{ route('imagenes.store') }}" id="dropzone" enctype="multipart/form-data"
-                        class="dropzone border-dashed border-2 border-slate-400 dark:border-slate-700 w-full h-4 rounded flex flex-col justify-center items-center mb-4"
+                        class="dropzone border-dashed border-2 border-slate-400 dark:border-slate-700 w-full h-4 rounded flex flex-col justify-center items-center mb-4 mt-auto"
                         method="POST">
                         @csrf
                     </form>
                     <button type="submit" onclick="enviarFormularios()"
-                        class="mt-auto w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Agregar
+                        class="mt-2 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        Agregar
                     </button>
                 @else
                 {{-- si es admin --}}
@@ -200,8 +205,12 @@
 
         </div>
            <!-- Columna derecha -->
-        <div id="tabla-derecha" class="w-full xl:w-3/4 p-0 flex flex-col transition-all duration-500">
-            <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-xl shadow-gray-100 dark:shadow-slate-800 xl:rounded-r-xl p-5 h-full">
+        @if ($user->role == 'admin')
+            <div id="tabla-derecha" class="w-full xl:w-3/4 p-0 flex flex-col order-2 xl:order-2 transition-all duration-500">
+        @else
+            <div id="tabla-derecha" class="w-full xl:w-3/4 p-0 flex flex-col order-1 xl:order-2 transition-all duration-500">
+        @endif
+            <div class="flex flex-col bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700  xl:rounded-r-xl p-5 h-full">
                 <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4 gap-2">
                     <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                         <button type="button" id="abrir-modal-filtrar-fecha"

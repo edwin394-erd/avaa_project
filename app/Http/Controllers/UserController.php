@@ -262,4 +262,5 @@ public function desactivar($id)
 
     return redirect()->route('users.index')->with('success', 'Usuario desactivado correctamente');
 }
+
 }

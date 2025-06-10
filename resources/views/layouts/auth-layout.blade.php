@@ -13,7 +13,18 @@
     <link rel="icon" href="{{ asset('icono.png') }}" type="image/png" />
     </head>
 
+{{-- APLICAR ESTILOS DARK --}}
+
+{{-- <script>
+if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+} else {
+    document.documentElement.classList.remove('dark');
+} --}}
+
+</script>
     <body class="min-h-screen flex flex-col p-0 bg-gradient-to-br from-blue-500 to-blue-400 bg-no-repeat bg-fixed md:bg-cover md:bg-center sm:bg-blue-500" @yield('body-style') >
+
         <div id="loader-bg" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-[99999]">
             <div class="flex flex-col items-center">
                 <svg class="animate-spin h-12 w-12 sm:h-10 sm:w-10 xs:h-8 xs:w-8 text-green-500 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -130,6 +141,8 @@ function togglePassword(fieldId, btn) {
     }
 }
 </script>
+
+
 </body>
 <div id="notificationsContainer" class="fixed top-8 right-4 z-[99999] flex flex-col items-end space-y-2"></div>
 

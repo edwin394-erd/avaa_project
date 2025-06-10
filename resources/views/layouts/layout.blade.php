@@ -320,7 +320,7 @@
 
 <footer class="py-4 mt-auto bg-gray-200 text-white dark:bg-slate-900 ">
   <div class="container mx-auto text-slate-900 dark:text-white text-center">
-    <p>&copy; 2023 AVAA. Todos los derechos reservados.</p>
+    <p>&copy; 2025 AVAA. Todos los derechos reservados.</p>
   </div>
 </footer>
 
@@ -422,47 +422,53 @@
 
     // Notification system
     window.createNotification = function({ type = 'success', title = '', message = '' }) {
-        const notificationsContainer = document.getElementById('notificationsContainer');
-        const notification = document.createElement('div');
-        let color = 'text-green-700', icon = `
-            <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 13l4 4L19 7" />
-            </svg>`;
-        if (type === 'error') {
-            color = 'text-red-700';
-            icon = `<svg fill="#d11f1f" class="w-6 h-6" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M32.085,56.058c6.165,-0.059 12.268,-2.619 16.657,-6.966c5.213,-5.164 7.897,-12.803 6.961,-20.096c-1.605,-12.499 -11.855,-20.98 -23.772,-20.98c-9.053,0 -17.853,5.677 -21.713,13.909c-2.955,6.302 -2.96,13.911 0,20.225c3.832,8.174 12.488,13.821 21.559,13.908c0.103,0.001 0.205,0.001 0.308,0Zm-0.282,-4.003c-9.208,-0.089 -17.799,-7.227 -19.508,-16.378c-1.204,-6.452 1.07,-13.433 5.805,-18.015c5.53,-5.35 14.22,-7.143 21.445,-4.11c6.466,2.714 11.304,9.014 12.196,15.955c0.764,5.949 -1.366,12.184 -5.551,16.48c-3.672,3.767 -8.82,6.016 -14.131,6.068c-0.085,0 -0.171,0 -0.256,0Zm-12.382,-10.29l9.734,-9.734-9.744,-9.744l2.804,-2.803l9.744,9.744l10.078,-10.078l2.808,2.807l-10.078,10.079l10.098,10.098l-2.803,2.804l-10.099,-10.099l-9.734,9.734l-2.808,-2.808Z"></path></svg>`;
-        }
-        notification.className = 'w-full max-w-sm md:max-w-md bg-white dark:bg-slate-800 shadow-md rounded-md p-4 flex items-center space-x-4 border border-gray-300 dark:border-slate-700 opacity-0 translate-x-8 pointer-events-none transition-all duration-500 mb-2';
-        notification.innerHTML = `
-            ${icon}
-            <div class="flex-1">
-                <p class="${color} font-semibold text-sm">${title}</p>
-                <p class="text-gray-600 dark:text-gray-200 text-xs">${message}</p>
-            </div>
-            <button class="closeBtn text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        `;
-        notificationsContainer.insertBefore(notification, notificationsContainer.firstChild);
-        setTimeout(() => {
-            notification.classList.remove('opacity-0', 'translate-x-8', 'pointer-events-none');
-            notification.classList.add('opacity-100', 'translate-x-0');
-        }, 10);
-        const closeBtn = notification.querySelector('.closeBtn');
-        let hideTimeout = setTimeout(() => removeNotification(notification), 5000);
-        closeBtn.addEventListener('click', function() {
-            clearTimeout(hideTimeout);
-            removeNotification(notification);
-        });
-        function removeNotification(notification) {
-            notification.classList.remove('opacity-100', 'translate-x-0');
-            notification.classList.add('opacity-0', 'translate-x-8', 'pointer-events-none');
-            setTimeout(() => notification.remove(), 500);
-        }
-    };
-
+    const notificationsContainer = document.getElementById('notificationsContainer');
+    const notification = document.createElement('div');
+    let color = 'text-green-700', bar = 'bg-green-500 dark:bg-green-400', icon = `
+        <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 13l4 4L19 7" />
+        </svg>`;
+    if (type === 'error') {
+        color = 'text-red-700';
+        bar = 'bg-red-500 dark:bg-red-400';
+        icon = `<svg fill="#d11f1f" class="w-6 h-6" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M32.085,56.058c6.165,-0.059 12.268,-2.619 16.657,-6.966c5.213,-5.164 7.897,-12.803 6.961,-20.096c-1.605,-12.499 -11.855,-20.98 -23.772,-20.98c-9.053,0 -17.853,5.677 -21.713,13.909c-2.955,6.302 -2.96,13.911 0,20.225c3.832,8.174 12.488,13.821 21.559,13.908c0.103,0.001 0.205,0.001 0.308,0Zm-0.282,-4.003c-9.208,-0.089 -17.799,-7.227 -19.508,-16.378c-1.204,-6.452 1.07,-13.433 5.805,-18.015c5.53,-5.35 14.22,-7.143 21.445,-4.11c6.466,2.714 11.304,9.014 12.196,15.955c0.764,5.949 -1.366,12.184 -5.551,16.48c-3.672,3.767 -8.82,6.016 -14.131,6.068c-0.085,0 -0.171,0 -0.256,0Zm-12.382,-10.29l9.734,-9.734-9.744,-9.744l2.804,-2.803l9.744,9.744l10.078,-10.078l2.808,2.807l-10.078,10.079l10.098,10.098l-2.803,2.804l-10.099,-10.099l-9.734,9.734l-2.808,-2.808Z"></path></svg>`;
+    }
+    notification.className = 'w-full max-w-sm md:max-w-md bg-white dark:bg-slate-800 shadow-md rounded-md p-4 flex items-center space-x-4 border border-gray-300 dark:border-slate-700 opacity-0 translate-x-8 pointer-events-none transition-all duration-500 mb-2 relative overflow-hidden';
+    notification.innerHTML = `
+        ${icon}
+        <div class="flex-1">
+            <p class="${color} font-semibold text-sm">${title}</p>
+            <p class="text-gray-600 dark:text-gray-200 text-xs">${message}</p>
+        </div>
+        <button class="closeBtn text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <div class="absolute right-0 bottom-0 h-1 ${bar} transition-all duration-[3000ms] ease-linear" style="width:100%;" id="notif-progress"></div>
+    `;
+    notificationsContainer.insertBefore(notification, notificationsContainer.firstChild);
+    setTimeout(() => {
+    notification.classList.remove('opacity-0', 'translate-x-8', 'pointer-events-none');
+    notification.classList.add('opacity-100', 'translate-x-0');
+    // Animar la barra de progreso de 100% a 0%
+    const progress = notification.querySelector('#notif-progress');
+    setTimeout(() => {
+        progress.style.width = '0%';
+    }, 10);
+    }, 10);
+    const closeBtn = notification.querySelector('.closeBtn');
+    let hideTimeout = setTimeout(() => removeNotification(notification), 3000);
+    closeBtn.addEventListener('click', function() {
+        clearTimeout(hideTimeout);
+        removeNotification(notification);
+    });
+    function removeNotification(notification) {
+        notification.classList.remove('opacity-100', 'translate-x-0');
+        notification.classList.add('opacity-0', 'translate-x-8', 'pointer-events-none');
+        setTimeout(() => notification.remove(), 500);
+    }
+};
     // Backend notifications
     @if(session('success'))
         window.addEventListener('DOMContentLoaded', function() {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stat;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -109,6 +110,13 @@ class HomeController extends Controller
                 ->orderBy('created_at')
                 ->get();
 
+            $stats_sinfiltro = Stat::whereHas('user', function($q) {
+                $q->where('activo', 1);
+            })
+            ->where('anulado', 'NO')
+            ->orderby('created_at','desc')
+            ->get();
+
               //PROGRESO TOTAL
             $progreso_total = ($porcen_volin + $porcen_volex + $porcen_taller + $porcen_chat) / 4;
             $horas_totales = $total_volin + $total_volex + $total_taller + $total_chat;
@@ -178,6 +186,7 @@ class HomeController extends Controller
                 'meta_chat' => $meta_chat,
                 'meta_taller' => $meta_taller,
                 'stats' => $stats,
+                'stats_sinfiltro' => $stats_sinfiltro,
                 'stats_anual' => $stats_anual,
                 'total_por_mes' => $total_por_mes,
                 'total_volin_por_mes' => $total_volin_por_mes,
@@ -307,10 +316,17 @@ class HomeController extends Controller
             $total_chat_por_mes[$mes] = $datos->total_chat_duracion ?? 0;
         }
 
+        $activities = Activity::where('status', 'pendiente')
+        ->orderBy('fecha', 'asc')
+        ->paginate(8);
+
+
+
 
 
             return view('dashboard')->with([
                 'user' => $user,
+                'activities' => $activities,
                 'progreso_total' => $progreso_total,
                 'horas_totales' => $horas_totales,
                 'meta_total' => $meta_total,

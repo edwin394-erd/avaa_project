@@ -17,15 +17,15 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name');
-            $table->string('description');
-            $table->integer('duration');
-            $table->string('location');
+            $table->string('facilitador')->nullable();
+            $table->integer('duration')->nulleable();
+            $table->string('location')->nullable();
             $table->enum('actividad', ['volin','volex','chat','taller']);
             $table->time('hora_inicio');
             $table->date('fecha');
             $table->enum('status', ['pendiente', 'completada', 'cancelada'])->default('pendiente');
             $table->integer('quorum_minimo')->default(0);
-            $table->integer('quorum_maximo')->default(null);
+            $table->integer('quorum_maximo')->nullable();
         });
     }
 
