@@ -107,30 +107,40 @@
                             </div>
                         </div>
                         <div class="w-full md:w-1/2">
-                            <div class="relative z-0 w-full mb-5 group">
-                                <input type="text" name="becario_semestre" id="becario_semestre"
-                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('becario_semestre') border-red-500 @enderror"
-                                    placeholder=" " value="{{ old('becario_semestre') }}">
-                                <label for="becario_semestre" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                                    Semestre / Trimestre
-                                </label>
-                                @error('becario_semestre')
-                                    <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
-                                @enderror
+                             <div class="relative z-0 w-full mb-5 group">
+                            <select name="genero" id="genero"
+                                class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('genero') border-red-500 @enderror">
+                                @php
+                                    $generos = [
+                                        'Masculino', 'Femenino'
+                                    ];
+                                @endphp
+                                <option value="" class="bg-white text-gray-900 dark:bg-slate-800 dark:text-gray-100">Seleccione</option>
+                                @foreach($generos as $nivel)
+                                    <option value="{{ $nivel }}" {{ old('genero', '') == $nivel ? 'selected' : '' }} class="bg-white text-gray-900 dark:bg-slate-800 dark:text-gray-100">{{ $nivel }}</option>
+                                @endforeach
+                            </select>
+                            <label for="genero" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                                Genero
+                            </label>
+                            @error('genero')
+                                <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                             </div>
                         </div>
-                    </div>
-                    <div class="relative z-0 w-full mb-5 group">
-                        <input type="text" name="becario_direccion" id="becario_direccion"
-                            class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('becario_direccion') border-red-500 @enderror"
-                            placeholder=" " value="{{ old('becario_direccion') }}">
-                        <label for="becario_direccion" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                            Dirección
-                        </label>
-                        @error('becario_direccion')
-                            <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
-                        @enderror
-                    </div>
+                        <div class="relative z-0 w-full mb-5 group">
+                            <input type="text" name="becario_direccion" id="becario_direccion"
+                                class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('becario_direccion') border-red-500 @enderror"
+                                placeholder=" " value="{{ old('becario_direccion') }}">
+                            <label for="becario_direccion" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                                Dirección
+                            </label>
+                            @error('becario_direccion')
+                                <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
+                            @enderror
+                        </div>
                        <div class="relative z-0 w-full mb-5 group">
                         <input type="date" name="becario_fecha_nacimiento" id="becario_fecha_nacimiento"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_fecha_nacimiento') border-red-500 @enderror"
@@ -199,26 +209,6 @@
                         </div>
                     </div>
 
-                    <div class="relative z-0 w-full mb-5 group">
-                        <select name="becario_nivel_cevaz" id="becario_nivel_cevaz"
-                            class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('becario_nivel_cevaz') border-red-500 @enderror">
-                            @php
-                                $niveles = [
-                                    'LEVEL 1', 'LEVEL 2', 'LEVEL 3', 'LEVEL 4', 'LEVEL 5', 'LEVEL 6', 'LEVEL 7', 'LEVEL 8', 'LEVEL 9',
-                                    'LEVEL 10', 'LEVEL 11', 'LEVEL 12', 'LEVEL 13', 'LEVEL 14', 'LEVEL 15', 'LEVEL 16', 'LEVEL 17', 'LEVEL 18', 'LEVEl 19'
-                                ];
-                            @endphp
-                            @foreach($niveles as $nivel)
-                                <option value="{{ $nivel }}" {{ old('becario_nivel_cevaz', 'LEVEL 1') == $nivel ? 'selected' : '' }}>{{ $nivel }}</option>
-                            @endforeach
-                        </select>
-                        <label for="becario_nivel_cevaz" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                            Nivel Cevaz
-                        </label>
-                        @error('becario_nivel_cevaz')
-                            <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
-                        @enderror
-                    </div>
 
                     <button type="submit"
                         class="mt-auto w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
@@ -390,8 +380,12 @@
             {{ $user->role == 'admin' ? 'hidden' : '' }}">
             <td class="px-3 py-4 text-center">{{ $user->id }}</td>
             <td class="px-3 py-4 text-center">
-                {{ $user->becario->nombre ?? $user->personal->nombre ?? '-' }}
-                {{ $user->becario->apellido ?? $user->personal->apellido ?? '' }}
+                @if ($user->role == 'user')
+                    <a href="{{ route('users.showbecario', $user->id) }}">{{ $user->becario->nombre ?? '' }} {{ $user->becario->apellido ?? '' }}</a>
+                @elseif ($user->role == 'admin')
+                    {{ $user->personal->nombre ?? '' }} {{ $user->personal->apellido ?? '' }}
+                @endif
+
             </td>
             <td class="px-3 py-4 text-center">{{ $user->email }}</td>
             <td class="px-3 py-4 text-center">
@@ -488,13 +482,14 @@
                             <div><span class="font-semibold">Cédula:</span> {{ $user->becario->cedula ?? $user->personal->cedula ?? '-' }}</div>
                             <div><span class="font-semibold">Rol:</span> {{ ucfirst($user->role) }}</div>
                             <div><span class="font-semibold">Estado:</span> {{ $user->activo == '1' ? 'Activo' : 'Inactivo' }}</div>
+                            <div><span class="font-semibold">Género:</span> {{ $user->becario->genero ?? '-' }}</div>
                             @if($user->role == 'user')
                                 <div><span class="font-semibold">Teléfono:</span> {{ $user->becario->telefono ?? '-' }}</div>
                                 <div><span class="font-semibold">Dirección:</span> {{ $user->becario->direccion ?? '-' }}</div>
                                 <div><span class="font-semibold">Fecha de Nacimiento:</span> {{ $user->becario->fecha_nacimiento ?? '-' }}</div>
                                 <div><span class="font-semibold">Carrera:</span> {{ $user->becario->carrera ?? '-' }}</div>
-                                <div><span class="font-semibold">Semestre/Trimestre:</span> {{ $user->becario->semestre ?? '-' }}</div>
-                                <div><span class="font-semibold">Nivel Cevaz:</span> {{ $user->becario->nivel_cevaz ?? '-' }}</div>
+
+                                {{-- <div><span class="font-semibold">Nivel Cevaz:</span> {{ $user->becario->nivel_cevaz ?? '-' }}</div> --}}
                                 <div><span class="font-semibold">Meta Taller:</span> {{ $user->becario->meta_taller ?? '-' }}</div>
                                 <div><span class="font-semibold">Meta Chat:</span> {{ $user->becario->meta_chat ?? '-' }}</div>
                                 <div><span class="font-semibold">Meta Volin:</span> {{ $user->becario->meta_volin ?? '-' }}</div>
@@ -943,7 +938,7 @@ function abrirModalEditar(tipo, id) {
 
    if (tipo === 'becario') {
     const becario = user.becario || {};
-    actionUrl = `/usuarios/${user.id}`; // Ajusta según tu ruta de update
+    actionUrl = `/Usuarios/${user.id}`; // Ajusta según tu ruta de update
     campos = `
         <div class="flex flex-col md:flex-row md:space-x-2">
             <div class="w-full md:w-1/2">
@@ -993,10 +988,17 @@ function abrirModalEditar(tipo, id) {
                 </div>
             </div>
             <div class="w-full md:w-1/2">
-                <div class="relative z-0 w-full mb-5 group">
-                    <input type="text" name="semestre" id="editar_semestre" value="${becario.semestre || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" ">
-                    <label for="editar_semestre" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Semestre / Trimestre</label>
-                </div>
+            <div class="relative z-0 w-full mb-5 group">
+                <select name="genero" id="editar_genero"
+                    class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                    <option value="" class="bg-white text-gray-900 dark:bg-slate-800 dark:text-gray-100">Seleccione</option>
+                    <option value="Masculino" ${becario.genero === 'Masculino' ? 'selected' : ''} class="bg-white text-gray-900 dark:bg-slate-800 dark:text-gray-100">Masculino</option>
+                    <option value="Femenino" ${becario.genero === 'Femenino' ? 'selected' : ''} class="bg-white text-gray-900 dark:bg-slate-800 dark:text-gray-100">Femenino</option>
+                </select>
+                <label for="editar_genero" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                    Género
+                </label>
+            </div>
             </div>
         </div>
 
@@ -1027,16 +1029,12 @@ function abrirModalEditar(tipo, id) {
                     <label for="editar_meta_volex" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Meta Volex</label>
                 </div>
             </div>
-        </div>
-          <div class="relative z-0 w-full mb-5 group">
-            <input type="text" name="nivel_cevaz" id="editar_nivel_cevaz" value="${becario.nivel_cevaz || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" ">
-            <label for="editar_nivel_cevaz" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nivel Cevaz</label>
-        </div>
+
         <!-- Agrega más campos según tu modelo -->
     `;
 } else {
     const personal = user.personal || {};
-    actionUrl = `/usuarios/${user.id}`; // Ajusta según tu ruta de update
+    actionUrl = `/Usuarios/${user.id}`; // Ajusta según tu ruta de update
     campos = `
         <div class="flex flex-col md:flex-row md:space-x-2">
             <div class="w-full md:w-1/2">
@@ -1081,6 +1079,17 @@ function abrirModalEditar(tipo, id) {
         <div class="relative z-0 w-full mb-5 group">
             <input type="date" name="fecha_nacimiento" id="editar_fecha_nacimiento" value="${personal.fecha_nacimiento || ''}" class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" ">
             <label for="editar_fecha_nacimiento" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Fecha de Nacimiento</label>
+        </div>
+        <div class="relative z-0 w-full mb-5 group">
+            <select name="genero" id="editar_genero"
+                class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                <option value="" class="bg-white text-gray-900 dark:bg-slate-800 dark:text-gray-100">Seleccione</option>
+                <option value="Masculino" ${(personal.genero === 'Masculino') ? 'selected' : ''} class="bg-white text-gray-900 dark:bg-slate-800 dark:text-gray-100">Masculino</option>
+                <option value="Femenino" ${(personal.genero === 'Femenino') ? 'selected' : ''} class="bg-white text-gray-900 dark:bg-slate-800 dark:text-gray-100">Femenino</option>
+            </select>
+            <label for="editar_genero" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                Género
+            </label>
         </div>
         <!-- Agrega más campos según tu modelo -->
     `;

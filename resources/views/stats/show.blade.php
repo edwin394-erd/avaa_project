@@ -682,7 +682,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     let dataPorMes;
@@ -867,135 +867,142 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+
+
 <script>
-let allStats = [];
-let filteredStats = [];
-let isAdmin = @json($user->role === 'admin');
+    let allStats = [];
+    let filteredStats = [];
+    let isAdmin = @json($user->role === 'admin');
 
-// Cargar todos los registros al cargar la página
-fetch("{{ route('stats.all.modalidad', $modalidad) }}")
-    .then(res => res.json())
-    .then(data => {
-        allStats = data;
-        filteredStats = data;
-    });
-
-// Botón "Ver todo" para limpiar el filtro y mostrar todas las filas
-document.getElementById('btn-ver-todo').addEventListener('click', function() {
-    document.getElementById('table-search').value = '';
-    document.querySelectorAll('#myTable tbody tr').forEach(row => {
-        row.style.display = '';
-    });
-    filteredStats = allStats;
-});
-
-// Reporte PDF usando los datos ya cargados
-function toDataURL(url, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-        const reader = new FileReader();
-        reader.onloadend = function() {
-            callback(reader.result);
-        }
-        reader.readAsDataURL(xhr.response);
-    };
-    xhr.onerror = function() {
-        alert('No se pudo cargar el logo para el reporte. El PDF se generará sin logo.');
-        callback('');
-    };
-    xhr.open('GET', url);
-    xhr.responseType = 'blob';
-    xhr.send();
-}
-
-document.getElementById('btn-generar-reporte')?.addEventListener('click', function() {
-    let modalidad = "{{ $n_actividad }}";
-    let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
-    const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
-    const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
-
-    toDataURL(logoUrl, function(logoBase64) {
-        doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
-        doc.setFontSize(16);
-        doc.setFont('helvetica', 'bold');
-        doc.text('Reporte de ' + modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        doc.text('Becario: ' + nombreUsuario, 10, 32);
-        doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
-        doc.setDrawColor(200, 200, 200);
-        doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
-
-        // Construir filas desde allStats
-        const rows = allStats.map(stat => [
-            stat.titulo,
-            stat.actividad,
-            stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
-            stat.modalidad,
-            stat.duracion,
-            stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
-        ]);
-
-        const headers = [['Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
-        doc.autoTable({
-            head: headers,
-            body: rows,
-            startY: 50,
-            styles: { fontSize: 10 },
-            headStyles: { fillColor: [30, 41, 59] },
-            alternateRowStyles: { fillColor: [243, 244, 246] },
+    // Cargar todos los registros al cargar la página
+    fetch("{{ route('stats.all.modalidad', $modalidad) }}")
+        .then(res => res.json())
+        .then(data => {
+            allStats = data;
+            filteredStats = data;
         });
 
-        doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
+        console.log("hola");
+
+    // Botón "Ver todo" para limpiar el filtro y mostrar todas las filas
+    document.getElementById('btn-ver-todo').addEventListener('click', function() {
+        document.getElementById('table-search').value = '';
+        document.querySelectorAll('#myTable tbody tr').forEach(row => {
+            row.style.display = '';
+        });
+        filteredStats = allStats;
     });
-});
+
+    // Reporte PDF usando los datos ya cargados
+    function toDataURL(url, callback) {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+            const reader = new FileReader();
+            reader.onloadend = function() {
+                callback(reader.result);
+            }
+            reader.readAsDataURL(xhr.response);
+        };
+        xhr.onerror = function() {
+            alert('No se pudo cargar el logo para el reporte. El PDF se generará sin logo.');
+            callback('');
+        };
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.send();
+    }
+
+    document.getElementById('btn-generar-reporte')?.addEventListener('click', function() {
+        let modalidad = "{{ $n_actividad }}";
+        let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
+        const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
+        const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+
+
+
+        toDataURL(logoUrl, function(logoBase64) {
+            doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
+            doc.setFontSize(16);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Reporte de ' + modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Becario: ' + nombreUsuario, 10, 32);
+            doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
+            doc.setDrawColor(200, 200, 200);
+            doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
+
+            // Construir filas desde allStats
+            const rows = allStats.map(stat => [
+                stat.titulo,
+                stat.actividad,
+                stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
+                stat.modalidad,
+                stat.duracion,
+                stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
+            ]);
+
+            const headers = [['Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
+            doc.autoTable({
+                head: headers,
+                body: rows,
+                startY: 50,
+                styles: { fontSize: 10 },
+                headStyles: { fillColor: [30, 41, 59] },
+                alternateRowStyles: { fillColor: [243, 244, 246] },
+            });
+
+            doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
+        });
+    });
 
 document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', function() {
-    let modalidad = "{{ $n_actividad }}";
-    let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
-    const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
-    const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+        let modalidad = "{{ $n_actividad }}";
+        let nombreUsuario = "{{ $user->role == 'user' ? $user->becario->nombre : ($user->personal->nombre ?? 'Administrador') }}";
+        const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
+        const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
 
-    toDataURL(logoUrl, function(logoBase64) {
-        doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
-        doc.setFontSize(16);
-        doc.setFont('helvetica', 'bold');
-        doc.text('Reporte general de ' + modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        doc.text('Generado por: ' + nombreUsuario, 10, 32);
-        doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
-        doc.setDrawColor(200, 200, 200);
-        doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
 
-        // Construir filas desde allStats
-        const rows = allStats.map(stat => [
-            stat.user?.becario?.nombre || '',
-            stat.titulo,
-            stat.actividad,
-            stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
-            stat.modalidad,
-            stat.duracion,
-            stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
-        ]);
+        toDataURL(logoUrl, function(logoBase64) {
+            doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
+            doc.setFontSize(16);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Reporte general de ' + modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Generado por: ' + nombreUsuario, 10, 32);
+            doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
+            doc.setDrawColor(200, 200, 200);
+            doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
 
-        const headers = [['Becario', 'Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
-        doc.autoTable({
-            head: headers,
-            body: rows,
-            startY: 50,
-            styles: { fontSize: 10 },
-            headStyles: { fillColor: [30, 41, 59] },
-            alternateRowStyles: { fillColor: [243, 244, 246] },
+            // Construir filas desde allStats
+            const rows = allStats.map(stat => [
+                stat.user?.becario?.nombre || '',
+                stat.titulo,
+                stat.actividad,
+                stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
+                stat.modalidad,
+                stat.duracion,
+                stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
+            ]);
+
+            const headers = [['Becario', 'Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
+            doc.autoTable({
+                head: headers,
+                body: rows,
+                startY: 50,
+                styles: { fontSize: 10 },
+                headStyles: { fillColor: [30, 41, 59] },
+                alternateRowStyles: { fillColor: [243, 244, 246] },
+            });
+
+
+            doc.save('Reporte_General_Actividades_' + new Date().toLocaleString() + '.pdf');
         });
-
-
-        doc.save('Reporte_General_Actividades_' + new Date().toLocaleString() + '.pdf');
     });
-</script>
 
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const btn = document.getElementById('toggle-form-btn');

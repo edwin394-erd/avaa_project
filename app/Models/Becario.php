@@ -14,7 +14,7 @@ class Becario extends Model
         'apellido',
         'cedula',
         'carrera',
-        'semestre',
+        'genero',
         'telefono',
         'direccion',
         'horario',
@@ -22,7 +22,6 @@ class Becario extends Model
         'meta_chat',
         'meta_volin',
         'meta_volex',
-        'nivel_cevaz',
         'fecha_nacimiento',
     ];
     protected $casts = [

@@ -176,6 +176,7 @@ class UserController extends Controller
 
 public function update(Request $request, $id)
 {
+
     $user = \App\Models\User::with(['becario', 'personal'])->findOrFail($id);
 
     if ($user->role === 'user') {
@@ -262,5 +263,14 @@ public function desactivar($id)
 
     return redirect()->route('users.index')->with('success', 'Usuario desactivado correctamente');
 }
+
+public function showbecario($id)
+{
+    $user = \App\Models\User::with(['becario'])->findOrFail($id);
+    return view('users.show', compact('user'));
+}
+
+
+
 
 }

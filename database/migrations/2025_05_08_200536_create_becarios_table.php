@@ -11,20 +11,33 @@ return new class extends Migration
         Schema::create('becarios', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
+            $table->string('fotoperfil')->nullable();
             $table->string('nombre');
             $table->string('apellido');
             $table->string('cedula')->unique();
             $table->string('carrera')->nullable();
-            $table->string('semestre')->nullable();
+            // $table->string('semestre')->nullable();
             $table->string('telefono')->nullable();
             $table->string('direccion')->nullable();
+            $table->enum('genero', ['Masculino', 'Femenino']);
             $table->string('horario')->nullable();
             $table->float('meta_taller')->default(40)->nullable();
             $table->float('meta_chat')->default(15)->nullable();
             $table->float('meta_volin')->default(60)->nullable();
             $table->float('meta_volex')->default(40)->nullable();
-            $table->enum('nivel_cevaz', ['LEVEL 1', 'LEVEL 2', 'LEVEL 3', 'LEVEL 4', 'LEVEL 5', 'LEVEL 6', 'LEVEL 7', 'LEVEL 8', 'LEVEL 9', 'LEVEL 10', 'LEVEL 11', 'LEVEL 12', 'LEVEL 13', 'LEVEL 14', 'LEVEL 15', 'LEVEL 16', 'LEVEL 17', 'LEVEL 18', 'LEVEl 19'])->default('LEVEL 1')->nullable();
             $table->date('fecha_nacimiento')->nullable();
+
+            // $table->enum('tipouni'), ['Publica', 'Privada'])->default('Privada');
+            // $table->date('fechainiciouni')->nullable();
+            // $table->string('Mencion')->nullable();
+            // $table->string('area_estudio')->nullable();
+            // $table->string('escala_evaluacion')->nullable();
+            // $table->string('regimen_estudio')->nullable();
+            // $table->boolean('poseebeca')->default(false);
+            // $table->string('comprobanteinscripcion')->nullable();
+            // $table->string('horarioclases')->nullable();
+
+
 
 
             $table->timestamps();

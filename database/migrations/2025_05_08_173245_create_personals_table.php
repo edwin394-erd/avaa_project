@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('cedula')->unique();
             $table->string('correo')->unique();
             $table->string('telefono')->nullable();
+            $table->enum('genero', ['Masculino', 'Femenino']);
             $table->string('direccion')->nullable();
             $table->string('cargo')->nullable();
             $table->timestamps();
@@ -31,6 +32,7 @@ return new class extends Migration
             'nombre' => 'Admin',
             'apellido' => 'Principal',
             'cedula' => '00000000',
+            'genero' => 'Femenino',
             'correo' => 'admin@gmail.com',
             'telefono' => null,
             'direccion' => null,

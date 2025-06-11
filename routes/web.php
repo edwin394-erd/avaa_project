@@ -62,6 +62,7 @@ Route::get('/Perfil/datos-personales',[PerfilController::class, 'datosindex'])->
 
 Route::get('/Perfil/configuracion-usuario',[PerfilController::class, 'configindex'])->name('configuser.index');
 Route::post('/Perfil/configuracion-usuario', [PerfilController::class, 'update'])->name('configuser.update');
+Route::post('/Perfil/datos-usuario', [PerfilController::class, 'datosuserupdate'])->name('datosuser.update');
 
 
 Route::get('/Usuarios',[UserController::class, 'index'])->name('users.index');
@@ -69,6 +70,7 @@ Route::post('/Usuarios',[UserController::class, 'store'])->name('users.store');
 Route::put('/Usuarios/{id}', [UserController::class, 'update'])->name('users.update');
 Route::post('/usuarios/{id}/activar', [UserController::class, 'activar'])->name('users.activar');
 Route::post('/usuarios/{id}/desactivar', [UserController::class, 'desactivar'])->name('users.desactivar');
+Route::get('/Usuarios/Becario/{id}', [UserController::class, 'showbecario'])->middleware('auth')->name('users.showbecario');
 
 Route::get('/Eventos/all', [ActivityController::class, 'allEvents'])->middleware('auth')->name('events.all');
 Route::get('/Eventos',[ActivityController::class, 'index'])->name('activities.index');

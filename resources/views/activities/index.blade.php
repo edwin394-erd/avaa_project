@@ -5,19 +5,7 @@
 @endsection
 
 @section('contenido')
-<style>
-/* Chrome, Edge, Safari */
-input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-}
 
-/* Firefox */
-@media (prefers-color-scheme: dark) {
-    input[type="date"] {
-        color-scheme: dark;
-    }
-}
-</style>
 <div class="2xl:w-6/6 mx-auto py-5 px-0 md:px-5">
 
     <div id="contenedor-principal" class="flex flex-wrap min-h-[calc(90vh-4rem)] xl:flex-nowrap p-0 h-full">
@@ -383,8 +371,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
                                                     <select name="actividad" id="editar_actividad_{{ $actividad->id }}"
                                                         class="optionx block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                                         required>
-                                                        <option value="" disabled selected hidden>Seleccione una opción</option>
-                                                        <option value="volin" @selected($actividad->actividad=='volin')>Voluntariado Interno</option>
+                                                        <option class="bg-blue-100" value="" disabled selected hidden>Seleccione una opción</option>
+                                                        <option class="bg-blue-100" value="volin" @selected($actividad->actividad=='volin')>Voluntariado Interno</option>
                                                         <option value="volex" @selected($actividad->actividad=='volex')>Voluntariado Externo</option>
                                                         <option value="chat" @selected($actividad->actividad=='chat')>Chat</option>
                                                         <option value="taller" @selected($actividad->actividad=='taller')>Taller</option>

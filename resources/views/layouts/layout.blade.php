@@ -326,9 +326,17 @@
 
 
 <script src="{{ asset('js/app.js') }}" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/es.js"></script>
+<script src="{{ asset('js/alpinecdn.min.js') }}" defer></script>
+
+<script src="{{ asset('js/jspdf.umd.min.js') }}" ></script>
+<script src="{{ asset('js/jspdf.plugin.autotable.min.js') }}" ></script>
+
+<script src="{{ asset('js/dayjs.min.js') }}"></script>
+<script src="{{ asset('js/relativeTime.js') }}" ></script>
+<script src="{{ asset('js/dayjs_es.js') }}"></script>
+
+
+
 <script>
     dayjs.extend(window.dayjs_plugin_relativeTime);
     dayjs.locale('es');

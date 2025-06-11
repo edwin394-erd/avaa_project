@@ -2,7 +2,7 @@
 @extends('layouts.layout')
 
 @section('titulo-tab')
-    Perfil
+    Becario: NOMBRE
 @endsection
 <script src="//unpkg.com/alpinejs" defer></script>
 
@@ -20,7 +20,7 @@
                         <!-- Foto de Perfil -->
                         <div class="mb-4 flex flex-col items-center">
                             <div class="relative w-24 h-24 mb-2">
-                                <img src="{{ auth()->user()->foto_perfil ? asset('storage/' . auth()->user()->foto_perfil) : asset('imgs/default-profile.jpg') }}"
+                                <img src="{{ auth()->user()->foto_perfil ? asset('uploads/' . auth()->user()->foto_perfil) : asset('imgs/default-profile.jpg') }}"
                                      alt="Foto de perfil"
                                      class="w-24 h-24 rounded-full object-cover border-2 border-gray-300 dark:border-slate-700 bg-gray-100 dark:bg-slate-800">
                                 <label for="foto_perfil" class="absolute bottom-0 right-0 bg-slate-800 hover:bg-slate-700 text-white rounded-full p-1 cursor-pointer shadow">
@@ -151,7 +151,7 @@
                         </div>
                         <input type="text" name="nombre" id="nombre"
                             class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('nombre') border-red-700 @enderror"
-                            placeholder="Nombre" required value="{{ old('nombre', auth()->user()->becario->nombre ?? auth()->user()->personal->nombre ?? '') }}" readonly />
+                            placeholder="Nombre" required value="{{ $user->becario->nombre}}" readonly />
                     </div>
                     <!-- Apellido -->
                     <div class="mb-2">
@@ -163,7 +163,7 @@
                         </div>
                         <input type="text" name="apellido" id="apellido"
                             class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('apellido') border-red-700 @enderror"
-                            placeholder="Apellido" required value="{{ old('apellido', auth()->user()->becario->apellido ?? auth()->user()->personal->apellido ?? '') }}" autocomplete="family-name" readonly/>
+                            placeholder="Apellido" required value="{{$user->becario->apellido }}" autocomplete="family-name" readonly/>
                     </div>
                     <!-- Cédula -->
                     <div class="mb-2">
@@ -175,8 +175,21 @@
                         </div>
                         <input type="text" name="cedula" id="cedula"
                             class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('cedula') border-red-700 @enderror"
-                            placeholder="Cédula" required  value="{{ old('apellido', auth()->user()->becario->cedula ?? auth()->user()->personal->cedula ?? '') }}" autocomplete="off" readonly/>
+                            placeholder="Cédula" required  value="{{ $user->becario->cedula }}" autocomplete="off" readonly/>
                     </div>
+                     <!-- Email -->
+                        <div class="mb-2">
+                            <div class="flex">
+                                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Email</label>
+                                @error('email')
+                                    <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
+                                @enderror
+                            </div>
+                            <input type="email" name="email" id="email"
+                                class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('email') border-red-700 @enderror"
+                                placeholder="Email" required value="{{$user->email}}" autocomplete="email" />
+                        </div>
+
                     <!-- Teléfono -->
                     <div class="mb-2">
                         <div class="flex">
@@ -187,7 +200,7 @@
                         </div>
                         <input type="text" name="telefono" id="telefono"
                             class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('telefono') border-red-700 @enderror"
-                            placeholder="Teléfono" required value="{{ old('telefono', auth()->user()->becario->telefono ?? auth()->user()->personal->telefono ?? '')}}" autocomplete="tel" />
+                            placeholder="Teléfono" required value="{{$user->becario->telefono }}" autocomplete="tel" />
 
                     </div>
                     <!-- Género (Dropdown) -->
@@ -198,7 +211,7 @@
                                 <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
                             @enderror
                         </div>
-                        <div x-data="{ open: false, value: '{{ old('genero', auth()->user()->becario->genero ?? auth()->user()->personal->genero ?? '') }}' }" class="relative">
+                        <div x-data="{ open: false, value: '{{$user->becario->genero}}' }" class="relative">
                             <button type="button"
                                 @click="open = !open"
                                 @blur="setTimeout(() => open = false, 100)"
@@ -248,7 +261,7 @@
                         </div>
                         <input type="date" name="fecha_nacimiento" id="fecha_nacimiento"
                             class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('fecha_nacimiento') border-red-700 @enderror"
-                            required value="{{ old('fecha_nacimiento', auth()->user()->becario->fecha_nacimiento ?? auth()->user()->personal->fecha_nacimiento ?? '') }}" />
+                            required value="{{ $user->becario->fecha_nacimiento}}" />
                     </div>
                     <!-- Dirección -->
                     <div class="mb-2">
@@ -260,9 +273,9 @@
                         </div>
                         <input type="text" name="direccion" id="direccion"
                             class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('direccion') border-red-700 @enderror"
-                            placeholder="Dirección" required value="{{ old('direccion', auth()->user()->becario->direccion ?? auth()->user()->personal->direccion ?? '')}}" />
+                            placeholder="Dirección" required value="{{$user->becario->direccion}}" />
                     </div>
-                    @if(auth()->user()->role === 'user')
+                    @if($user->role === 'user')
                         <!-- Carrera -->
                         <div class="mb-2">
                             <div class="flex">
@@ -273,7 +286,7 @@
                             </div>
                             <input type="text" name="carrera" id="carrera"
                                 class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('carrera') border-red-700 @enderror"
-                                placeholder="Carrera" required value="{{ old('carrera', auth()->user()->becario->carrera ?? auth()->user()->personal->carrera ?? ' ')}}" />
+                                placeholder="Carrera" required value="{{$user->becario->carrera}}" />
                         </div>
                         <!-- Meta Voluntariado Interno -->
                         <div class="mb-2">
@@ -285,7 +298,7 @@
                             </div>
                             <input type="number" min="0" name="meta_voluntariado_interno" id="meta_voluntariado_interno"
                                 class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('meta_voluntariado_interno') border-red-700 @enderror"
-                                placeholder="Horas internas" value="{{ old('meta_volin', auth()->user()->becario->meta_volin ?? ' ')}}" readonly/>
+                                placeholder="Horas internas" value="{{$user->becario->meta_volin}}" readonly/>
                         </div>
                         <!-- Meta Voluntariado Externo -->
                         <div class="mb-2">
@@ -297,7 +310,7 @@
                             </div>
                             <input type="number" min="0" name="meta_voluntariado_externo" id="meta_voluntariado_externo"
                                 class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('meta_voluntariado_externo') border-red-700 @enderror"
-                                placeholder="Horas externas" value="{{ old('meta_volex', auth()->user()->becario->meta_volex ?? ' ')}}"
+                                placeholder="Horas externas" value="{{$user->becario->meta_volex}}"
                                 readonly/>
                         </div>
                         <!-- Meta Chats -->
@@ -310,7 +323,7 @@
                             </div>
                             <input type="number" min="0" name="meta_chats" id="meta_chats"
                                 class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('meta_chats') border-red-700 @enderror"
-                                placeholder="Cantidad de chats" value="{{ old('meta_chat', auth()->user()->becario->meta_chat ?? ' ') }}"
+                                placeholder="Cantidad de chats" value="{{$user->becario->meta_chat}}"
                                 readonly />
                         </div>
                         <!-- Meta Taller -->
@@ -323,7 +336,7 @@
                             </div>
                             <input type="number" min="0" name="meta_taller" id="meta_taller"
                                 class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('meta_taller') border-red-700 @enderror"
-                                placeholder="Cantidad de talleres" value="{{ old('meta_taller', auth()->user()->becario->meta_taller ?? '') }}" readonly />
+                                placeholder="Cantidad de talleres" value="{{ $user->becario->meta_taller }}" readonly />
                         </div>
                     @else
                         <!-- Cargo -->
