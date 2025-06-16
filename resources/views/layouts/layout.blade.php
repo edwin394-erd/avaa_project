@@ -1,6 +1,18 @@
 {{-- filepath: c:\Users\DELL\Downloads\TESIS\avaa_project\resources\views\layouts\layout.blade.php --}}
 <!DOCTYPE html>
 <html lang="en" class="bg-gray-100 dark:bg-slate-900">
+  <script>
+(function() {
+  try {
+    const theme = localStorage.getItem('theme');
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  } catch(e) {}
+})();
+</script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +26,7 @@
     <link rel="icon" href="{{ asset('icono.png') }}" type="image/png" />
 </head>
 
-<body class="bg-gray-100 dark:bg-slate-900 flex flex-col p-0 min-h-screen" @yield('body-style') >
+<body class="bg-gray-200 dark:bg-slate-900 flex flex-col p-0 min-h-screen" @yield('body-style') >
 <div id="loader-bg" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-[99999]">
     <div class="flex flex-col items-center">
         <svg class="animate-spin h-12 w-12 text-green-500 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stat;
-use App\Models\Activity;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -34,18 +34,19 @@ class HomeController extends Controller
             $meta_chat = \App\Models\Becario::whereHas('user', function($q) {
                 $q->where('activo', 1);
             })->sum('meta_chat');
+            
             $nombre_user= $user->personal->nombre;
             $cedula_becario= $user->personal->cedula;
 
             //VOLUNTARIADO INTERNO
-            $stats_volin = Stat::where('actividad', 'volin')
-                ->whereHas('user', function($q) {
-                    $q->where('activo', 1);
-                })
-                ->where('anulado', 'NO')
-                ->where('estado', 'aprobado')
-                ->where('fecha', '>=', $startOfYear)
-                ->get();
+            $stats_volin = \App\Models\Stat::where('actividad', 'volin')
+            ->whereHas('becario.user', function($q) {
+                $q->where('activo', 1);
+            })
+            ->where('anulado', 'NO')
+            ->where('estado', 'aprobado')
+            ->where('fecha', '>=', $startOfYear)
+            ->get();
             $total_volin = $stats_volin->sum('duracion'); //TOTAL HORAS
             $porcen_volin = ($meta_volin > 0) ? ($total_volin / $meta_volin) * 100 : 0;
             $porcen_volin = number_format($porcen_volin, 2); //PORCENTAJE
@@ -54,8 +55,8 @@ class HomeController extends Controller
             }
 
             //VOLUNTARIADO EXTERNO
-            $stats_volex = Stat::where('actividad', 'volex')
-                ->whereHas('user', function($q) {
+            $stats_volex = \App\Models\Stat::where('actividad', 'volex')
+                ->whereHas('becario.user', function($q) {
                     $q->where('activo', 1);
                 })
                 ->where('anulado', 'NO')
@@ -70,8 +71,8 @@ class HomeController extends Controller
             }
 
             //TALLER
-            $stats_taller = Stat::where('actividad', 'taller')
-                ->whereHas('user', function($q) {
+            $stats_taller = \App\Models\Stat::where('actividad', 'taller')
+                ->whereHas('becario.user', function($q) {
                     $q->where('activo', 1);
                 })
                 ->where('anulado', 'NO')
@@ -86,8 +87,8 @@ class HomeController extends Controller
             }
 
             //CHAT
-            $stats_chat = Stat::where('actividad', 'chat')
-                ->whereHas('user', function($q) {
+            $stats_chat = \App\Models\Stat::where('actividad', 'chat')
+                ->whereHas('becario.user', function($q) {
                     $q->where('activo', 1);
                 })
                 ->where('anulado', 'NO')
@@ -101,8 +102,8 @@ class HomeController extends Controller
                 $porcen_chat = 100;
             }
 
-            //STATS
-            $stats = Stat::whereHas('user', function($q) {
+            // STATS filtradas por estado aprobado
+            $stats = \App\Models\Stat::whereHas('becario.user', function($q) {
                     $q->where('activo', 1);
                 })
                 ->where('anulado', 'NO')
@@ -110,12 +111,13 @@ class HomeController extends Controller
                 ->orderBy('created_at')
                 ->get();
 
-            $stats_sinfiltro = Stat::whereHas('user', function($q) {
-                $q->where('activo', 1);
-            })
-            ->where('anulado', 'NO')
-            ->orderby('created_at','desc')
-            ->get();
+            // STATS sin filtro de estado
+            $stats_sinfiltro = \App\Models\Stat::whereHas('becario.user', function($q) {
+                    $q->where('activo', 1);
+                })
+                ->where('anulado', 'NO')
+                ->orderBy('created_at', 'desc')
+                ->get();
 
               //PROGRESO TOTAL
             $progreso_total = ($porcen_volin + $porcen_volex + $porcen_taller + $porcen_chat) / 4;
@@ -129,20 +131,19 @@ class HomeController extends Controller
 
 
 
-            $stats_anual = Stat::where('anulado', 'NO')
-                ->where('anulado', 'NO')
+           $stats_anual = \App\Models\Stat::where('anulado', 'NO')
                 ->where('estado', 'aprobado')
                 ->whereBetween('fecha', [$startOfYear, $endOfYear])
-                ->whereHas('user', function($q) {
-                $q->where('activo', 1);
+                ->whereHas('becario.user', function($q) {
+                    $q->where('activo', 1);
                 })
                 ->selectRaw('
-                MONTH(fecha) as month,
-                SUM(duracion) as total_duracion,
-                SUM(CASE WHEN actividad = "volin" THEN duracion ELSE 0 END) as total_volin_duracion,
-                SUM(CASE WHEN actividad = "volex" THEN duracion ELSE 0 END) as total_volex_duracion,
-                SUM(CASE WHEN actividad = "taller" THEN duracion ELSE 0 END) as total_taller_duracion,
-                SUM(CASE WHEN actividad = "chat" THEN duracion ELSE 0 END) as total_chat_duracion
+                    MONTH(fecha) as month,
+                    SUM(duracion) as total_duracion,
+                    SUM(CASE WHEN actividad = "volin" THEN duracion ELSE 0 END) as total_volin_duracion,
+                    SUM(CASE WHEN actividad = "volex" THEN duracion ELSE 0 END) as total_volex_duracion,
+                    SUM(CASE WHEN actividad = "taller" THEN duracion ELSE 0 END) as total_taller_duracion,
+                    SUM(CASE WHEN actividad = "chat" THEN duracion ELSE 0 END) as total_chat_duracion
                 ')
                 ->groupBy('month')
                 ->get()
@@ -198,17 +199,18 @@ class HomeController extends Controller
 
 
         } else {
+            
         $meta_volin= $user->becario->meta_volin;
         $meta_volex= $user->becario->meta_volex;
         $meta_taller= $user->becario->meta_taller;
         $meta_chat= $user->becario->meta_chat;
         $nombre_user= $user->becario->nombre;
         $cedula_becario= $user->becario->cedula;
-
+        $becario = $user->becario;
 
 
         //VOLUNTARIADO INTERNO
-        $stats_volin = Stat::where('user_id', $user->id)
+        $stats_volin = Stat::where('becario_id', $becario->id)
             ->where('actividad', 'volin')
             ->where('anulado', 'NO')
             ->where('estado', 'aprobado')
@@ -222,7 +224,7 @@ class HomeController extends Controller
         }
 
         //VOLUNTARIADO EXTERNO
-        $stats_volex = Stat::where('user_id', $user->id)
+        $stats_volex = Stat::where('becario_id', $becario->id)
             ->where('actividad', 'volex')
             ->where('anulado', 'NO')
             ->where('estado', 'aprobado')
@@ -236,7 +238,7 @@ class HomeController extends Controller
         }
 
         //TALLER
-        $stats_taller = Stat::where('user_id', $user->id)
+        $stats_taller = Stat::where('becario_id', $becario->id)
             ->where('actividad', 'taller')
             ->where('anulado', 'NO')
             ->where('estado', 'aprobado')
@@ -250,7 +252,7 @@ class HomeController extends Controller
         }
 
         //CHAT
-        $stats_chat = Stat::where('user_id', $user->id)
+        $stats_chat = Stat::where('becario_id', $becario->id)
             ->where('actividad', 'chat')
             ->where('anulado', 'NO')
             ->where('estado', 'aprobado')
@@ -264,7 +266,7 @@ class HomeController extends Controller
         }
 
         //STATS
-        $stats = Stat::where('user_id', $user->id)
+        $stats = Stat::where('becario_id', $becario->id)
             ->where('anulado', 'NO')
             ->where('estado', 'aprobado')
             ->orderBy('created_at')
@@ -282,7 +284,7 @@ class HomeController extends Controller
 
 
 
-        $stats_anual = Stat::where('user_id', $user->id)
+        $stats_anual = Stat::where('becario_id', $becario->id)
             ->where('anulado', 'NO')
             ->where('estado', 'aprobado')
             ->whereBetween('fecha', [$startOfYear, $endOfYear])
@@ -316,7 +318,7 @@ class HomeController extends Controller
             $total_chat_por_mes[$mes] = $datos->total_chat_duracion ?? 0;
         }
 
-        $activities = Activity::where('status', 'pendiente')
+        $activities = Event::where('status', 'pendiente')
         ->orderBy('fecha', 'asc')
         ->paginate(8);
 

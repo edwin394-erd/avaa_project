@@ -15,7 +15,7 @@ class Stat extends Model
         'modalidad',
         'duracion',
         'fecha',
-        'user_id',
+        'becario_id',
         'estado',
         'observacion',
         'anulado',
@@ -25,8 +25,8 @@ class Stat extends Model
     {
         return $this->hasMany(Evidencia::class, 'stats_id');
     }
-    public function user()
+    public function becario()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Becario::class);
     }
 }

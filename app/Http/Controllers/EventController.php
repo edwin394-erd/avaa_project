@@ -1,15 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Activity;
+use App\Models\Event;
 use Illuminate\Http\Request;
 
-class ActivityController extends Controller
+class EventController extends Controller
 {
     public function index(Request $request){
     $user = auth()->user();
 
-    $query = Activity::query();
+    $query = Event::query();
 
     // Filtro por búsqueda
     if ($request->filled('search')) {
@@ -47,14 +47,14 @@ class ActivityController extends Controller
         // status por defecto
         $validated['status'] = 'pendiente';
 
-        Activity::create($validated);
+        Event::create($validated);
 
         return redirect()->route('activities.index')->with('success', 'Evento creado correctamente.');
     }
 
     public function cancelar($id)
     {
-        $actividad = \App\Models\Activity::findOrFail($id);
+        $actividad = \App\Models\Event::findOrFail($id);
         $actividad->status = 'cancelada';
         $actividad->save();
 
@@ -63,7 +63,7 @@ class ActivityController extends Controller
 
     public function restaurar($id)
     {
-        $actividad = \App\Models\Activity::findOrFail($id);
+        $actividad = \App\Models\Event::findOrFail($id);
         $actividad->status = 'pendiente';
         $actividad->save();
 
@@ -90,7 +90,7 @@ class ActivityController extends Controller
             }
         });
 
-        $actividad = \App\Models\Activity::findOrFail($id);
+        $actividad = \App\Models\Event::findOrFail($id);
         $actividad->update($validated);
 
         return redirect()->route('activities.index')->with('success', 'Evento actualizado correctamente.');
@@ -98,7 +98,7 @@ class ActivityController extends Controller
 
        public function allEvents()
         {
-            $activities = Activity::orderBy('created_at', 'desc')->get();
+            $activities = Event::orderBy('created_at', 'desc')->get();
             return response()->json($activities);
         }
 

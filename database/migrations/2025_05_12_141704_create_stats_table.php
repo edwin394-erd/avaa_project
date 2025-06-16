@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('stats', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('becario_id')->constrained()->onDelete('cascade');
             $table->string('titulo');
             $table->enum('actividad', ['chat', 'taller', 'volin', 'volex']);
             $table->enum('modalidad', ['online', 'presencial']);
             $table->float('duracion');
+            $table->string('facilitador')->nullable();
             $table->date('fecha');
             $table->enum('estado', ['pendiente', 'aprobado', 'rechazado'])->default('pendiente');
             $table->string('observacion')->nullable();

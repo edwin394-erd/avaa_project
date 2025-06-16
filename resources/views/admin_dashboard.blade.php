@@ -144,7 +144,7 @@
                                         {{ $actividad->titulo ?? $actividad->nombre ?? 'Actividad' }}
                                     </h4>
                                     <p class="text-sm md:text-base text-gray-500 dark:text-gray-300 mt-1 line-clamp-2">
-                                        Becario: {{ $actividad->user->Becario->nombre ?? '-' }} {{ $actividad->user->Becario->apellido ?? '-' }}
+                                        Becario: {{ $actividad->becario->nombre ?? '-' }} {{ $actividad->becario->apellido ?? '-' }}
                                     </p>
                                 </div>
                                 <div class="text-right ml-4 flex flex-col items-end">

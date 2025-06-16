@@ -26,6 +26,12 @@ return new class extends Migration
             $table->float('meta_volin')->default(60)->nullable();
             $table->float('meta_volex')->default(40)->nullable();
             $table->date('fecha_nacimiento')->nullable();
+            $table->unsignedBigInteger('user_id')->unique();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
 
             // $table->enum('tipouni'), ['Publica', 'Privada'])->default('Privada');
             // $table->date('fechainiciouni')->nullable();

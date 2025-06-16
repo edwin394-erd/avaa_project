@@ -51,11 +51,11 @@ class User extends Authenticatable
     }
     public function Becario()
     {
-        return $this->belongsTo(Becario::class);
+        return $this->hasOne(Becario::class);
     }
      public function Personal()
     {
-        return $this->belongsTo(Personal::class);
+        return $this->hasOne(Personal::class);
     }
     public function notifications()
     {

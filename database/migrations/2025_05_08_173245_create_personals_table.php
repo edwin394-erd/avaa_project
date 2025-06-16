@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('cargo')->nullable();
             $table->timestamps();
             $table->date('fecha_nacimiento')->nullable();
+            $table->unsignedBigInteger('user_id')->unique();
+
         });
 
          // Insertar un registro por defecto
@@ -40,6 +42,7 @@ return new class extends Migration
             'created_at' => now(),
             'updated_at' => now(),
             'fecha_nacimiento' => null,
+            'user_id' => 1,
         ]);
     }
 

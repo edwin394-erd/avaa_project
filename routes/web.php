@@ -12,7 +12,7 @@ use App\Http\Controllers\ImagenController;
 // use App\Http\Controllers\EvidenciaController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 
 
@@ -72,12 +72,12 @@ Route::post('/usuarios/{id}/activar', [UserController::class, 'activar'])->name(
 Route::post('/usuarios/{id}/desactivar', [UserController::class, 'desactivar'])->name('users.desactivar');
 Route::get('/Usuarios/Becario/{id}', [UserController::class, 'showbecario'])->middleware('auth')->name('users.showbecario');
 
-Route::get('/Eventos/all', [ActivityController::class, 'allEvents'])->middleware('auth')->name('events.all');
-Route::get('/Eventos',[ActivityController::class, 'index'])->name('activities.index');
-Route::post('/Eventos', [ActivityController::class, 'store'])->name('activities.store');
-Route::post('/Eventos/{id}/cancelar', [ActivityController::class, 'cancelar'])->name('activities.cancelar');
-Route::post('/Eventos/{id}/restaurar', [ActivityController::class, 'restaurar'])->name('activities.restaurar');
-Route::put('/Eventos/{id}', [ActivityController::class, 'update'])->name('activities.update');
+Route::get('/Eventos/all', [EventController::class, 'allEvents'])->middleware('auth')->name('events.all');
+Route::get('/Eventos',[EventController::class, 'index'])->name('activities.index');
+Route::post('/Eventos', [EventController::class, 'store'])->name('activities.store');
+Route::post('/Eventos/{id}/cancelar', [EventController::class, 'cancelar'])->name('activities.cancelar');
+Route::post('/Eventos/{id}/restaurar', [EventController::class, 'restaurar'])->name('activities.restaurar');
+Route::put('/Eventos/{id}', [EventController::class, 'update'])->name('activities.update');
 
 Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');

@@ -108,7 +108,7 @@
                         </div>
                         <div class="w-full md:w-1/2">
                              <div class="relative z-0 w-full mb-5 group">
-                            <select name="genero" id="genero"
+                            <select name="becario_genero" id="becario_genero"
                                 class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('genero') border-red-500 @enderror">
                                 @php
                                     $generos = [
@@ -117,13 +117,13 @@
                                 @endphp
                                 <option value="" class="bg-white text-gray-900 dark:bg-slate-800 dark:text-gray-100">Seleccione</option>
                                 @foreach($generos as $nivel)
-                                    <option value="{{ $nivel }}" {{ old('genero', '') == $nivel ? 'selected' : '' }} class="bg-white text-gray-900 dark:bg-slate-800 dark:text-gray-100">{{ $nivel }}</option>
+                                    <option value="{{ $nivel }}" {{ old('becario_genero', '') == $nivel ? 'selected' : '' }} class="bg-white text-gray-900 dark:bg-slate-800 dark:text-gray-100">{{ $nivel }}</option>
                                 @endforeach
                             </select>
-                            <label for="genero" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                            <label for="becario_genero" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                 Genero
                             </label>
-                            @error('genero')
+                            @error('becario_genero')
                                 <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
                             @enderror
                         </div>
@@ -225,7 +225,8 @@
                             <div class="relative z-0 w-full mb-5 group">
                                 <input type="text" name="personal_nombre" id="personal_nombre"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_nombre') border-red-500 @enderror"
-                                    placeholder=" " required value="{{ old('personal_nombre') }}">
+                                    placeholder=" " required value="{{ old('personal_nombre') }}"
+                                    oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')">
                                 <label for="personal_nombre" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                     Nombre
                                 </label>
@@ -238,7 +239,8 @@
                             <div class="relative z-0 w-full mb-5 group">
                                 <input type="text" name="personal_apellido" id="personal_apellido"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_apellido') border-red-500 @enderror"
-                                    placeholder=" " required value="{{ old('personal_apellido') }}">
+                                    placeholder=" " required value="{{ old('personal_apellido') }}"
+                                    oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')">
                                 <label for="personal_apellido" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                     Apellido
                                 </label>
@@ -259,16 +261,34 @@
                             <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div class="relative z-0 w-full mb-5 group">
-                        <input type="text" name="personal_cedula" id="personal_cedula"
-                            class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_cedula') border-red-500 @enderror"
-                            placeholder=" " required value="{{ old('personal_cedula') }}">
-                        <label for="personal_cedula" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                            Cédula
-                        </label>
-                        @error('personal_cedula')
-                            <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
-                        @enderror
+                    <div class="flex flex-col md:flex-row md:space-x-2">
+                        <div class="w-full md:w-1/2">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input type="text" name="personal_cedula" id="personal_cedula"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_cedula') border-red-500 @enderror"
+                                    placeholder=" " required value="{{ old('personal_cedula') }}"
+                                    oninput="this.value = this.value.replace(/[^0-9\-]/g, '')">
+                                <label for="personal_cedula" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                                    Cédula
+                                </label>
+                                @error('personal_cedula')
+                                    <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input type="text" name="personal_telefono" id="personal_telefono"
+                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_telefono') border-red-500 @enderror"
+                                    placeholder=" " value="{{ old('personal_telefono') }}">
+                                <label for="personal_telefono" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                                    Teléfono
+                                </label>
+                                @error('personal_telefono')
+                                    <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
                     <div class="relative z-0 w-full mb-5 group">
                         <input type="text" name="personal_cargo" id="personal_cargo"
@@ -278,17 +298,6 @@
                             Cargo
                         </label>
                         @error('personal_cargo')
-                            <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="relative z-0 w-full mb-5 group">
-                        <input type="text" name="personal_telefono" id="personal_telefono"
-                            class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_telefono') border-red-500 @enderror"
-                            placeholder=" " value="{{ old('personal_telefono') }}">
-                        <label for="personal_telefono" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                            Teléfono
-                        </label>
-                        @error('personal_telefono')
                             <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
                         @enderror
                     </div>
@@ -303,7 +312,7 @@
                             <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
                         @enderror
                     </div>
-                     <div class="relative z-0 w-full mb-5 group">
+                    <div class="relative z-0 w-full mb-5 group">
                         <input type="date" name="personal_fecha_nacimiento" id="personal_fecha_nacimiento"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_fecha_nacimiento') border-red-500 @enderror"
                             placeholder=" " value="{{ old('personal_fecha_nacimiento') }}">
@@ -311,6 +320,20 @@
                             Fecha de Nacimiento
                         </label>
                         @error('personal_fecha_nacimiento')
+                            <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="relative z-0 w-full mb-5 group">
+                        <select name="personal_genero" id="personal_genero"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_genero') border-red-500 @enderror">
+                            <option value="" class="bg-white text-gray-900 dark:bg-slate-800 dark:text-gray-100">Seleccione</option>
+                            <option value="Masculino" {{ old('personal_genero') == 'Masculino' ? 'selected' : '' }} class="bg-white text-gray-900 dark:bg-slate-800 dark:text-gray-100">Masculino</option>
+                            <option value="Femenino" {{ old('personal_genero') == 'Femenino' ? 'selected' : '' }} class="bg-white text-gray-900 dark:bg-slate-800 dark:text-gray-100">Femenino</option>
+                        </select>
+                        <label for="personal_genero" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                            Género
+                        </label>
+                        @error('personal_genero')
                             <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
                         @enderror
                     </div>
@@ -424,7 +447,11 @@
                 <div id="modal-activar-{{ $user->id }}" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
                     <div class="bg-white dark:bg-slate-900 rounded-lg p-6 max-w-sm w-full relative">
                         <h2 class="text-lg font-bold mb-4 text-center text-gray-800 dark:text-gray-100">Confirmar activación</h2>
-                        <h2 class="text-sm mb-1 text-center text-gray-700 dark:text-gray-200">Usuario: {{ $user->becario->nombre ?? $user->personal->nombre }} {{ $user->becario->apellido ?? $user->personal->apellido }}</h2>
+                      <h2 class="text-sm mb-1 text-center text-gray-700 dark:text-gray-200">
+                        Usuario: 
+                        {{ optional($user->becario)->nombre ?? optional($user->personal)->nombre ?? '-' }}
+                        {{ optional($user->becario)->apellido ?? optional($user->personal)->apellido ?? '-' }}
+                    </h2>
                         <h2 class="text-sm mb-1 text-center text-gray-700 dark:text-gray-200">Correo: {{ $user->email }}</h2>
                         <hr class="dark:border-slate-700"><br>
                         <button type="button" onclick="cerrarModal('modal-activar-{{ $user->id }}')" class="absolute top-2 right-2 text-gray-500 hover:text-black dark:hover:text-white text-lg 2xl:text-2xl">&times;</button>
@@ -450,7 +477,11 @@
                 <div id="modal-desactivar-{{ $user->id }}" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
                     <div class="bg-white dark:bg-slate-900 rounded-lg p-6 max-w-sm w-full relative">
                         <h2 class="text-lg font-bold mb-4 text-center text-gray-800 dark:text-gray-100">Confirmar desactivación</h2>
-                        <h2 class="text-sm mb-1 text-center text-gray-700 dark:text-gray-200">Usuario: {{ $user->becario->nombre ?? $user->personal->nombre }} {{ $user->becario->apellido ?? $user->personal->apellido }}</h2>
+                       <h2 class="text-sm mb-1 text-center text-gray-700 dark:text-gray-200">
+                            Usuario: 
+                            {{ optional($user->becario)->nombre ?? optional($user->personal)->nombre ?? '-' }}
+                            {{ optional($user->becario)->apellido ?? optional($user->personal)->apellido ?? '-' }}
+                        </h2>
                         <h2 class="text-sm mb-1 text-center text-gray-700 dark:text-gray-200">Correo: {{ $user->email }}</h2>
                         <hr class="dark:border-slate-700"><br>
                         <button type="button" onclick="cerrarModal('modal-desactivar-{{ $user->id }}')" class="absolute top-2 right-2 text-gray-500 hover:text-black dark:hover:text-white text-lg 2xl:text-2xl">&times;</button>
@@ -565,9 +596,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-4">
+                {{-- <div class="mt-4">
                     {{ $users->links('pagination::tailwind') }}
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -576,6 +607,8 @@
 
 @section('scripts')
 <script>
+    window.usuariosParaReporte = @json($users->items());
+
 // Cambiar pestañas y contenido
 document.getElementById('tab-becarios').addEventListener('click', function() {
     this.classList.add('bg-white', 'dark:bg-slate-900', 'border-slate-800', 'dark:border-blue-400');
@@ -631,8 +664,6 @@ document.getElementById('tab-becarios').click();
         });
     @endif
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
 
 <script>
 document.querySelectorAll('.btn-detalle').forEach(btn => {
@@ -720,11 +751,11 @@ function maskVenezuelaPhone(input) {
 maskVenezuelaPhone(document.getElementById('becario_telefono'));
 maskVenezuelaPhone(document.getElementById('personal_telefono'));
 
-window.usuariosParaReporte = @json($users->items() ?? $users);
-
 function generarReporteUsuarios(tipo) {
-    const usuarios = window.usuariosParaReporte.filter(u => u.role === tipo);
-    const rows = usuarios.map(user => {
+    const usuarios = window.usuariosParaReporte || window.usuarios || [];
+    console.log(tipo, usuarios);
+    const filtrados = usuarios.filter(u => u.role === tipo);
+    const rows = filtrados.map(user => {
         const becario = user.becario || {};
         const personal = user.personal || {};
         if (tipo === 'user') {
@@ -826,6 +857,7 @@ function generarReporteUsuarios(tipo) {
         xhr.send();
     }
 }
+
 document.getElementById('btn-reporte-becarios').addEventListener('click', function() {
     generarReporteUsuarios('user');
 });
@@ -926,7 +958,7 @@ btn.addEventListener('click', function() {
 <script>
 function abrirModalEditar(tipo, id) {
     // Busca el usuario en la variable global de usuarios
-    const usuarios = window.usuariosParaReporte || [];
+    const usuarios = window.usuariosParaReporte || window.usuarios || [];
     const user = usuarios.find(u => u.id == id);
     if (!user) return;
 

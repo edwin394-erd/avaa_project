@@ -24,6 +24,9 @@ class Personal extends Model
 
     public function User()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
+
+     
+
 }

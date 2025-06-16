@@ -23,11 +23,13 @@ class StatController extends Controller
 
 
             // Filtro base
-            $query = Stat::with(['evidencias', 'user.becario']);
+            $query = Stat::with(['evidencias', 'becario.user']);
 
             // Filtro por usuario si no es admin
             if ($user->role !== 'admin') {
-                $query->where('user_id', $user->id);
+                $query->whereHas('becario', function($q) use ($user) {
+                 $q->where('user_id', $user->id);
+                });
             }
 
             // Filtro por búsqueda
@@ -41,7 +43,7 @@ class StatController extends Controller
                     ->orWhere('estado', 'like', "%$search%");
                     // Si es admin, buscar también por nombre de becario
                     if ($user->role === 'admin') {
-                        $q->orWhereHas('user.becario', function($q2) use ($search) {
+                        $q->orWhereHas('becario', function($q2) use ($search) {
                             $q2->where('nombre', 'like', "%$search%");
                         });
                     }
@@ -52,7 +54,7 @@ class StatController extends Controller
                 $query->whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin]);
             }
 
-            $stats = $query->with(['user.becario', 'evidencias'])->orderBy('created_at', 'desc')->paginate(8);
+            $stats = $query->with(['becario.user', 'evidencias'])->orderBy('created_at', 'desc')->paginate(8);
 
         if ($user->role === 'admin') {
 
@@ -72,7 +74,7 @@ class StatController extends Controller
             $stats_realizado_volin = Stat::where('actividad', 'volin')
                 ->where('estado', 'aprobado')
                 ->where('anulado', 'NO')
-                ->whereHas('user', function($q) {
+                ->whereHas('becario.user', function($q) {
                     $q->where('activo', 1);
                 })
                 ->get();
@@ -80,7 +82,7 @@ class StatController extends Controller
             $stats_realizado_volex = Stat::where('actividad', 'volex')
                 ->where('estado', 'aprobado')
                 ->where('anulado', 'NO')
-                ->whereHas('user', function($q) {
+                ->whereHas('becario.user', function($q) {
                     $q->where('activo', 1);
                 })
                 ->get();
@@ -88,7 +90,7 @@ class StatController extends Controller
             $stats_realizado_taller = Stat::where('actividad', 'taller')
                 ->where('estado', 'aprobado')
                 ->where('anulado', 'NO')
-                ->whereHas('user', function($q) {
+                ->whereHas('becario.user', function($q) {
                     $q->where('activo', 1);
                 })
                 ->get();
@@ -96,7 +98,7 @@ class StatController extends Controller
             $stats_realizado_chat = Stat::where('actividad', 'chat')
                 ->where('estado', 'aprobado')
                 ->where('anulado', 'NO')
-                ->whereHas('user', function($q) {
+                ->whereHas('becario.user', function($q) {
                     $q->where('activo', 1);
                 })
                 ->get();
@@ -106,7 +108,7 @@ class StatController extends Controller
                 ->where('estado', 'aprobado')
                 ->where('anulado', 'NO')
                 ->where('fecha', '>=', $startOfYear)
-                ->whereHas('user', function($q) {
+                ->whereHas('becario.user', function($q) {
                     $q->where('activo', 1);
                 })
                 ->get();
@@ -118,7 +120,7 @@ class StatController extends Controller
                 ->where('estado', 'aprobado')
                 ->where('anulado', 'NO')
                 ->where('fecha', '>=', $startOfYear)
-                ->whereHas('user', function($q) {
+                ->whereHas('becario.user', function($q) {
                     $q->where('activo', 1);
                 })
                 ->get();
@@ -130,7 +132,7 @@ class StatController extends Controller
                 ->where('estado', 'aprobado')
                 ->where('anulado', 'NO')
                 ->where('fecha', '>=', $startOfYear)
-                ->whereHas('user', function($q) {
+                ->whereHas('becario.user', function($q) {
                     $q->where('activo', 1);
                 })
                 ->get();
@@ -142,7 +144,7 @@ class StatController extends Controller
                 ->where('estado', 'aprobado')
                 ->where('anulado', 'NO')
                 ->where('fecha', '>=', $startOfYear)
-                ->whereHas('user', function($q) {
+                ->whereHas('becario.user', function($q) {
                     $q->where('activo', 1);
                 })
                 ->get();
@@ -203,14 +205,16 @@ public function modalidadindex(String $modalidad, Request $request)
     $user = auth()->user();
 
     // Filtro base
-    $query = Stat::with(['evidencias', 'user.becario'])
+    $query = Stat::with(['evidencias', 'becario.user'])
         ->where('actividad', $modalidad);
 
 
 
     // Filtro por usuario si no es admin
     if ($user->role !== 'admin') {
-        $query->where('user_id', $user->id);
+        $query->whereHas('becario', function($q) use ($user) {
+        $q->where('user_id', $user->id);
+        });
     }
 
     // Filtro por búsqueda
@@ -224,7 +228,7 @@ public function modalidadindex(String $modalidad, Request $request)
               ->orWhere('estado', 'like', "%$search%");
             // Si es admin, buscar también por nombre de becario
             if ($user->role === 'admin') {
-                $q->orWhereHas('user.becario', function($q2) use ($search) {
+                $q->orWhereHas('becario', function($q2) use ($search) {
                     $q2->where('nombre', 'like', "%$search%");
                 });
             }
@@ -256,7 +260,7 @@ public function modalidadindex(String $modalidad, Request $request)
         $stats_anual = Stat::where('anulado', 'NO')
             ->where('estado', 'aprobado')
             ->whereBetween('fecha', [$startOfYear, $endOfYear])
-            ->whereHas('user', function($q) {
+            ->whereHas('becario.user', function($q) {
             $q->where('activo', 1);
             })
             ->selectRaw('
@@ -274,7 +278,7 @@ public function modalidadindex(String $modalidad, Request $request)
         $stats_realizado = Stat::where('actividad', $modalidad)
             ->where('estado', 'aprobado')
             ->where('anulado', 'NO')
-            ->whereHas('user', function($q) {
+            ->whereHas('becario.user', function($q) {
             $q->where('activo', 1);
             })
             ->get();
@@ -284,7 +288,7 @@ public function modalidadindex(String $modalidad, Request $request)
             ->where('estado', 'aprobado')
             ->where('anulado', 'NO')
             ->where('fecha', '>=', $startOfYear)
-            ->whereHas('user', function($q) {
+            ->whereHas('becario.user', function($q) {
             $q->where('activo', 1);
             })
             ->sum('duracion');
@@ -293,7 +297,7 @@ public function modalidadindex(String $modalidad, Request $request)
             ->where('estado', 'aprobado')
             ->where('anulado', 'NO')
             ->where('fecha', '>=', $startOfYear)
-            ->whereHas('user', function($q) {
+            ->whereHas('becario.user', function($q) {
             $q->where('activo', 1);
             })
             ->sum('duracion');
@@ -302,7 +306,7 @@ public function modalidadindex(String $modalidad, Request $request)
             ->where('estado', 'aprobado')
             ->where('anulado', 'NO')
             ->where('fecha', '>=', $startOfYear)
-            ->whereHas('user', function($q) {
+            ->whereHas('becario.user', function($q) {
             $q->where('activo', 1);
             })
             ->sum('duracion');
@@ -311,7 +315,7 @@ public function modalidadindex(String $modalidad, Request $request)
             ->where('estado', 'aprobado')
             ->where('anulado', 'NO')
             ->where('fecha', '>=', $startOfYear)
-            ->whereHas('user', function($q) {
+            ->whereHas('becario.user', function($q) {
             $q->where('activo', 1);
             })
             ->sum('duracion');
@@ -363,12 +367,14 @@ public function modalidadindex(String $modalidad, Request $request)
         $meta_taller = $user->becario->meta_taller;
         $meta_chat = $user->becario->meta_chat;
 
-        $stats_anual = Stat::where('user_id', $user->id)
-            ->where('anulado', 'NO')
+       $stats_anual = Stat::where('anulado', 'NO')
             ->where('estado', 'aprobado')
             ->whereBetween('fecha', [$startOfYear, $endOfYear])
-            ->whereHas('user', function($q) {
-            $q->where('activo', 1);
+            ->whereHas('becario', function($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
+            ->whereHas('becario.user', function($q) {
+                $q->where('activo', 1);
             })
             ->selectRaw('
                 MONTH(fecha) as month,
@@ -381,53 +387,63 @@ public function modalidadindex(String $modalidad, Request $request)
             ->groupBy('month')
             ->get()
             ->keyBy('month');
-
-        $stats_realizado = Stat::where('user_id', $user->id)
-            ->where('actividad', $modalidad)
+            
+        $stats_realizado = Stat::where('actividad', $modalidad)
             ->where('estado', 'aprobado')
             ->where('anulado', 'NO')
-            ->whereHas('user', function($q) {
-            $q->where('activo', 1);
+            ->whereHas('becario', function($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
+            ->whereHas('becario.user', function($q) {
+                $q->where('activo', 1);
             })
             ->get();
 
         // Totales y porcentajes por modalidad
-        $total_volin = Stat::where('user_id', $user->id)
-            ->where('actividad', 'volin')
+        $total_volin = Stat::where('actividad', 'volin')
             ->where('estado', 'aprobado')
             ->where('anulado', 'NO')
             ->where('fecha', '>=', $startOfYear)
-            ->whereHas('user', function($q) {
+            ->whereHas('becario', function($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
+            ->whereHas('becario.user', function($q) {
+                $q->where('activo', 1);
+            })
+            ->sum('duracion');
+
+        $total_volex = Stat::where('actividad', 'volex')
+            ->where('estado', 'aprobado')
+            ->where('anulado', 'NO')
+            ->where('fecha', '>=', $startOfYear)
+            ->whereHas('becario', function($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
+            ->whereHas('becario.user', function($q) {
             $q->where('activo', 1);
             })
             ->sum('duracion');
 
-        $total_volex = Stat::where('user_id', $user->id)
-            ->where('actividad', 'volex')
+        $total_taller = Stat::where('actividad', 'taller')
             ->where('estado', 'aprobado')
             ->where('anulado', 'NO')
             ->where('fecha', '>=', $startOfYear)
-            ->whereHas('user', function($q) {
+            ->whereHas('becario', function($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
+            ->whereHas('becario.user', function($q) {
             $q->where('activo', 1);
             })
             ->sum('duracion');
 
-        $total_taller = Stat::where('user_id', $user->id)
-            ->where('actividad', 'taller')
+        $total_chat = Stat::where('actividad', 'chat')
             ->where('estado', 'aprobado')
             ->where('anulado', 'NO')
             ->where('fecha', '>=', $startOfYear)
-            ->whereHas('user', function($q) {
-            $q->where('activo', 1);
+            ->whereHas('becario', function($q) use ($user) {
+                 $q->where('user_id', $user->id);
             })
-            ->sum('duracion');
-
-        $total_chat = Stat::where('user_id', $user->id)
-            ->where('actividad', 'chat')
-            ->where('estado', 'aprobado')
-            ->where('anulado', 'NO')
-            ->where('fecha', '>=', $startOfYear)
-            ->whereHas('user', function($q) {
+            ->whereHas('becario.user', function($q) {
             $q->where('activo', 1);
             })
             ->sum('duracion');
@@ -499,7 +515,7 @@ public function modalidadindex(String $modalidad, Request $request)
 
             // Notificar al usuario dueño de la actividad
             Notification::create([
-                'user_id' => $stat->user_id,
+                'user_id' => $stat->becario->user_id,
                 'titulo' => 'Actividad aprobada',
                 'mensaje' => 'Tu actividad "' . $stat->titulo . ' ('. \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') .') fue aprobada.',
                 'stat_id' => $stat->id,
@@ -518,7 +534,7 @@ public function modalidadindex(String $modalidad, Request $request)
             $stat->save();
             // Notificar al usuario dueño de la actividad
             Notification::create([
-                'user_id' => $stat->user_id,
+                'user_id' => $stat->becario->user_id,
                 'titulo' => 'Actividad rechazada',
                 'mensaje' => 'Tu actividad "' . $stat->titulo . ' ('. \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') .') fue rechazada.',
                 'stat_id' => $stat->id,
@@ -541,6 +557,8 @@ public function modalidadindex(String $modalidad, Request $request)
         ]);
 
 
+        $becario = auth()->user()->becario;
+
         $stat = Stat::create([
             'titulo' => $request->titulo,
             'actividad' => $request->actividad,
@@ -548,7 +566,7 @@ public function modalidadindex(String $modalidad, Request $request)
             'duracion' => $request->duracion,
             'observacion' => $request->motivo ?? null,
             'fecha' => $request->fecha,
-            'user_id' => auth()->user()->id,
+            'becario_id' => $becario->id,
         ]);
 
         // si el request trae imagenes
@@ -587,13 +605,13 @@ public function modalidadindex(String $modalidad, Request $request)
 
    public function allStats()
     {
-        $stats = Stat::with(['user.becario'])->orderBy('created_at', 'desc')->get();
+        $stats = Stat::with(['becario.user'])->orderBy('created_at', 'desc')->get();
         return response()->json($stats);
     }
 
     public function allStatsmodalidad(String $modalidad)
     {
-        $stats = Stat::with(['user.becario'])
+        $stats = Stat::with(['becario.user'])
         ->orderBy('created_at', 'desc')
         ->where('actividad', $modalidad)
         ->get();
@@ -610,7 +628,9 @@ public function modalidadindex(String $modalidad, Request $request)
 
     // Filtro por usuario (si no es admin)
     if ($user->role !== 'admin') {
-        $query->where('user_id', $user->id);
+        $query->whereHas('becario', function($q) use ($user) {
+        $q->where('user_id', $user->id);
+        });
     }
 
     // Filtro por búsqueda
@@ -662,3 +682,4 @@ public function modalidadindex(String $modalidad, Request $request)
 
 
 }
+

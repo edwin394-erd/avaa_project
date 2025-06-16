@@ -31,8 +31,8 @@ class Becario extends Model
         'meta_volex' => 'float',
     ];
 
-    public function User()
+    public function user()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
 }
