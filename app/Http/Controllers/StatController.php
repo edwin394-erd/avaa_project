@@ -54,9 +54,11 @@ class StatController extends Controller
                 $query->whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin]);
             }
 
-            $stats = $query->with(['becario.user', 'evidencias'])->orderBy('created_at', 'desc')->paginate(8);
+
 
         if ($user->role === 'admin') {
+
+            $stats = $query->where('anulado', 'NO')->with(['becario.user', 'evidencias'])->orderBy('created_at', 'desc')->paginate(8);
 
             $meta_volin = \App\Models\Becario::whereHas('user', function($q) {
                 $q->where('activo', 1);
@@ -172,6 +174,7 @@ class StatController extends Controller
             'porcen_chat' => $porcen_chat ?? 0,
         ]);
         } else {
+            $stats = $query->with(['becario.user', 'evidencias'])->orderBy('created_at', 'desc')->paginate(8);
 
              return view('stats.index')->with([
             'user' => $user,
@@ -244,6 +247,8 @@ public function modalidadindex(String $modalidad, Request $request)
 
     // Estadísticas y metas
     if ($user->role === 'admin') {
+        // Paginación y orden
+        $stats = $query->where('anulado', 'NO')->orderBy('created_at', 'desc')->paginate(8);
         $meta_volin = \App\Models\Becario::whereHas('user', function($q) {
             $q->where('activo', 1);
         })->sum('meta_volin');
@@ -387,7 +392,7 @@ public function modalidadindex(String $modalidad, Request $request)
             ->groupBy('month')
             ->get()
             ->keyBy('month');
-            
+
         $stats_realizado = Stat::where('actividad', $modalidad)
             ->where('estado', 'aprobado')
             ->where('anulado', 'NO')

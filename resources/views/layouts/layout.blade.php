@@ -465,7 +465,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
-        <div class="absolute right-0 bottom-0 h-1 ${bar} transition-all duration-[3000ms] ease-linear" style="width:100%;" id="notif-progress"></div>
+        <div class="absolute right-0 bottom-0 h-1 ${bar} transition-all duration-[5000ms] ease-linear" style="width:100%;" id="notif-progress"></div>
     `;
     notificationsContainer.insertBefore(notification, notificationsContainer.firstChild);
     setTimeout(() => {
@@ -478,7 +478,7 @@
     }, 10);
     }, 10);
     const closeBtn = notification.querySelector('.closeBtn');
-    let hideTimeout = setTimeout(() => removeNotification(notification), 3000);
+    let hideTimeout = setTimeout(() => removeNotification(notification), 5000);
     closeBtn.addEventListener('click', function() {
         clearTimeout(hideTimeout);
         removeNotification(notification);

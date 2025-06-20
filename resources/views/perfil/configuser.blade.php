@@ -4,7 +4,7 @@
 @section('titulo-tab')
     Perfil
 @endsection
-<script src="//unpkg.com/alpinejs" defer></script>
+{{-- <script src="//unpkg.com/alpinejs" defer></script> --}}
 
 @section('contenido')
 <div class="flex flex-col xl:flex-row w-full py-10 px-4">
@@ -15,12 +15,12 @@
                 <div class="bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 px-2 rounded-lg px-4 md:px-8 py-6 w-full min-h-[620px]">
                     <h1 class="text-lg 2xl:text-xl font-bold text-gray-800 dark:text-gray-100">Configuración Usuario</h1>
                     <hr class="w-full border-t-2 border-gray-300 dark:border-slate-700 my-2"><br>
-                    <form action="{{ route('configuser.update') }}" method="POST" novalidate>
+                    <form action="{{ route('configuser.update') }}" method="POST" enctype="multipart/form-data" novalidate>
                         @csrf
                         <!-- Foto de Perfil -->
                         <div class="mb-4 flex flex-col items-center">
                             <div class="relative w-24 h-24 mb-2">
-                                <img src="{{ auth()->user()->foto_perfil ? asset('storage/' . auth()->user()->foto_perfil) : asset('imgs/default-profile.jpg') }}"
+                                <img src="{{ auth()->user()->fotoperfil ? asset('storage/' . auth()->user()->fotoperfil) : asset('imgs/default-profile.jpg') }}"
                                      alt="Foto de perfil"
                                      class="w-24 h-24 rounded-full object-cover border-2 border-gray-300 dark:border-slate-700 bg-gray-100 dark:bg-slate-800">
                                 <label for="foto_perfil" class="absolute bottom-0 right-0 bg-slate-800 hover:bg-slate-700 text-white rounded-full p-1 cursor-pointer shadow">
@@ -369,5 +369,12 @@ function togglePassword(fieldId, btn) {
         iconHide.classList.add('hidden');
     }
 }
+</script>
+<script>
+document.getElementById('foto_perfil').addEventListener('change', function(e) {
+    if (this.files.length) {
+        this.closest('.relative').querySelector('img').src = URL.createObjectURL(this.files[0]);
+    }
+});
 </script>
 @endsection

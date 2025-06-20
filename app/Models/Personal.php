@@ -10,10 +10,8 @@ class Personal extends Model
     use HasFactory;
     protected $fillable = [
         'user_id',
-        'fotoperfil',
         'nombre',
         'apellido',
-        'correo',
         'fecha_nacimiento',
         'cedula',
         'genero',
@@ -27,6 +25,6 @@ class Personal extends Model
         return $this->belongsTo(User::class);
     }
 
-     
+
 
 }

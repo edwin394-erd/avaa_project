@@ -387,13 +387,13 @@
                     <table class="w-full text-sm text-left rtl:text-right text-black dark:text-gray-100 table-auto bg-white dark:bg-slate-900" id="myTable">
                         <thead class="text-gray-700 dark:text-gray-200 text-md uppercase border-b border-gray-200 dark:border-gray-700">
                             <tr>
-                                <th class="px-3 py-3 text-center">ID</th>
-                                <th class="px-3 py-3 text-center">Nombre</th>
-                                <th class="px-3 py-3 text-center">Correo</th>
-                                <th class="px-3 py-3 text-center">Cédula</th>
-                                <th class="px-3 py-3 text-center">Teléfono</th>
-                                <th class="px-3 py-3 text-center">Estado</th>
-                                <th class="px-3 py-3 text-center">Acciones</th>
+                                <th class="px-3 py-3 text-left">ID</th>
+                                <th class="px-3 py-3 text-left">Nombre</th>
+                                <th class="px-3 py-3 text-left">Correo</th>
+                                <th class="px-3 py-3 text-left">Cédula</th>
+                                <th class="px-3 py-3 text-left">Teléfono</th>
+                                <th class="px-3 py-3 text-left">Estado</th>
+                                <th class="px-3 py-3 text-left">Acciones</th>
                             </tr>
                         </thead>
                        <tbody>
@@ -401,33 +401,52 @@
         <tr class="bg-white dark:bg-slate-900 text-sm border-b border-gray-200 dark:border-gray-700 transition duration-300 ease-in-out hover:bg-blue-100 dark:hover:bg-blue-900/40
             {{ $user->role == 'admin' ? 'row-personal' : 'row-becario' }}
             {{ $user->role == 'admin' ? 'hidden' : '' }}">
-            <td class="px-3 py-4 text-center">{{ $user->id }}</td>
-            <td class="px-3 py-4 text-center">
-                @if ($user->role == 'user')
-                    <a href="{{ route('users.showbecario', $user->id) }}">{{ $user->becario->nombre ?? '' }} {{ $user->becario->apellido ?? '' }}</a>
-                @elseif ($user->role == 'admin')
-                    {{ $user->personal->nombre ?? '' }} {{ $user->personal->apellido ?? '' }}
-                @endif
-
+            <td class="px-3 py-4 text-left">{{ $user->id }}</td>
+            <td class="px-3 py-4 text-left align-middle">
+                <div class="flex items-center gap-2">
+                    @if ($user->role == 'user')
+                        @if($user->fotoperfil)
+                            <img src="{{ asset('storage/' . $user->fotoperfil) }}" alt="Foto de perfil" class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+                        @else
+                            <img src="{{ asset('imgs/default-profile.jpg') }}" alt="Foto de perfil" class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+                        @endif
+                        <a href="{{ route('users.showbecario', $user->id) }}">
+                            <span class="hover:underline text-blue-700 dark:text-blue-300 cursor-pointer block">
+                                {{ $user->becario->nombre ?? '' }} {{ $user->becario->apellido ?? '' }}
+                            </span>
+                        </a>
+                    @elseif ($user->role == 'admin')
+                        @if($user->personal && $user->fotoperfil)
+                            <img src="{{ asset('storage/' . $user->fotoperfil) }}" alt="Foto de perfil" class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+                        @else
+                            <img src="{{ asset('imgs/default-profile.jpg') }}" alt="Foto de perfil" class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+                        @endif
+                        <span>
+                            {{ $user->personal->nombre ?? '' }} {{ $user->personal->apellido ?? '' }}
+                        </span>
+                    @endif
+                </div>
             </td>
-            <td class="px-3 py-4 text-center">{{ $user->email }}</td>
-            <td class="px-3 py-4 text-center">
+            <td class="px-3 py-4 text-left">{{ $user->email }}</td>
+            <td class="px-3 py-4 text-left">
                 {{ $user->becario->cedula ?? $user->personal->cedula ?? '-' }}
             </td>
-            <td class="px-3 py-4 text-center">{{ $user->becario->telefono ?? $user->personal->telefono ?? '-'}}</td>
-            <td class="px-3 py-4 text-center">
+            <td class="px-3 py-4 text-left">{{ $user->becario->telefono ?? $user->personal->telefono ?? '-'}}</td>
+            <td class="px-3 py-4 text-left">
                 @if ($user->activo == '1')
-                    <span class="bg-green-200 dark:bg-green-700 p-2 rounded text-green-800 dark:text-green-200">Activo</span>
+                    <span class="bg-green-200 dark:bg-green-800 p-2 rounded text-green-800 dark:text-green-200">Activo</span>
                 @else
-                    <span class="bg-red-200 dark:bg-red-700 p-2 rounded text-red-800 dark:text-red-200">Inactivo</span>
+                    <span class="bg-red-200 dark:bg-red-800 p-2 rounded text-red-800 dark:text-red-200">Inactivo</span>
                 @endif
             </td>
-            <td class="px-3 py-4 text-center">
-                <button
-                    class="text-blue-600 dark:text-blue-400 hover:underline text-center mx-auto"
-                    onclick="abrirModal('modal-detalle-{{ $user->id }}')">
-                    Ver Detalle
-                </button>
+            <td class="px-3 py-4 text-left">
+                @if($user->role == 'admin')
+                    <button
+                        class="text-blue-600 dark:text-blue-400 hover:underline text-center mx-auto"
+                        onclick="abrirModal('modal-detalle-{{ $user->id }}')">
+                        Ver Detalle
+                    </button>
+                @endif
                 @if($user->role == 'user')
                     <button class="text-yellow-600 dark:text-yellow-400 hover:underline mx-1"
                         onclick="abrirModalEditar('becario', {{ $user->id }})">Editar</button>
@@ -448,7 +467,7 @@
                     <div class="bg-white dark:bg-slate-900 rounded-lg p-6 max-w-sm w-full relative">
                         <h2 class="text-lg font-bold mb-4 text-center text-gray-800 dark:text-gray-100">Confirmar activación</h2>
                       <h2 class="text-sm mb-1 text-center text-gray-700 dark:text-gray-200">
-                        Usuario: 
+                        Usuario:
                         {{ optional($user->becario)->nombre ?? optional($user->personal)->nombre ?? '-' }}
                         {{ optional($user->becario)->apellido ?? optional($user->personal)->apellido ?? '-' }}
                     </h2>
@@ -478,7 +497,7 @@
                     <div class="bg-white dark:bg-slate-900 rounded-lg p-6 max-w-sm w-full relative">
                         <h2 class="text-lg font-bold mb-4 text-center text-gray-800 dark:text-gray-100">Confirmar desactivación</h2>
                        <h2 class="text-sm mb-1 text-center text-gray-700 dark:text-gray-200">
-                            Usuario: 
+                            Usuario:
                             {{ optional($user->becario)->nombre ?? optional($user->personal)->nombre ?? '-' }}
                             {{ optional($user->becario)->apellido ?? optional($user->personal)->apellido ?? '-' }}
                         </h2>
@@ -768,8 +787,6 @@ function generarReporteUsuarios(tipo) {
                 becario.direccion || '-',
                 becario.fecha_nacimiento || '-',
                 becario.carrera || '-',
-                becario.semestre || '-',
-                becario.nivel_cevaz || '-',
                 becario.meta_taller || '-',
                 becario.meta_chat || '-',
                 becario.meta_volin || '-',
@@ -794,8 +811,7 @@ function generarReporteUsuarios(tipo) {
     let headers, filename, titulo;
     if (tipo === 'user') {
         headers = [[
-            'ID', 'Nombre', 'Correo', 'Cédula', 'Teléfono', 'Dirección', 'Fecha Nac.', 'Carrera', 'Semestre',
-            'Nivel Cevaz', 'Meta Taller', 'Meta Chat', 'Meta Volin', 'Meta Volex', 'Estado'
+            'ID', 'Nombre', 'Correo', 'Cédula', 'Teléfono', 'Dirección', 'Fecha Nac.', 'Carrera', 'Meta Taller', 'Meta Chat', 'Meta Volin', 'Meta Volex', 'Estado'
         ]];
         filename = 'Reporte_Becarios_';
         titulo = 'Reporte de Becarios';

@@ -19,36 +19,53 @@ class PerfilController extends Controller
 
     }
 
-     public function update(Request $request)
+    public function update(Request $request)
     {
         $user = Auth::user();
 
-        $request->validate([
+        $rules = [
+            'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4096', // Máximo 4MB
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'required',
-            'new_password' => 'nullable|min:8',
-            'confirm_password' => 'same:new_password',
-        ]);
+        ];
 
-        // Verifica la contraseña actual
-        if (!Hash::check($request->password, $user->password)) {
+        // Solo requiere contraseña si se cambia email o contraseña
+        $changingEmail = $user->email !== $request->email;
+        $changingPassword = $request->filled('new_password');
+
+        if ($changingEmail || $changingPassword) {
+            $rules['password'] = 'required';
+        }
+
+        if ($changingPassword) {
+            $rules['new_password'] = 'min:8';
+            $rules['confirm_password'] = 'same:new_password';
+        }
+
+        $request->validate($rules);
+
+        // Verifica la contraseña actual solo si se cambia email o contraseña
+        if (($changingEmail || $changingPassword) && !Hash::check($request->password, $user->password)) {
             return back()->withErrors(['password' => 'La contraseña actual es incorrecta.'])->withInput();
         }
 
         // Actualiza el email si cambió
-        if ($user->email !== $request->email) {
+        if ($changingEmail) {
             $user->email = $request->email;
         }
 
+        if ($request->hasFile('foto_perfil')) {
+            $path = $request->file('foto_perfil')->store('perfil', 'public');
+            $user->fotoperfil = $path;
+        }
+
         // Actualiza la contraseña si se ingresó una nueva
-        if ($request->filled('new_password')) {
+        if ($changingPassword) {
             $user->password = Hash::make($request->new_password);
         }
 
         $user->save();
 
         return back()->with('success', 'Datos actualizados correctamente.');
-
     }
 
     public function datosuserUpdate(Request $request)

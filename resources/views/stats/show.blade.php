@@ -193,7 +193,20 @@
 @forelse ($stats as $stat)
     <tr id="stat-{{ $stat->id }}" class="bg-white dark:bg-slate-900 text-sm border-b border-gray-200 dark:border-slate-700 transition duration-300 ease-in-out {{ $hover }} text-sm">
         @if ($user->role == 'admin')
-            <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100"> {{ optional($stat->becario)->nombre ?? '-' }} {{ optional($stat->becario)->apellido ?? '-' }}</td>
+            <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">
+                <div class="flex items-center justify-center gap-2">
+                    @if($stat->becario && $stat->becario->user && $stat->becario->user->fotoperfil)
+                        <img src="{{ asset('storage/' . $stat->becario->user->fotoperfil) }}" alt="Foto de perfil" class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+                    @else
+                        <img src="{{ asset('imgs/default-profile.jpg') }}" alt="Foto de perfil" class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+                    @endif
+                    <a href="{{ route('users.showbecario', $stat->becario->user->id ?? '') }}">
+                        <span class="hover:underline text-blue-700 dark:text-blue-300 cursor-pointer">
+                            {{ $stat->becario->nombre ?? '' }} {{ $stat->becario->apellido ?? '' }}
+                        </span>
+                    </a>
+                </div>
+            </td>
         @endif
         <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ $stat->titulo }}</td>
         <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">
@@ -502,10 +515,15 @@
         </div>
     </div>
 </div>
+
 @endsection
 
 
 @section('scripts')
+
+<!-- =========================
+    FUNCIONES DE MODALES Y EVIDENCIAS
+========================= -->
 <script>
 // Enviar ambos formularios con el btn_enviar
 function enviarFormularios() {
@@ -568,6 +586,10 @@ function cerrarModalEvidencias() {
     }, 200);
 }
 </script>
+
+<!-- =========================
+    MODAL FILTRAR POR FECHA
+========================= -->
 <script>
 const abrirBtn = document.getElementById('abrir-modal-filtrar-fecha');
 if (abrirBtn) {
@@ -588,9 +610,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
 </script>
 
+<!-- =========================
+    FUNCIONES GENERALES DE MODALES
+========================= -->
 <script>
 function abrirModal(id) {
     const modal = document.getElementById(id);
@@ -651,20 +675,25 @@ document.getElementById('modal-img-ampliada').addEventListener('click', function
 });
 </script>
 
- <script>
-
- document.querySelector('button[onclick="enviarFormularios()"]').addEventListener('click', function(e) {
-                // Si Dropzone está subiendo archivos o hay archivos en cola
-                if (myDropzone.getUploadingFiles().length > 0 || myDropzone.getQueuedFiles().length > 0) {
-                    e.preventDefault();
-                    alert('Por favor espera a que se suban todas las imágenes antes de enviar el formulario.');
-                    return false;
-                }
-                // Si no, envía el formulario principal
-                document.querySelector('form[action="{{ route('stat.store') }}"]').submit();
-            });
+<!-- =========================
+    DROPZONE Y ENVÍO DE FORMULARIOS
+========================= -->
+<script>
+document.querySelector('button[onclick="enviarFormularios()"]').addEventListener('click', function(e) {
+    // Si Dropzone está subiendo archivos o hay archivos en cola
+    if (myDropzone.getUploadingFiles().length > 0 || myDropzone.getQueuedFiles().length > 0) {
+        e.preventDefault();
+        alert('Por favor espera a que se suban todas las imágenes antes de enviar el formulario.');
+        return false;
+    }
+    // Si no, envía el formulario principal
+    document.querySelector('form[action="{{ route('stat.store') }}"]').submit();
+});
 </script>
 
+<!-- =========================
+    ANIMACIÓN DE BARRA DE PROGRESO
+========================= -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const barra = document.getElementById('barra-progreso');
@@ -685,6 +714,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<!-- =========================
+    GRÁFICO DE BARRAS (APEXCHARTS)
+========================= -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     let dataPorMes;
@@ -703,8 +735,6 @@ document.addEventListener("DOMContentLoaded", function() {
             break;
         default:
     }
-    console.log("dataPorMes:", dataPorMes);
-
     // Obtener la fecha actual
     const currentDate = new Date();
 
@@ -718,7 +748,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     const lastSixMonthIndexes = getLastSixMonthIndexes();
-    console.log("lastSixMonthIndexes:" + lastSixMonthIndexes);
 
     // Extraer los últimos 6 meses de la actividad seleccionada según $modalidad
     let horasUltimos6Meses = lastSixMonthIndexes.map(index => dataPorMes[(index + 1) % 12] ?? 0);
@@ -779,14 +808,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     const el = document.getElementById("bar-chart");
                     const ww = window.innerWidth;
                     if (el) {
-                        // Usa un valor base pero limita el máximo y mínimo
                         if (ww >= 1536) return 390;
                         if (ww >= 1280) return 280;
                         if (ww >= 900) return 250;
                         if (ww >= 640) return 200;
                         return 160;
                     }
-                    // Fallback si no existe el elemento
                     if (ww >= 1536) return 420;
                     if (ww >= 1280) return 350;
                     if (ww >= 900) return 300;
@@ -870,52 +897,51 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-
-
+<!-- =========================
+    FUNCIONES DE TABLA, FILTRO Y REPORTE PDF
+========================= -->
 <script>
-    let allStats = [];
-    let filteredStats = [];
-    let isAdmin = @json($user->role === 'admin');
+let allStats = [];
+let filteredStats = [];
+let isAdmin = @json($user->role === 'admin');
 
-    // Cargar todos los registros al cargar la página
-    fetch("{{ route('stats.all.modalidad', $modalidad) }}")
-        .then(res => res.json())
-        .then(data => {
-            allStats = data;
-            filteredStats = data;
-        });
-
-        console.log("hola");
-
-    // Botón "Ver todo" para limpiar el filtro y mostrar todas las filas
-    document.getElementById('btn-ver-todo').addEventListener('click', function() {
-        document.getElementById('table-search').value = '';
-        document.querySelectorAll('#myTable tbody tr').forEach(row => {
-            row.style.display = '';
-        });
-        filteredStats = allStats;
+// Cargar todos los registros al cargar la página
+fetch("{{ route('stats.all.modalidad', $modalidad) }}")
+    .then(res => res.json())
+    .then(data => {
+        allStats = data;
+        filteredStats = data;
     });
 
-    // Reporte PDF usando los datos ya cargados
-    function toDataURL(url, callback) {
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function() {
-            const reader = new FileReader();
-            reader.onloadend = function() {
-                callback(reader.result);
-            }
-            reader.readAsDataURL(xhr.response);
-        };
-        xhr.onerror = function() {
-            alert('No se pudo cargar el logo para el reporte. El PDF se generará sin logo.');
-            callback('');
-        };
-        xhr.open('GET', url);
-        xhr.responseType = 'blob';
-        xhr.send();
-    }
+// Botón "Ver todo" para limpiar el filtro y mostrar todas las filas
+document.getElementById('btn-ver-todo').addEventListener('click', function() {
+    document.getElementById('table-search').value = '';
+    document.querySelectorAll('#myTable tbody tr').forEach(row => {
+        row.style.display = '';
+    });
+    filteredStats = allStats;
+});
 
-    // Becario
+// Reporte PDF usando los datos ya cargados
+function toDataURL(url, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        const reader = new FileReader();
+        reader.onloadend = function() {
+            callback(reader.result);
+        }
+        reader.readAsDataURL(xhr.response);
+    };
+    xhr.onerror = function() {
+        alert('No se pudo cargar el logo para el reporte. El PDF se generará sin logo.');
+        callback('');
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+}
+
+// Becario
 document.getElementById('btn-generar-reporte')?.addEventListener('click', function() {
     let modalidad = "{{ $n_actividad }}";
     let nombreUsuario = "{{ $user->role == 'user' ? ($user->becario->nombre . ' ' . $user->becario->apellido) : (($user->personal->nombre ?? 'Administrador') . ' ' . ($user->personal->apellido ?? '')) }}";
@@ -968,9 +994,9 @@ document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', 
     const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
     const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
 
-    // Filtrar solo stats de la modalidad actual
+    // Filtrar solo stats de la modalidad actual y excluir anuladas
     const rows = allStats
-        .filter(stat => stat.actividad === "{{ $modalidad }}")
+        .filter(stat => stat.actividad === "{{ $modalidad }}" && stat.anulado !== 'SI')
         .map(stat => [
             (stat.becario?.nombre || '') + ' ' + (stat.becario?.apellido || ''),
             stat.titulo,
@@ -1006,8 +1032,11 @@ document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', 
         doc.save('Reporte_General_Actividades_' + new Date().toLocaleString() + '.pdf');
     });
 });
-
 </script>
+
+<!-- =========================
+    ANIMACIÓN Y RESPONSIVE DEL FORMULARIO IZQUIERDA
+========================= -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const btn = document.getElementById('toggle-form-btn');
@@ -1038,9 +1067,9 @@ document.addEventListener('DOMContentLoaded', function() {
             Array.from(innerDiv.children).forEach(child => {
                 child.style.display = '';
             });
-              if (window.renderChart) {
-            renderChart();
-        }
+            if (window.renderChart) {
+                renderChart();
+            }
         } else {
             formDiv.classList.remove('xl:w-1/4', 'w-full');
             formDiv.classList.add('xl:w-[56px]', 'w-[56px]', 'overflow-hidden');
@@ -1087,6 +1116,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
+<!-- =========================
+    ESTILOS PARA TRANSICIÓN
+========================= -->
 <style>
 /* Quita la transición solo cuando tiene la clase notransition */
 #formulario-izquierda.notransition,

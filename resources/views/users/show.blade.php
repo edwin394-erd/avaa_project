@@ -1,386 +1,478 @@
-{{-- resources/views/perfil/configuser.blade.php --}}
+{{-- resources/views/users/show.blade.php --}}
 @extends('layouts.layout')
 
 @section('titulo-tab')
-    Becario: NOMBRE
+    Becario: {{ $user->becario->nombre ?? '' }} {{ $user->becario->apellido ?? '' }}
 @endsection
-<script src="//unpkg.com/alpinejs" defer></script>
 
 @section('contenido')
-<div class="flex flex-col xl:flex-row w-full py-10 px-4">
-    <!-- Lado Izquierdo: Formulario Usuario -->
-    <div class="w-full xl:w-1/4 px-0 xl:pr-3 mb-8 xl:mb-0 flex flex-col">
-        <div class="p-0 flex flex-col h-full">
-            <div class="flex w-full">
-                <div class="bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 px-2 rounded-lg px-4 md:px-8 py-6 w-full min-h-[620px]">
-                    <h1 class="text-lg 2xl:text-xl font-bold text-gray-800 dark:text-gray-100">Configuración Usuario</h1>
-                    <hr class="w-full border-t-2 border-gray-300 dark:border-slate-700 my-2"><br>
-                    <form action="{{ route('configuser.update') }}" method="POST" novalidate>
-                        @csrf
-                        <!-- Foto de Perfil -->
-                        <div class="mb-4 flex flex-col items-center">
-                            <div class="relative w-24 h-24 mb-2">
-                                <img src="{{ auth()->user()->foto_perfil ? asset('uploads/' . auth()->user()->foto_perfil) : asset('imgs/default-profile.jpg') }}"
-                                     alt="Foto de perfil"
-                                     class="w-24 h-24 rounded-full object-cover border-2 border-gray-300 dark:border-slate-700 bg-gray-100 dark:bg-slate-800">
-                                <label for="foto_perfil" class="absolute bottom-0 right-0 bg-slate-800 hover:bg-slate-700 text-white rounded-full p-1 cursor-pointer shadow">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2a2.828 2.828 0 11-4-4l6 6a2.828 2.828 0 11-4-4z" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M16 21H4a2 2 0 01-2-2V6a2 2 0 012-2h7" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    <input type="file" name="foto_perfil" id="foto_perfil" class="hidden" accept="image/*"
-                                        onchange="if(this.files.length){this.closest('.relative').querySelector('img').src = URL.createObjectURL(this.files[0]);}">
-                                </label>
-                            </div>
-                            @error('foto_perfil')
-                                <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                            @enderror
-                            <span class="text-xs text-gray-500 dark:text-gray-400">Formatos permitidos: JPG, PNG. Máx: 2MB.</span>
-                        </div>
-                        <!-- Email -->
-                        <div class="mb-2">
-                            <div class="flex">
-                                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Email</label>
-                                @error('email')
-                                    <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                                @enderror
-                            </div>
-                            <input type="email" name="email" id="email"
-                                class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('email') border-red-700 @enderror"
-                                placeholder="Email" required value="{{ old('email', auth()->user()->email) }}" autocomplete="email" />
-                        </div>
 
-                        <!-- Contraseña actual -->
-                        <div class="mb-2">
-                            <div class="flex">
-                                <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Contraseña actual</label>
-                                @error('password')
-                                    <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="relative">
-                                <input type="password" name="password" id="password"
-                                    class="text-sm shadow-sm rounded-md w-full px-3 py-2 pr-10 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('password') border-red-700 @enderror"
-                                    placeholder="Contraseña actual" required autocomplete="current-password" value="{{ old('password') }}" />
-                                <button type="button" onclick="togglePassword('password', this)" class="absolute inset-y-0 right-0 flex items-center px-2 py-1 bg-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100 focus:outline-none">
-                                    <span class="icon-show">
-                                        <!-- Ojo abierto -->
-                                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"><path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    </span>
-                                    <span class="icon-hide hidden">
-                                        <!-- Ojo tachado -->
-                                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"><path d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
+<a href="{{ url()->previous() }}" class="inline-flex items-center mb-4 px-4 py-2 bg-gray-300 dark:bg-slate-800 text-gray-700 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-slate-700 transition fixed">
+    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+    Volver
+</a>
 
-                        <!-- Nueva contraseña (opcional) -->
-                        <div class="mb-2">
-                            <div class="flex">
-                                <label for="new_password" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Nueva contraseña (opcional)</label>
-                                @error('new_password')
-                                    <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="relative">
-                                <input type="password" name="new_password" id="new_password"
-                                    class="text-sm shadow-sm rounded-md w-full px-3 py-2 pr-10 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('new_password') border-red-700 @enderror"
-                                    placeholder="Nueva contraseña" autocomplete="new-password" value="{{ old('new_password') }}" />
-                                <button type="button" onclick="togglePassword('new_password', this)" class="absolute inset-y-0 right-0 flex items-center px-2 py-1 bg-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100 focus:outline-none">
-                                    <span class="icon-show">
-                                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"><path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    </span>
-                                    <span class="icon-hide hidden">
-                                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"><path d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
+<div class="flex flex-col xl:flex-row w-full py-10 px-4 gap-1">
 
-                        <!-- Confirmar nueva contraseña -->
-                        <div class="mb-2">
-                            <div class="flex">
-                                <label for="confirm_password" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Confirmar nueva contraseña</label>
-                                @error('confirm_password')
-                                    <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="relative">
-                                <input type="password" name="confirm_password" id="confirm_password"
-                                    class="text-sm shadow-sm rounded-md w-full px-3 py-2 pr-10 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('confirm_password') border-red-700 @enderror"
-                                    placeholder="Confirmar nueva contraseña" autocomplete="new-password" value="{{ old('confirm_password') }}" />
-                                <button type="button" onclick="togglePassword('confirm_password', this)" class="absolute inset-y-0 right-0 flex items-center px-2 py-1 bg-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100 focus:outline-none">
-                                    <span class="icon-show">
-                                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"><path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    </span>
-                                    <span class="icon-hide hidden">
-                                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"><path d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
-
-                       <div class="flex justify-center items-center mt-5 w-full">
-                        <button type="submit" class="w-4/3 xl:w-1/2 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                        Actualizar Datos
-                        </button>
+    <!-- Lado Izquierdo: Información Personal -->
+    <div class="w-full xl:w-1/4 px-0 xl:pr-2 mb-8 xl:mb-0 flex flex-col">
+        <div class="bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg px-6 py-8 flex flex-col items-center">
+            <!-- Foto de Perfil -->
+            <div class="mb-4 flex flex-col items-center">
+                <div class="relative w-28 h-28 mb-2">
+                    <img src="{{ $user->fotoperfil ? asset('storage/' . $user->fotoperfil) : asset('imgs/default-profile.jpg') }}"
+                         alt="Foto de perfil"
+                         class="w-28 h-28 rounded-full object-cover border-2 border-gray-300 dark:border-slate-700 bg-gray-100 dark:bg-slate-800">
+                </div>
+                <span class="text-base font-semibold text-gray-800 dark:text-gray-100 mt-2">
+                    {{ $user->becario->nombre ?? '' }} {{ $user->becario->apellido ?? '' }}
+                </span>
+                <span class="text-sm text-gray-500 dark:text-gray-400">{{ $user->email }}</span>
+            </div>
+            <hr class="w-full border-t-2 border-gray-300 dark:border-slate-700 my-4">
+            <!-- Datos personales -->
+            <div class="w-full ">
+                <!-- Datos personales -->
+                <div class="w-2/2 space-y-2">
+                    <div>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400">Cédula</span>
+                        <span class="block text-sm font-medium text-gray-800 dark:text-gray-100">{{ $user->becario->cedula }}</span>
                     </div>
-                    </form>
+                    <div>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400">Teléfono</span>
+                        <span class="block text-sm font-medium text-gray-800 dark:text-gray-100">{{ $user->becario->telefono }}</span>
+                    </div>
+                    <div>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400">Género</span>
+                        <span class="block text-sm font-medium text-gray-800 dark:text-gray-100">{{ $user->becario->genero }}</span>
+                    </div>
+                    <div>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400">Fecha de nacimiento</span>
+                        <span class="block text-sm font-medium text-gray-800 dark:text-gray-100">{{ $user->becario->fecha_nacimiento }}</span>
+                    </div>
+                    <div>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400">Dirección</span>
+                        <span class="block text-sm font-medium text-gray-800 dark:text-gray-100">{{ $user->becario->direccion }}</span>
+                    </div>
+                    <div>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400">Carrera</span>
+                        <span class="block text-sm font-medium text-gray-800 dark:text-gray-100">{{ $user->becario->carrera }}</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Lado Derecho: Información Personal y Universitaria -->
-<div class="w-full xl:w-3/4 px-0 flex flex-col">
-    <div class="bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg px-4 md:px-8 py-6 mb-4 w-full flex flex-col min-h-[620px]">
-        <h1 class="text-lg 2xl:text-xl font-bold text-gray-800 dark:text-gray-100">Información Personal</h1>
-        <hr class="w-full border-t-2 border-gray-300 dark:border-slate-700 my-2"><br>
-        <form action="{{ route('datosuser.update') }}" method="POST" enctype="multipart/form-data" novalidate class="flex flex-col h-full">
-            @csrf
-            <div class="flex-1">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-visible">
-                    <!-- Nombre -->
-                    <div class="mb-2">
-                        <div class="flex">
-                            <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Nombre</label>
-                            @error('nombre')
-                                <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                            @enderror
-                        </div>
-                        <input type="text" name="nombre" id="nombre"
-                            class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('nombre') border-red-700 @enderror"
-                            placeholder="Nombre" required value="{{ $user->becario->nombre}}" readonly />
-                    </div>
-                    <!-- Apellido -->
-                    <div class="mb-2">
-                        <div class="flex">
-                            <label for="apellido" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Apellido</label>
-                            @error('apellido')
-                                <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                            @enderror
-                        </div>
-                        <input type="text" name="apellido" id="apellido"
-                            class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('apellido') border-red-700 @enderror"
-                            placeholder="Apellido" required value="{{$user->becario->apellido }}" autocomplete="family-name" readonly/>
-                    </div>
-                    <!-- Cédula -->
-                    <div class="mb-2">
-                        <div class="flex">
-                            <label for="cedula" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Cédula</label>
-                            @error('cedula')
-                                <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                            @enderror
-                        </div>
-                        <input type="text" name="cedula" id="cedula"
-                            class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('cedula') border-red-700 @enderror"
-                            placeholder="Cédula" required  value="{{ $user->becario->cedula }}" autocomplete="off" readonly/>
-                    </div>
-                     <!-- Email -->
-                        <div class="mb-2">
-                            <div class="flex">
-                                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Email</label>
-                                @error('email')
-                                    <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                                @enderror
-                            </div>
-                            <input type="email" name="email" id="email"
-                                class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('email') border-red-700 @enderror"
-                                placeholder="Email" required value="{{$user->email}}" autocomplete="email" />
-                        </div>
+    <!-- Lado Derecho: Espacio para Gráficos y Estadísticas -->
 
-                    <!-- Teléfono -->
-                    <div class="mb-2">
-                        <div class="flex">
-                            <label for="telefono" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Teléfono</label>
-                            @error('telefono')
-                                <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                            @enderror
+    <div class="w-full xl:w-3/4 px-0 gap-0">
+ <div class=" dark:bg-slate-900 rounded-lg  flex flex-col  w-3/3">
+         <!-- Tarjetas de progreso -->
+    <div class="flex flex-wrap">
+        @foreach ([
+              [
+                'title' => 'Voluntariado Interno',
+                'total' => $total_volin,
+                'meta' => $meta_volin,
+                'percentage' => $porcen_volin,
+                'color' => 'text-[#28a745] dark:text-green-400',
+                'bgcolor' => 'bg-green-400/40 dark:bg-green-900/40',
+                'icono' => 'icon-volin.png',
+                'name' => 'volin',
+            ],
+            [
+                'title' => 'Voluntariado Externo',
+                'total' => $total_volex,
+                'meta' => $meta_volex,
+                'percentage' => $porcen_volex,
+                'color' => 'text-[#dc3545] dark:text-red-400',
+                'bgcolor' => 'bg-red-400/40  dark:bg-red-900/40',
+                'icono' => 'icon-volex.png',
+                'name' => 'volex',
+            ],
+            [
+                'title' => 'Chats',
+                'total' => $total_chat,
+                'meta' => $meta_chat,
+                'percentage' => $porcen_chat,
+                'color' => 'text-[#fd7e14] dark:text-orange-400',
+                'bgcolor' => 'bg-yellow-400/40 dark:bg-orange-900/40',
+                'icono' => 'icon-chat.png',
+                'name' => 'chat',
+            ],
+            [
+                'title' => 'Talleres',
+                'total' => $total_taller,
+                'meta' => $meta_taller,
+                'percentage' => $porcen_taller,
+                'color' => 'text-[#007bff] dark:text-blue-400',
+                'bgcolor' => 'bg-blue-400/40 dark:bg-blue-900/40',
+                'icono' => 'icon-taller.png',
+                'name' => 'taller',
+            ],
+        ] as $card)
+        <div class="w-full px-1 pb-3 w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4">
+            <div class="flex flex-col bg-white dark:bg-slate-900 border  shadow-gray-300 dark:shadow-slate-800  border border-gray-200 dark:border-slate-700 rounded-xl hover:shadow-xl transition-shadow duration-300">
+                <div class="pb-0 pt-4 px-0">
+                    <div class="px-4">
+                        <div class="flex items-center">
+                            <img src="{{ asset('imgs/' . $card['icono']) }}" alt="{{ $card['title'] }} icono" class="w-12 h-12">
+                            <h3 class="{{ $card['color'] }} text-lg font-bold ml-2">{{ $card['title'] }}</h3>
                         </div>
-                        <input type="text" name="telefono" id="telefono"
-                            class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('telefono') border-red-700 @enderror"
-                            placeholder="Teléfono" required value="{{$user->becario->telefono }}" autocomplete="tel" />
+                    <hr class="dark:border-slate-700"><br>
+                    <div class="flex px-0">
+                        <div class="w-2/5">
+                            <div class="relative size-24 md:size-28">
+                                <svg class="size-full -rotate-90" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-gray-200 dark:text-slate-700" stroke-width="4"></circle>
+                                    <circle
+                                        cx="18" cy="18" r="16" fill="none" class="stroke-current {{ $card['color'] }} progress-circle"
+                                        stroke-width="4"
+                                        stroke-dasharray="100"
+                                        stroke-dashoffset="100"
+                                        stroke-linecap="round"
+                                        data-final-offset="{{ 100 - $card['percentage'] }}">
+                                    </circle>
+                                </svg>
+                                <div class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                                    <span
+                                        class="text-center text-xl font-bold {{ $card['color'] }}">{{ $card['percentage'] }}%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-3/5 flex flex-col justify-center items-end space-y-1">
+                            <span class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $card['total'] }} horas<span class="text-base font-semibold text-gray-500 dark:text-gray-300"></span></span>
+                            <span class="text-sm text-gray-600 dark:text-gray-300">Meta: <span class="font-semibold text-green-600 dark:text-green-400">{{ $card['meta'] }}</span> horas</span>
+                            <span class="text-sm text-gray-600 dark:text-gray-300">Restante:
+                                <span class="font-semibold {{ ($card['meta'] - $card['total']) > 0 ? 'text-yellow-600 dark:text-yellow-400' : 'text-green-900 dark:text-green-300' }}">
+                                    {{ $card['meta'] - $card['total'] }}
+                                </span> horas
+                            </span>
+                        </div>
+                    </div>
+                    <br>
+                    </div>
 
-                    </div>
-                    <!-- Género (Dropdown) -->
-                    <div class="mb-2">
-                        <div class="flex">
-                            <label for="genero" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Género</label>
-                            @error('genero')
-                                <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div x-data="{ open: false, value: '{{$user->becario->genero}}' }" class="relative">
-                            <button type="button"
-                                @click="open = !open"
-                                @blur="setTimeout(() => open = false, 100)"
-                                class="text-sm shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 text-left focus:outline-none focus:ring-slate-300 focus:border-slate-300 cursor-pointer">
-                                <span x-text="value ? value : 'Seleccione género'" :class="value ? '' : 'text-gray-400 dark:text-gray-500'"></span>
-                                <span class="absolute right-3 top-1/2 -translate-y-1/2">
-                                    <svg class="w-4 h-4 text-gray-400 dark:text-gray-300 transition-transform duration-200 inline" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </span>
-                            </button>
-                            <div x-show="open"
-                                x-transition:enter="transition ease-out duration-200"
-                                x-transition:enter-start="opacity-0 -translate-y-2"
-                                x-transition:enter-end="opacity-100 translate-y-0"
-                                x-transition:leave="transition ease-in duration-150"
-                                x-transition:leave-start="opacity-100 translate-y-0"
-                                x-transition:leave-end="opacity-0 -translate-y-2"
-                                class="absolute left-0 right-0 mt-1 bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-md shadow-lg z-[9999]">
-                                <ul>
-                                    <li>
-                                        <button type="button" @click="value = 'Masculino'; open = false"
-                                            class="w-full text-left px-4 py-2 hover:bg-green-100 dark:text-white dark:hover:bg-slate-800 transition-colors"
-                                            :class="value === 'Masculino' ? 'font-bold text-green-700 dark:text-green-400' : ''">
-                                            Masculino
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button type="button" @click="value = 'Femenino'; open = false"
-                                            class="w-full text-left px-4 py-2 hover:bg-green-100 dark:text-white dark:hover:bg-slate-800 transition-colors"
-                                            :class="value === 'Femenino' ? 'font-bold text-green-700 dark:text-green-400' : ''">
-                                            Femenino
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-                            <input type="hidden" name="genero" :value="value">
-                        </div>
-                    </div>
-                    <!-- Fecha de nacimiento -->
-                    <div class="mb-2">
-                        <div class="flex">
-                            <label for="fecha_nacimiento" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Fecha de nacimiento</label>
-                            @error('fecha_nacimiento')
-                                <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                            @enderror
-                        </div>
-                        <input type="date" name="fecha_nacimiento" id="fecha_nacimiento"
-                            class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('fecha_nacimiento') border-red-700 @enderror"
-                            required value="{{ $user->becario->fecha_nacimiento}}" />
-                    </div>
-                    <!-- Dirección -->
-                    <div class="mb-2">
-                        <div class="flex">
-                            <label for="direccion" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Dirección</label>
-                            @error('direccion')
-                                <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                            @enderror
-                        </div>
-                        <input type="text" name="direccion" id="direccion"
-                            class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('direccion') border-red-700 @enderror"
-                            placeholder="Dirección" required value="{{$user->becario->direccion}}" />
-                    </div>
-                    @if($user->role === 'user')
-                        <!-- Carrera -->
-                        <div class="mb-2">
-                            <div class="flex">
-                                <label for="carrera" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Carrera</label>
-                                @error('carrera')
-                                    <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                                @enderror
-                            </div>
-                            <input type="text" name="carrera" id="carrera"
-                                class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('carrera') border-red-700 @enderror"
-                                placeholder="Carrera" required value="{{$user->becario->carrera}}" />
-                        </div>
-                        <!-- Meta Voluntariado Interno -->
-                        <div class="mb-2">
-                            <div class="flex">
-                                <label for="meta_voluntariado_interno" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Meta Voluntariado Interno</label>
-                                @error('meta_voluntariado_interno')
-                                    <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                                @enderror
-                            </div>
-                            <input type="number" min="0" name="meta_voluntariado_interno" id="meta_voluntariado_interno"
-                                class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('meta_voluntariado_interno') border-red-700 @enderror"
-                                placeholder="Horas internas" value="{{$user->becario->meta_volin}}" readonly/>
-                        </div>
-                        <!-- Meta Voluntariado Externo -->
-                        <div class="mb-2">
-                            <div class="flex">
-                                <label for="meta_voluntariado_externo" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Meta Voluntariado Externo</label>
-                                @error('meta_voluntariado_externo')
-                                    <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                                @enderror
-                            </div>
-                            <input type="number" min="0" name="meta_voluntariado_externo" id="meta_voluntariado_externo"
-                                class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('meta_voluntariado_externo') border-red-700 @enderror"
-                                placeholder="Horas externas" value="{{$user->becario->meta_volex}}"
-                                readonly/>
-                        </div>
-                        <!-- Meta Chats -->
-                        <div class="mb-2">
-                            <div class="flex">
-                                <label for="meta_chats" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Meta Chats</label>
-                                @error('meta_chats')
-                                    <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                                @enderror
-                            </div>
-                            <input type="number" min="0" name="meta_chats" id="meta_chats"
-                                class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('meta_chats') border-red-700 @enderror"
-                                placeholder="Cantidad de chats" value="{{$user->becario->meta_chat}}"
-                                readonly />
-                        </div>
-                        <!-- Meta Taller -->
-                        <div class="mb-2">
-                            <div class="flex">
-                                <label for="meta_taller" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Meta Taller</label>
-                                @error('meta_taller')
-                                    <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                                @enderror
-                            </div>
-                            <input type="number" min="0" name="meta_taller" id="meta_taller"
-                                class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('meta_taller') border-red-700 @enderror"
-                                placeholder="Cantidad de talleres" value="{{ $user->becario->meta_taller }}" readonly />
-                        </div>
-                    @else
-                        <!-- Cargo -->
-                        <div class="mb-2">
-                            <div class="flex">
-                                <label for="cargo" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Cargo</label>
-                                @error('cargo')
-                                    <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
-                                @enderror
-                            </div>
-                            <input type="text" name="cargo" id="cargo"
-                                class="text-sm shadow-sm rounded-md w-full px-3 py-2 border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-slate-300 focus:border-slate-300 @error('cargo') border-red-700 @enderror"
-                                placeholder="Cargo" required value="{{ old('cargo', auth()->user()->personal->cargo ?? '') }}" />
-                        </div>
-                    @endif
                 </div>
             </div>
-            <div class="flex justify-center mt-4">
-                <button type="submit"
-                    class="w-2/3 lg:w-1/5 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                    Actualizar Datos
-                </button>
-            </div>
-        </form>
+        </div>
+        @endforeach
     </div>
+    <!-- Fin de las tarjetas de progreso -->
 </div>
+<div class="flex gap-2">
+         <div class="bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg px-2 py-1 flex flex-col min-h-[400px] w-full xl:w-2/4">
+          <div class="p-4 md:p-5 flex flex-col h-full">
+                     <div class="flex items-center text">
+                        <img src="{{ asset('imgs/icon-progen.png') }}" alt="icono" class="w-12 h-12 block dark:hidden">
+                        <img src="{{ asset('imgs/icon-progen-blanco.png') }}" alt="icono" class="w-12 h-12 hidden dark:block">
+
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 ml-2">Progreso del  Becario</h3>
+                    </div>
+                    <hr class="dark:border-slate-700">
+                    <br>
+                    <div class="justify-between border-gray-200 dark:border-slate-700 pb-3 text-center">
+                        <dl>
+                            <dt class="text-base font-normal text-gray-500 dark:text-gray-300 pb-1">Horas Totales</dt>
+                            <dd class="leading-none text-3xl font-bold text-gray-800 dark:text-gray-100">
+                                {{$total_volin + $total_volex + $total_taller + $total_chat}} Horas</dd>
+                        </dl>
+                        <div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 py-3">
+                        <dl class="text-left">
+                            <dt class="text-base font-normal text-gray-500 dark:text-gray-300 pb-1">Meta Anual</dt>
+                            <dd class="leading-none text-xl font-bold text-green-500 dark:text-green-400">
+                                {{$meta_volin + $meta_volex + $meta_chat + $meta_taller}} Horas</dd>
+                        </dl>
+                        <dl class="text-right">
+                            <dt class="text-base font-normal text-gray-500 dark:text-gray-300 pb-1">Restantes</dt>
+                            <dd class="leading-none text-xl font-bold text-red-600 dark:text-red-400">
+                                {{($meta_volin + $meta_volex + $meta_chat + $meta_taller)-($total_volin + $total_volex + $total_taller + $total_chat)}}
+                                Horas</dd>
+                        </dl>
+                    </div>
+                    <div id="bar-chart"></div>
+                     <div id="chart-legend" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 p-4 lg:justify-center lg:text-center">
+                        <div class="text-sm dark:text-white flex items-center lg:justify-center justify-start mb-2">
+                            <span class="w-4 h-4 bg-[#16A34A] dark:bg-green-500 inline-block rounded-full mr-2"></span> Voluntariado Interno
+                        </div>
+                        <div class="text-sm dark:text-white flex items-center lg:justify-center justify-start mb-2">
+                            <span class="w-4 h-4 bg-[#DC2626] dark:bg-red-500 inline-block rounded-full mr-2"></span> Voluntariado Externo
+                        </div>
+                        <div class="text-sm dark:text-white flex items-center lg:justify-center justify-start mb-2">
+                            <span class="w-4 h-4 bg-[#F97316] dark:bg-orange-400 inline-block rounded-full mr-2"></span> Chats
+                        </div>
+                        <div class="text-sm  dark:text-white flex items-center lg:justify-center justify-start mb-2">
+                            <span class="w-4 h-4 bg-[#2563EB] dark:bg-blue-400 inline-block rounded-full mr-2"></span> Talleres
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+         <div class="bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg px-2 py-1 flex flex-col min-h-[400px] w-full xl:w-2/4">
+          <div class="p-4 md:p-5 flex flex-col h-full">
+                     <div class="flex items-center text">
+                        <img src="{{ asset('imgs/icon-progen.png') }}" alt="icono" class="w-12 h-12 block dark:hidden">
+                        <img src="{{ asset('imgs/icon-progen-blanco.png') }}" alt="icono" class="w-12 h-12 hidden dark:block">
+
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 ml-2">Cargadas Recientemente</h3>
+                    </div>
+                    <hr class="dark:border-slate-700"><br>
+                       <div class="space-y-4 flex-grow max-h-[520px] overflow-y-auto ">
+                        @forelse($stats_sinfiltro as $actividad)
+                            <div class="flex items-center justify-between bg-gradient-to-r from-gray-50 via-white to-gray-100 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 p-5 rounded-2xl shadow transition-all duration-200 hover:shadow-xl border border-gray-200 dark:border-slate-700 group">
+                                <div class="flex flex-col">
+                                    <h4 class="font-semibold text-md md:text-lg text-gray-800 dark:text-blue-300 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
+                                        {{ $actividad->titulo ?? $actividad->nombre ?? 'Actividad' }}
+                                    </h4>
+                                    <p class="text-sm md:text-base text-gray-500 dark:text-gray-300 mt-1 line-clamp-2">
+                                        Becario: {{ $actividad->becario->nombre ?? '-' }} {{ $actividad->becario->apellido ?? '-' }}
+                                    </p>
+                                </div>
+                                <div class="text-right ml-4 flex flex-col items-end">
+                                    <span class="block text-xs md:text-sm text-gray-400 dark:text-gray-300 font-medium">
+                                        {{ \Carbon\Carbon::parse($actividad->fecha ?? $actividad->created_at)->format('d M, Y') }}
+                                    </span>
+                                    <span class="inline-block px-2 py-1 mt-2 rounded-full text-xs font-semibold
+                                        @if(isset($actividad->estado))
+                                            @if($actividad->estado == 'pendiente') bg-yellow-100 dark:bg-slate-800 text-yellow-700 dark:text-yellow-300 border border-yellow-300 dark:border-yellow-700
+                                            @elseif($actividad->estado == 'aprobado') bg-green-100 dark:bg-slate-800 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-700
+                                            @elseif($actividad->estado == 'rechazado') bg-red-100 dark:bg-slate-800 text-red-700 dark:text-red-400 border border-red-300 dark:border-red-700
+                                            @else bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-slate-600
+                                            @endif
+                                        @else
+                                            bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-slate-600
+                                        @endif
+                                    ">
+                                        {{ $actividad->estado ?? 'Sin estado' }}
+                                    </span>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="flex flex-col items-center justify-center text-center text-gray-400 dark:text-gray-500 mt-8">
+                                <svg class="w-12 h-12 mb-2 text-gray-200 dark:text-slate-700" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"></path>
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                </svg>
+                                <p class="text-base font-medium">No tiene actividades recientes.</p>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+        </div>
+
+</div>
+
+
+        <!-- Puedes agregar más secciones de estadísticas o detalles aquí -->
+
+
+
+
+
+    </div>
 </div>
 @endsection
 
 @section('scripts')
-<script>
-function togglePassword(fieldId, btn) {
-    const input = document.getElementById(fieldId);
-    const iconShow = btn.querySelector('.icon-show');
-    const iconHide = btn.querySelector('.icon-hide');
-    if (input.type === "password") {
-        input.type = "text";
-        iconShow.classList.add('hidden');
-        iconHide.classList.remove('hidden');
-    } else {
-        input.type = "password";
-        iconShow.classList.remove('hidden');
-        iconHide.classList.add('hidden');
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const total_anual_por_mes = @json($total_por_mes);
+    const total_volin_por_mes = @json($total_volin_por_mes);
+    const total_volex_por_mes = @json($total_volex_por_mes);
+    const total_taller_por_mes = @json($total_taller_por_mes);
+    const total_chat_por_mes = @json($total_chat_por_mes);
+
+    const currentDate = new Date();
+
+    function getLastSixMonthIndexes() {
+        const indexes = [];
+        for (let i = 5; i >= 0; i--) {
+            indexes.push((currentDate.getMonth() - i + 12) % 12);
+        }
+        return indexes;
     }
-}
-</script>
+
+    const lastSixMonthIndexes = getLastSixMonthIndexes();
+
+    let horasUltimos6MesesVolin = lastSixMonthIndexes.map(index => total_volin_por_mes[(index + 1) % 12] ?? 0);
+    let horasUltimos6MesesVolex = lastSixMonthIndexes.map(index => total_volex_por_mes[(index + 1) % 12] ?? 0);
+    let horasUltimos6MesesTaller = lastSixMonthIndexes.map(index => total_taller_por_mes[(index + 1) % 12] ?? 0);
+    let horasUltimos6MesesChat = lastSixMonthIndexes.map(index => total_chat_por_mes[(index + 1) % 12] ?? 0);
+
+    function getLastSixMonths() {
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return lastSixMonthIndexes.map(index => months[index]);
+    }
+
+    let months = getLastSixMonths();
+    const isHorizontal = window.innerWidth < 640;
+
+    if (isHorizontal) {
+        months = months.slice().reverse();
+        horasUltimos6MesesVolin = horasUltimos6MesesVolin.slice().reverse();
+        horasUltimos6MesesVolex = horasUltimos6MesesVolex.slice().reverse();
+        horasUltimos6MesesTaller = horasUltimos6MesesTaller.slice().reverse();
+        horasUltimos6MesesChat = horasUltimos6MesesChat.slice().reverse();
+    }
+
+    function getBarColors() {
+        const isDark = document.documentElement.classList.contains('dark');
+        if (isDark) {
+            return months.map((_, i) => i % 2 === 0 ? "#1e293b" : "#0f172a");
+        } else {
+            return months.map((_, i) => i % 2 === 0 ? "#E5E7EB" : "#FFFFFF");
+        }
+    }
+
+    function renderChart() {
+        let barColors = getBarColors();
+        const isDark = document.documentElement.classList.contains('dark');
+        const options2 = {
+            series: [
+                {
+                    name: "Voluntariado Interno",
+                    color: "#16A34A",
+                    data: horasUltimos6MesesVolin,
+                },
+                {
+                    name: "Voluntariado Externo",
+                    color: "#dc2626",
+                    data: horasUltimos6MesesVolex,
+                },
+                {
+                    name: "Chat",
+                    color: "#f97316",
+                    data: horasUltimos6MesesChat,
+                },
+                {
+                    name: "Talleres",
+                    color: "#2563EB",
+                    data: horasUltimos6MesesTaller,
+                },
+            ],
+            chart: {
+                sparkline: { enabled: false },
+                type: "bar",
+                width: "100%",
+                height: window.innerWidth >= 640 ? 300 : 800,
+                toolbar: { show: false },
+                background: isDark ? "#0f172a" : "#fff",
+                events: {
+                    mounted: function(chartContext, config) {
+                        if (typeof addBarHoverEffect === "function") addBarHoverEffect();
+                    },
+                    updated: function(chartContext, config) {
+                        if (typeof addBarHoverEffect === "function") addBarHoverEffect();
+                    }
+                }
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: isHorizontal,
+                    columnWidth: "90%",
+                    borderRadiusApplication: "end",
+                    borderRadius: 6,
+                    dataLabels: {
+                        position: window.innerWidth >= 640 ? "top" : "center",
+                    },
+                },
+            },
+            legend: {
+                show: true,
+                position: "top",
+                horizontalAlign: "center",
+                floating: false,
+                fontSize: "14px",
+                fontFamily: "Inter, sans-serif",
+                fontWeight: 400,
+                width: "100%",
+                height: 40,
+                offsetX: 0,
+                offsetY: 0,
+            },
+            tooltip: {
+                enabled: false,
+                shared: true,
+                intersect: false,
+                fillSeriesColor: false,
+                x: { show: true },
+                y: {
+                    formatter: function (value, { seriesIndex, w }) {
+                        return `${w.config.series[seriesIndex].name}: ${value} Horas`;
+                    }
+                },
+            },
+            xaxis: {
+                categories: months,
+                labels: {
+                    show: true,
+                    style: {
+                        fontFamily: "Inter, sans-serif",
+                        cssClass: 'text-xs font-normal fill-gray-500'
+                    }
+                },
+                axisTicks: { show: false },
+                axisBorder: { show: false },
+            },
+            yaxis: {
+                labels: {
+                    show: true,
+                    style: {
+                        fontFamily: "Inter, sans-serif",
+                        cssClass: 'text-xs font-normal fill-gray-500'
+                    }
+                },
+            },
+            grid: {
+                show: true,
+                strokeDashArray: 4,
+                padding: { left: 2, right: 2, top: -20 },
+                row: {
+                    colors: isHorizontal ? barColors : undefined,
+                },
+                column: {
+                    colors: !isHorizontal ? barColors : undefined,
+                },
+            },
+            fill: { opacity: 1 },
+        };
+
+        if (window.chart) {
+            window.chart.destroy();
+        }
+        window.chart = new ApexCharts(document.getElementById("bar-chart"), options2);
+        window.chart.render();
+    }
+
+    // Renderiza el gráfico al cargar
+    renderChart();
+
+    // Vuelve a renderizar el gráfico al cambiar el modo claro/oscuro
+    const observer = new MutationObserver(() => {
+        renderChart();
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+    // Si tienes un botón toggle-dark, también vuelve a renderizar al hacer click
+    const toggleDark = document.getElementById('toggle-dark');
+    if (toggleDark) {
+        toggleDark.addEventListener('click', function() {
+            setTimeout(renderChart, 300); // Espera a que cambie el tema
+        });
+    }});
+
+     // Animación de los círculos de progreso
+    document.querySelectorAll(".progress-circle").forEach(circle => {
+        const finalOffset = circle.getAttribute("data-final-offset");
+        circle.style.setProperty("--final-offset", finalOffset);
+        circle.style.animation = "none";
+        void circle.offsetWidth;
+        circle.style.animation = "progressAnimation 1.5s forwards";
+    });
+    </script>
 @endsection

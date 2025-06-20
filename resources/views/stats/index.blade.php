@@ -282,15 +282,15 @@
                         <thead class="text-gray-700 dark:text-gray-200 text-md uppercase border-b border-gray-200 dark:border-slate-700">
                             <tr>
                                 @if ($user->role == 'admin')
-                                    <th class="px-3 py-3 text-center">BECARIO</th>
+                                    <th class="px-3 py-3 text-left">BECARIO</th>
                                 @endif
-                                <th scope="col" class="px-3 py-3 text-center">Titulo</th>
-                                <th scope="col" class="px-3 py-3 text-center">Actividad</th>
-                                <th scope="col" class="px-3 py-3 text-center">Fecha</th>
-                                <th scope="col" class="px-3 py-3 text-center">Modalidad</th>
-                                <th scope="col" class="px-3 py-3 text-center">Duración (Horas)</th>
-                                <th scope="col" class="px-3 py-3 text-center">Ver evidencias</th>
-                                <th scope="col" class="px-3 py-3 text-center">Estatus</th>
+                                <th scope="col" class="px-3 py-3 text-left">Titulo</th>
+                                <th scope="col" class="px-3 py-3 text-left">Actividad</th>
+                                <th scope="col" class="px-3 py-3 text-left">Fecha</th>
+                                <th scope="col" class="px-3 py-3 text-left">Modalidad</th>
+                                <th scope="col" class="px-3 py-3 text-left">Duración (Horas)</th>
+                                <th scope="col" class="px-3 py-3 text-left">Ver evidencias</th>
+                                <th scope="col" class="px-3 py-3 text-left">Estatus</th>
                                 <th scope="col" class="px-3 py-3"> Opciones</th>
                             </tr>
                         </thead>
@@ -307,10 +307,23 @@
     style="height: 20px;"
 >
         @if ($user->role == 'admin')
-            <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ optional($stat->becario)->nombre ?? '-' }} {{optional($stat->becario)->apellido ?? '-'}}</td>
+            <td class="px-3 py-4 text-left text-gray-900 dark:text-gray-100">
+                <div class="flex items-center justify-left gap-2">
+                    @if($stat->becario && $stat->becario->user && $stat->becario->user->fotoperfil)
+                        <img src="{{ asset('storage/' . $stat->becario->user->fotoperfil) }}" alt="Foto de perfil" class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+                    @else
+                        <img src="{{ asset('imgs/default-profile.jpg') }}" alt="Foto de perfil" class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">
+                    @endif
+                    <a href="{{ route('users.showbecario', $stat->becario->user->id ?? '') }}">
+                        <span class="hover:underline text-blue-700 dark:text-blue-300 cursor-pointer">
+                            {{ $stat->becario->nombre ?? '' }} {{ $stat->becario->apellido ?? '' }}
+                        </span>
+                    </a>
+                </div>
+            </td>
         @endif
-        <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ $stat->titulo }}</td>
-        <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">
+        <td class="px-3 py-4 text-left text-gray-900 dark:text-gray-100">{{ $stat->titulo }}</td>
+        <td class="px-3 py-4 text-left text-gray-900 dark:text-gray-100">
             @switch($stat->actividad)
                 @case('chat') Chat @break
                 @case('taller') Taller de Formación @break
@@ -319,18 +332,18 @@
                 @default {{ $stat->actividad }}
             @endswitch
         </td>
-        <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">
+        <td class="px-3 py-4 text-left text-gray-900 dark:text-gray-100">
             {{ \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') }}
         </td>
-        <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">
+        <td class="px-3 py-4 text-left text-gray-900 dark:text-gray-100">
             @switch($stat->modalidad)
                 @case('presencial') Presencial @break
                 @case('online') Online @break
                 @default {{ $stat->modalidad }}
             @endswitch
         </td>
-        <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ $stat->duracion }}</td>
-        <td class="px-3 py-4 text-center">
+        <td class="px-3 py-4 text-left text-gray-900 dark:text-gray-100">{{ $stat->duracion }}</td>
+        <td class="px-3 py-4 text-left">
             <button class="rounded p-2 text-white bg-white ver-evidencias-btn hover:bg-blue-100 dark:bg-transparent"
                 data-evidencias='@json($stat->evidencias->pluck('ruta_imagen'))' type="button">
                 <svg width="30px" height="30px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="#000000">
@@ -347,7 +360,7 @@
                 </svg>
             </button>
         </td>
-        <td class="px-3 py-4 text-center">
+        <td class="px-3 py-4 text-left">
             @if ($stat->anulado == 'SI')
                 <span class="bg-gray-300 dark:bg-gray-700 p-2 text-bold rounded text-gray-900 dark:text-gray-100">ANULADO</span>
             @elseif ($stat->estado == 'pendiente')
@@ -361,7 +374,7 @@
                 <span class="bg-green-200 dark:bg-green-700 p-2 text-bold rounded text-gray-900 dark:text-gray-100">APROBADO</span>
             @endif
         </td>
-        <td class="px-3 py-4 text-center">
+        <td class="px-3 py-4 text-left">
             @if ($user->role == 'admin')
                 <div class="flex p-0">
                     @if ($stat->estado == 'aprobado')
@@ -877,16 +890,18 @@ document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', 
     const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
     const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
 
-    // Todas las stats
-    const rows = allStats.map(stat => [
-        (stat.becario?.nombre || '') + ' ' + (stat.becario?.apellido || ''),
-        stat.titulo,
-        stat.actividad,
-        stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
-        stat.modalidad,
-        stat.duracion,
-        stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
-    ]);
+    // Todas las stats, excluyendo las anuladas
+    const rows = allStats
+        .filter(stat => stat.anulado !== 'SI')
+        .map(stat => [
+            (stat.becario?.nombre || '') + ' ' + (stat.becario?.apellido || ''),
+            stat.titulo,
+            stat.actividad,
+            stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
+            stat.modalidad,
+            stat.duracion,
+            stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
+        ]);
 
     toDataURL(logoUrl, function(logoBase64) {
         doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
