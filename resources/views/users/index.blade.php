@@ -266,7 +266,7 @@
                             <div class="relative z-0 w-full mb-5 group">
                                 <input type="text" name="personal_cedula" id="personal_cedula"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_cedula') border-red-500 @enderror"
-                                    placeholder=" " required value="{{ old('personal_cedula') }}"
+                                    maxlength="8" minlength="7" placeholder=" " required value="{{ old('personal_cedula') }}"
                                     oninput="this.value = this.value.replace(/[^0-9\-]/g, '')">
                                 <label for="personal_cedula" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                     Cédula
@@ -852,7 +852,10 @@ function generarReporteUsuarios(tipo) {
             alternateRowStyles: { fillColor: [243, 244, 246] }
         });
 
-        doc.save(filename + new Date().toLocaleString() + '.pdf');
+         // Previsualizar en nueva pestaña
+                    const blob = doc.output('blob');
+                    const blobUrl = URL.createObjectURL(blob);
+                    window.open(blobUrl, '_blank');
     });
 
     function toDataURL(url, callback) {

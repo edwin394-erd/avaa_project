@@ -850,7 +850,11 @@ document.getElementById('btn-generar-reporte')?.addEventListener('click', functi
         .filter(stat => stat.becario && stat.becario.user_id === userId)
         .map(stat => [
             stat.titulo,
-            stat.actividad,
+             stat.actividad === 'chat' ? 'Chat'
+            : stat.actividad === 'taller' ? 'Taller de Formación'
+            : stat.actividad === 'volin' ? 'Voluntariado Interno'
+            : stat.actividad === 'volex' ? 'Voluntariado Externo'
+            : stat.actividad,
             stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
             stat.modalidad,
             stat.duracion,
@@ -861,7 +865,8 @@ document.getElementById('btn-generar-reporte')?.addEventListener('click', functi
         doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
         doc.setFontSize(16);
         doc.setFont('helvetica', 'bold');
-        doc.text('Reporte de ' + modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+
+        doc.text('Reporte de Actividades', doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
         doc.setFontSize(10);
         doc.setFont('helvetica', 'normal');
         doc.text('Becario: ' + nombreUsuario, 10, 32);
@@ -879,7 +884,10 @@ document.getElementById('btn-generar-reporte')?.addEventListener('click', functi
             alternateRowStyles: { fillColor: [243, 244, 246] },
         });
 
-        doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
+        const pdfUrl = doc.output('bloburl');
+        window.open(pdfUrl, '_blank');
+
+
     });
 });
 
@@ -896,7 +904,11 @@ document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', 
         .map(stat => [
             (stat.becario?.nombre || '') + ' ' + (stat.becario?.apellido || ''),
             stat.titulo,
-            stat.actividad,
+            stat.actividad === 'chat' ? 'Chat'
+            : stat.actividad === 'taller' ? 'Taller de Formación'
+            : stat.actividad === 'volin' ? 'Voluntariado Interno'
+            : stat.actividad === 'volex' ? 'Voluntariado Externo'
+            : stat.actividad,
             stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
             stat.modalidad,
             stat.duracion,
@@ -907,7 +919,8 @@ document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', 
         doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
         doc.setFontSize(16);
         doc.setFont('helvetica', 'bold');
-        doc.text('Reporte general de ' + modalidad, doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+
+        doc.text('Reporte general de Actividades', doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
         doc.setFontSize(10);
         doc.setFont('helvetica', 'normal');
         doc.text('Generado por: ' + nombreUsuario, 10, 32);
@@ -925,7 +938,8 @@ document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', 
             alternateRowStyles: { fillColor: [243, 244, 246] },
         });
 
-        doc.save('Reporte_General_Actividades_' + new Date().toLocaleString() + '.pdf');
+         const pdfUrl = doc.output('bloburl');
+        window.open(pdfUrl, '_blank');
     });
 });
 </script>

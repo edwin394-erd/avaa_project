@@ -7,18 +7,24 @@
 
 @section('contenido')
 
-<a href="{{ url()->previous() }}" class="inline-flex items-center mb-4 px-4 py-2 bg-gray-300 dark:bg-slate-800 text-gray-700 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-slate-700 transition fixed">
+<a href="{{ url()->previous() }}" class="inline-flex items-center mb-4 px-4 py-2 bg-gray-300 dark:bg-slate-800 text-gray-700 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-slate-700 transition fixed z-50">
     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
     </svg>
     Volver
 </a>
 
-<div class="flex flex-col xl:flex-row w-full py-10 px-4 gap-1">
+<div class="flex flex-col md:flex-row w-full py-10 px-4 gap-1">
 
     <!-- Lado Izquierdo: Información Personal -->
-    <div class="w-full xl:w-1/4 px-0 xl:pr-2 mb-8 xl:mb-0 flex flex-col">
-        <div class="bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg px-6 py-8 flex flex-col items-center">
+    <div class="w-full md:w-1/4 xl:w-1/4 px-0 xl:pr-2 mb-8 xl:mb-0 flex flex-col">
+        <div class="bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg px-6 py-8 flex flex-col items-center relative">
+            <!-- Botón Generar Reporte -->
+            <a href="#"
+               class="absolute top-4 right-4 bg-white hover:bg-gray-200 text-gray-800 dark:bg-slate-800 dark:text-white text-xs font-semibold px-3 py-2 rounded  transition border border-gray-300 dark:border-slate-700"
+               title="Generar reporte">
+                Generar Reporte
+            </a><br>
             <!-- Foto de Perfil -->
             <div class="mb-4 flex flex-col items-center">
                 <div class="relative w-28 h-28 mb-2">
@@ -67,7 +73,7 @@
 
     <!-- Lado Derecho: Espacio para Gráficos y Estadísticas -->
 
-    <div class="w-full xl:w-3/4 px-0 gap-0">
+    <div class="w-full md:w-3/4 xl:w-3/4 px-0 gap-0">
  <div class=" dark:bg-slate-900 rounded-lg  flex flex-col  w-3/3">
          <!-- Tarjetas de progreso -->
     <div class="flex flex-wrap">
@@ -113,7 +119,7 @@
                 'name' => 'taller',
             ],
         ] as $card)
-        <div class="w-full px-1 pb-3 w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4">
+        <div class="w-full px-1 pb-3 w-1/2 md:w-2/4 lg:w-2/4 xl:w-1/4">
             <div class="flex flex-col bg-white dark:bg-slate-900 border  shadow-gray-300 dark:shadow-slate-800  border border-gray-200 dark:border-slate-700 rounded-xl hover:shadow-xl transition-shadow duration-300">
                 <div class="pb-0 pt-4 px-0">
                     <div class="px-4">
@@ -122,30 +128,44 @@
                             <h3 class="{{ $card['color'] }} text-lg font-bold ml-2">{{ $card['title'] }}</h3>
                         </div>
                     <hr class="dark:border-slate-700"><br>
-                    <div class="flex px-0">
-                        <div class="w-2/5">
+                    <div class="flex flex-col lg:flex-row px-0 items-center lg:items-stretch">
+                        <div class="w-full lg:w-2/5 flex justify-center lg:justify-start mb-2 lg:mb-0">
                             <div class="relative size-24 md:size-28">
                                 <svg class="size-full -rotate-90" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-gray-200 dark:text-slate-700" stroke-width="4"></circle>
                                     <circle
-                                        cx="18" cy="18" r="16" fill="none" class="stroke-current {{ $card['color'] }} progress-circle"
+                                        cx="18" cy="18"
+                                        r="14"
+                                        fill="none"
+                                        class="stroke-current text-gray-200 dark:text-slate-700"
+                                        stroke-width="4"
+                                        :r="window.innerWidth >= 1200 ? 16 : 14"
+                                        x-data
+                                        x-init="$el.setAttribute('r', window.innerWidth >= 768 ? 16 : 14)"
+                                    ></circle>
+                                    <circle
+                                        cx="18" cy="18"
+                                        r="14"
+                                        fill="none"
+                                        class="stroke-current {{ $card['color'] }} progress-circle"
                                         stroke-width="4"
                                         stroke-dasharray="100"
                                         stroke-dashoffset="100"
                                         stroke-linecap="round"
-                                        data-final-offset="{{ 100 - $card['percentage'] }}">
-                                    </circle>
+                                        data-final-offset="{{ 100 - $card['percentage'] }}"
+                                        :r="window.innerWidth >= 1200 ? 16 : 14"
+                                        x-data
+                                        x-init="$el.setAttribute('r', window.innerWidth >= 768 ? 16 : 14)"
+                                    ></circle>
                                 </svg>
                                 <div class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                                    <span
-                                        class="text-center text-xl font-bold {{ $card['color'] }}">{{ $card['percentage'] }}%</span>
+                                    <span class="text-center text-xl font-bold {{ $card['color'] }}">{{ $card['percentage'] }}%</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="w-3/5 flex flex-col justify-center items-end space-y-1">
-                            <span class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $card['total'] }} horas<span class="text-base font-semibold text-gray-500 dark:text-gray-300"></span></span>
-                            <span class="text-sm text-gray-600 dark:text-gray-300">Meta: <span class="font-semibold text-green-600 dark:text-green-400">{{ $card['meta'] }}</span> horas</span>
-                            <span class="text-sm text-gray-600 dark:text-gray-300">Restante:
+                        <div class="w-full lg:w-3/5 flex flex-col justify-center items-center lg:items-end space-y-1">
+                            <span class="text-xl font-bold text-gray-800 dark:text-gray-100">{{ $card['total'] }} horas<span class="text-base font-semibold text-gray-500 dark:text-gray-300"></span></span>
+                            <span class="text-[14px] text-gray-600 dark:text-gray-300">Meta: <span class="font-semibold text-green-600 dark:text-green-400">{{ $card['meta'] }}</span> horas</span>
+                            <span class="text-[14px]  text-gray-600 dark:text-gray-300">Restante:
                                 <span class="font-semibold {{ ($card['meta'] - $card['total']) > 0 ? 'text-yellow-600 dark:text-yellow-400' : 'text-green-900 dark:text-green-300' }}">
                                     {{ $card['meta'] - $card['total'] }}
                                 </span> horas
@@ -162,7 +182,7 @@
     </div>
     <!-- Fin de las tarjetas de progreso -->
 </div>
-<div class="flex gap-2">
+<div class="xl:flex gap-2">
          <div class="bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg px-2 py-1 flex flex-col min-h-[400px] w-full xl:w-2/4">
           <div class="p-4 md:p-5 flex flex-col h-full">
                      <div class="flex items-center text">
@@ -475,4 +495,81 @@ document.addEventListener("DOMContentLoaded", () => {
         circle.style.animation = "progressAnimation 1.5s forwards";
     });
     </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('a[title="Generar reporte"]')?.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // Cargar las stats del becario vía fetch (igual que en stats.index)
+        fetch("{{ route('stats.all', ['user_id' => $user->id]) }}")
+            .then(res => res.json())
+            .then(allStats => {
+                const nombreUsuario = @json(($user->becario->nombre ?? '') . ' ' . ($user->becario->apellido ?? ''));
+                const logoUrl = "{{ asset('imgs/avaalogo_color_p.png') }}";
+                const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+
+                // Filtrar solo stats del becario actual
+                const rows = allStats
+                    .filter(stat => stat.becario && stat.becario.user_id == {{ $user->id }})
+                    .map(stat => [
+                        stat.titulo,
+                        stat.actividad,
+                        stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
+                        stat.modalidad,
+                        stat.duracion,
+                        stat.estado === 'pendiente' ? 'PENDIENTE' : (stat.estado === 'rechazado' ? 'RECHAZADO' : (stat.anulado === 'SI' ? 'ANULADO' : 'APROBADO'))
+                    ]);
+
+                // Cargar logo y generar PDF
+                const toDataURL = (url, callback) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.onload = function() {
+                        const reader = new FileReader();
+                        reader.onloadend = function() {
+                            callback(reader.result);
+                        }
+                        reader.readAsDataURL(xhr.response);
+                    };
+                    xhr.onerror = function() {
+                        callback('');
+                    };
+                    xhr.open('GET', url);
+                    xhr.responseType = 'blob';
+                    xhr.send();
+                };
+
+                toDataURL(logoUrl, function(logoBase64) {
+                    if (logoBase64) {
+                        doc.addImage(logoBase64, 'PNG', 10, 10, 40, 18);
+                    }
+                    doc.setFontSize(16);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('Reporte de Actividades', doc.internal.pageSize.getWidth() / 2, 44, { align: 'center' });
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text('Becario: ' + nombreUsuario, 10, 32);
+                    doc.text('Generado: ' + new Date().toLocaleString(), 10, 38);
+                    doc.setDrawColor(200, 200, 200);
+                    doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
+
+                    const headers = [['Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
+                    doc.autoTable({
+                        head: headers,
+                        body: rows,
+                        startY: 50,
+                        styles: { fontSize: 10 },
+                        headStyles: { fillColor: [30, 41, 59] },
+                        alternateRowStyles: { fillColor: [243, 244, 246] },
+                    });
+
+                    // Previsualizar en nueva pestaña
+                    const blob = doc.output('blob');
+                    const blobUrl = URL.createObjectURL(blob);
+                    window.open(blobUrl, '_blank');
+                });
+            });
+    });
+});
+</script>
 @endsection

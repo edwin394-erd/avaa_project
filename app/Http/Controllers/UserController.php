@@ -45,6 +45,10 @@ class UserController extends Controller
                     }
                 ],
                 'becario_telefono' => ['required', 'min:11'],
+                'becario_direccion' => ['nullable', 'max:255'],
+                'becario_carrera'  => ['nullable', 'max:100'],
+                'becario_genero'   => ['required', 'in:Masculino,Femenino'],
+                'becario_fecha_nacimiento' => ['required', 'date', 'before:today'],
             ]);
 
             if ($validator->fails()) {
@@ -61,6 +65,7 @@ class UserController extends Controller
                 "Tipo: Becario | Email: {$request->becario_email} | Contraseña: {$password} | Fecha de creación: " . now()->format('Y-m-d H:i:s') . "\n",
                 FILE_APPEND
             );
+
 
             // Crear usuario primero
             $usuario = User::create([
@@ -114,6 +119,11 @@ class UserController extends Controller
                     }
                 ],
                 'personal_telefono' => ['required', 'min:11'],
+                'personal_direccion' => ['nullable', 'max:255'],
+                'personal_cargo'    => ['nullable', 'max:100'],
+                'personal_genero'   => ['required', 'in:Masculino,Femenino'],
+                'personal_fecha_nacimiento' => ['required', 'date', 'before:today'],
+
             ]);
 
             if ($validator->fails()) {

@@ -141,7 +141,7 @@
                             <div class="flex items-center justify-between bg-gradient-to-r from-gray-50 via-white to-gray-100 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 p-5 rounded-2xl shadow transition-all duration-200 hover:shadow-xl border border-gray-200 dark:border-slate-700 group">
                                 <div class="flex flex-col">
                                     <h4 class="font-semibold text-md md:text-lg text-gray-800 dark:text-blue-300 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
-                                        {{ $actividad->titulo ?? $actividad->nombre ?? 'Actividad' }}
+                                        {{ $actividad->titulo ?? $actividad->nombre ?? 'Actividad' }} ({{ $actividad->duracion }} horas)
                                     </h4>
                                     <p class="text-sm md:text-base text-gray-500 dark:text-gray-300 mt-1 line-clamp-2">
                                         Becario: {{ $actividad->becario->nombre ?? '-' }} {{ $actividad->becario->apellido ?? '-' }}

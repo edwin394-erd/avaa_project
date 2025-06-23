@@ -179,13 +179,13 @@
                                 @if ($user->role == 'admin')
                                     <th class="p-1 2xl:px-3 2xl:py-3 text-center">BECARIO</th>
                                 @endif
-                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-center">Titulo</th>
-                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-center">Actividad</th>
-                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-center">Fecha</th>
-                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-center">Modalidad</th>
-                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-center">Duración</th>
-                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-center">Ver evidencias</th>
-                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-center">Estatus</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Titulo</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Actividad</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Fecha</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Modalidad</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Duración</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Ver evidencias</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Estatus</th>
                                 <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md"> Opciones</th>
                             </tr>
                         </thead>
@@ -193,8 +193,8 @@
 @forelse ($stats as $stat)
     <tr id="stat-{{ $stat->id }}" class="bg-white dark:bg-slate-900 text-sm border-b border-gray-200 dark:border-slate-700 transition duration-300 ease-in-out {{ $hover }} text-sm">
         @if ($user->role == 'admin')
-            <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">
-                <div class="flex items-center justify-center gap-2">
+            <td class="px-3 py-4 text-left text-gray-900 dark:text-gray-100">
+                <div class="flex items-center justify-left gap-2">
                     @if($stat->becario && $stat->becario->user && $stat->becario->user->fotoperfil)
                         <img src="{{ asset('storage/' . $stat->becario->user->fotoperfil) }}" alt="Foto de perfil" class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">
                     @else
@@ -208,8 +208,8 @@
                 </div>
             </td>
         @endif
-        <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ $stat->titulo }}</td>
-        <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">
+        <td class="px-3 py-4 text-left text-gray-900 dark:text-gray-100">{{ $stat->titulo }}</td>
+        <td class="px-3 py-4 text-left text-gray-900 dark:text-gray-100">
             @switch($stat->actividad)
                 @case('chat') Chat @break
                 @case('taller') Taller de Formación @break
@@ -218,18 +218,18 @@
                 @default {{ $stat->actividad }}
             @endswitch
         </td>
-        <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">
+        <td class="px-3 py-4 text-left text-gray-900 dark:text-gray-100">
             {{ \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') }}
         </td>
-        <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">
+        <td class="px-3 py-4 text-left text-gray-900 dark:text-gray-100">
             @switch($stat->modalidad)
                 @case('presencial') Presencial @break
                 @case('online') Online @break
                 @default {{ $stat->modalidad }}
             @endswitch
         </td>
-        <td class="px-3 py-4 text-center text-gray-900 dark:text-gray-100">{{ $stat->duracion }}</td>
-        <td class="px-3 py-4 text-center">
+        <td class="px-3 py-4 text-left text-gray-900 dark:text-gray-100">{{ $stat->duracion }}</td>
+        <td class="px-3 py-4 text-left">
             <button class="rounded p-2 text-white bg-white ver-evidencias-btn hover:bg-blue-100 dark:bg-transparent"
                 data-evidencias='@json($stat->evidencias->pluck('ruta_imagen'))' type="button">
                 <svg width="25px" height="25px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="#000000">
@@ -246,7 +246,7 @@
                 </svg>
             </button>
         </td>
-        <td class="px-3 py-4 text-center">
+        <td class="px-3 py-4 text-left">
             @if ($stat->anulado == 'SI')
                 <span class="bg-gray-300 dark:bg-gray-700 p-1 text-bold rounded text-gray-900 dark:text-gray-100">ANULADO</span>
             @elseif ($stat->estado == 'pendiente')
@@ -260,7 +260,7 @@
                 <span class="bg-green-200 dark:bg-green-700 p-1 text-bold rounded text-gray-900 dark:text-gray-100">APROBADO</span>
             @endif
         </td>
-        <td class="px-2 py-2 text-center">
+        <td class="px-2 py-2 text-left">
             @if ($user->role == 'admin')
                 <div class="flex p-0">
                     @if ($stat->estado == 'aprobado')
@@ -983,7 +983,10 @@ document.getElementById('btn-generar-reporte')?.addEventListener('click', functi
             alternateRowStyles: { fillColor: [243, 244, 246] },
         });
 
-        doc.save('Reporte_Actividades_' + nombreUsuario + '_' + new Date().toLocaleString() + '.pdf');
+         // Previsualizar en nueva pestaña
+                    const blob = doc.output('blob');
+                    const blobUrl = URL.createObjectURL(blob);
+                    window.open(blobUrl, '_blank');
     });
 });
 
@@ -1029,7 +1032,10 @@ document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', 
             alternateRowStyles: { fillColor: [243, 244, 246] },
         });
 
-        doc.save('Reporte_General_Actividades_' + new Date().toLocaleString() + '.pdf');
+         // Previsualizar en nueva pestaña
+                    const blob = doc.output('blob');
+                    const blobUrl = URL.createObjectURL(blob);
+                    window.open(blobUrl, '_blank');
     });
 });
 </script>
