@@ -47,6 +47,8 @@ Route::post('/recuperar-contrasena', [RecuperarController::class, 'store'])->nam
 Route::post('/actividades/crear',[StatController::class, 'store'])->name('stat.store');
 Route::post('/actividades/{stat}/anular', [StatController::class, 'anular'])->name('stat.anular');
 Route::post('/actividades/{stat}/restaurar', [StatController::class, 'restaurar'])->name('stat.restaurar');
+Route::put('/actividades/{stat}/editar', [StatController::class, 'update'])->name('stats.update');
+
 
 Route::post('/actividades/{stat}/aprobar', [StatController::class, 'aprobar'])->name('stat.aprobar');
 Route::post('/actividades/{stat}/rechazar', [StatController::class, 'rechazar'])->name('stat.rechazar');

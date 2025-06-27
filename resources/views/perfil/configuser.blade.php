@@ -20,7 +20,8 @@
                         <!-- Foto de Perfil -->
                         <div class="mb-4 flex flex-col items-center">
                             <div class="relative w-24 h-24 mb-2">
-                                <img src="{{ auth()->user()->fotoperfil ? asset('storage/' . auth()->user()->fotoperfil) : asset('imgs/default-profile.jpg') }}"
+                                <img id="preview_foto_perfil"
+                                     src="{{ auth()->user()->fotoperfil ? asset('storage/' . auth()->user()->fotoperfil) : asset('imgs/default-profile.jpg') }}"
                                      alt="Foto de perfil"
                                      class="w-24 h-24 rounded-full object-cover border-2 border-gray-300 dark:border-slate-700 bg-gray-100 dark:bg-slate-800">
                                 <label for="foto_perfil" class="absolute bottom-0 right-0 bg-slate-800 hover:bg-slate-700 text-white rounded-full p-1 cursor-pointer shadow">
@@ -29,8 +30,21 @@
                                         <path d="M16 21H4a2 2 0 01-2-2V6a2 2 0 012-2h7" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                     <input type="file" name="foto_perfil" id="foto_perfil" class="hidden" accept="image/*"
-                                        onchange="if(this.files.length){this.closest('.relative').querySelector('img').src = URL.createObjectURL(this.files[0]);}">
+                                        onchange="if(this.files.length){document.getElementById('preview_foto_perfil').src = URL.createObjectURL(this.files[0]); document.getElementById('quitar_foto_perfil').value = '';}">
                                 </label>
+                                @if(auth()->user()->fotoperfil)
+                                <button type="button"
+                                    onclick="document.getElementById('preview_foto_perfil').src='{{ asset('imgs/default-profile.jpg') }}'; document.getElementById('foto_perfil').value=''; document.getElementById('quitar_foto_perfil').value='1';"
+                                    class="absolute top-0 right-0 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 shadow focus:outline-none"
+                                    title="Quitar foto">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                                <input type="hidden" name="quitar_foto_perfil" id="quitar_foto_perfil" value="">
+                                @else
+                                <input type="hidden" name="quitar_foto_perfil" id="quitar_foto_perfil" value="">
+                                @endif
                             </div>
                             @error('foto_perfil')
                                 <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>

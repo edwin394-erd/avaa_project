@@ -18,10 +18,10 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with(['becario', 'personal'])->paginate(15);
+        $users = User::with(['becario', 'personal'])->orderBy('created_at', 'desc')->paginate(10000);
 
 
-
+    
         return view('users.index', compact('users'));
     }
 

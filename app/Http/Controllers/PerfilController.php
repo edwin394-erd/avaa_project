@@ -52,6 +52,14 @@ class PerfilController extends Controller
         if ($changingEmail) {
             $user->email = $request->email;
         }
+        
+        // Si el usuario quiere quitar la foto de perfil
+        if ($request->input('quitar_foto_perfil') == '1') {
+            if ($user->fotoperfil) {
+                \Storage::disk('public')->delete($user->fotoperfil);
+                $user->fotoperfil = null;
+            }
+        }
 
         if ($request->hasFile('foto_perfil')) {
             $path = $request->file('foto_perfil')->store('perfil', 'public');

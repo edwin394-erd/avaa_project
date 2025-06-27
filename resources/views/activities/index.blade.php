@@ -566,7 +566,8 @@ function generarReporte() {
             startY: 50,
             styles: { font: 'helvetica', fontSize: 10 }
         });
-        doc.save('reporte_eventos.pdf');
+        const pdfUrl = doc.output('bloburl');
+        window.open(pdfUrl, '_blank');
     });
 }
 </script>

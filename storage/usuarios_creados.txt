@@ -35,3 +35,4 @@ Tipo: Becario | Email: elias@gmail.com | Contraseña: 9KStwafDpV | Fecha de crea
 Tipo: Becario | Email: elias@gmail.com | Contraseña: 83ajVZ8WZD | Fecha de creación: 2025-06-23 12:45:47
 Tipo: Becario | Email: alejandro@gmail.com | Contraseña: xsBkWUVcE6 | Fecha de creación: 2025-06-23 12:46:31
 Tipo: Personal | Email: ana@gmail.com | Contraseña: aIz09m3Md0 | Fecha de creación: 2025-06-23 12:48:38
+Tipo: Becario | Email: moisesserd.394@gmail.com | Contraseña: vfKGGlLbrF | Fecha de creación: 2025-06-27 16:20:24

@@ -59,7 +59,7 @@
        <div id="formulario-izquierda" class="w-full xl:w-1/4 p-0 flex flex-col mb-4 xl:mb-0 order-2 xl:order-1 transition-all duration-500">
               <div class="relative flex flex-col bg-white dark:bg-slate-900 border dark:border-gray-700 shadow-xl shadow-gray-100 dark:shadow-gray-900 rounded-l-xl p-4 h-full">
             <button id="toggle-form-btn"
-                cl                <button id="toggle-form-btn"
+            
                     class="absolute top-2 right-2 z-20 px-2 py-1 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 dark:bg-slate-700 dark:text-gray-100 dark:border-slate-700 dark:hover:bg-slate-800 rounded transition-all duration-300 hidden xl:block"
                     style="min-width:32px;min-height:32px;">
                     <span id="toggle-form-icon">⮜</span>
@@ -177,12 +177,14 @@
                         <thead class="text-gray-700 dark:text-gray-200 text-md uppercase border-b border-gray-200 dark:border-slate-700">
                             <tr>
                                 @if ($user->role == 'admin')
-                                    <th class="p-1 2xl:px-3 2xl:py-3 text-center">BECARIO</th>
+                                    <th class="p-1 2xl:px-3 2xl:py-3 text-left">BECARIO</th>
                                 @endif
                                 <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Titulo</th>
                                 <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Actividad</th>
+                                <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Facilitador</th>
                                 <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Fecha</th>
                                 <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Modalidad</th>
+                                
                                 <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Duración</th>
                                 <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Ver evidencias</th>
                                 <th scope="col" class="p-1 2xl:px-3 2xl:py-3 text-sm 2xl:text-md text-left">Estatus</th>
@@ -218,6 +220,8 @@
                 @default {{ $stat->actividad }}
             @endswitch
         </td>
+        <td class="px-3 py-4 text-left text-gray-900 dark:text-gray-100">{{ $stat->facilitador ?? "No Aplica"}}</td>
+
         <td class="px-3 py-4 text-left text-gray-900 dark:text-gray-100">
             {{ \Carbon\Carbon::parse($stat->fecha)->format('d/m/Y') }}
         </td>
@@ -347,6 +351,7 @@
                             fill: #d1d5db !important; /* Tailwind slate-300 */
                         }
                     </style>
+
                 @endif
             @endif
         </td>
@@ -1003,7 +1008,6 @@ document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', 
         .map(stat => [
             (stat.becario?.nombre || '') + ' ' + (stat.becario?.apellido || ''),
             stat.titulo,
-            stat.actividad,
             stat.fecha ? new Date(stat.fecha).toLocaleDateString('es-VE') : '',
             stat.modalidad,
             stat.duracion,
@@ -1022,7 +1026,7 @@ document.getElementById('btn-generar-reporte-admin')?.addEventListener('click', 
         doc.setDrawColor(200, 200, 200);
         doc.line(10, 47, doc.internal.pageSize.getWidth() - 10, 47);
 
-        const headers = [['Becario', 'Título', 'Tipo de Actividad', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
+        const headers = [['Becario', 'Título', 'Fecha', 'Modalidad', 'Duración (Horas)', 'Estatus']];
         doc.autoTable({
             head: headers,
             body: rows,

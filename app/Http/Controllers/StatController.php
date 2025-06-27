@@ -570,6 +570,7 @@ public function modalidadindex(String $modalidad, Request $request)
             'modalidad' => $request->modalidad,
             'duracion' => $request->duracion,
             'observacion' => $request->motivo ?? null,
+            'facilitador' => $request->facilitador ?? "No Aplica",
             'fecha' => $request->fecha,
             'becario_id' => $becario->id,
         ]);
@@ -607,6 +608,25 @@ public function modalidadindex(String $modalidad, Request $request)
         return redirect()->route('stats.index')->with('success', 'La actividad se ha registrado exitosamente');
 
     }
+
+    public function update(Request $request, $id)
+{
+    $stat = Stat::findOrFail($id);
+
+    $validated = $request->validate([
+        'titulo' => 'required|string|max:255',
+        'actividad' => 'required|string|max:50',
+        'modalidad' => 'required|string|max:50',
+        'duracion' => 'required|numeric|min:0',
+        'facilitador' => 'nullable|string|max:255',
+        'fecha' => 'required|date',
+      
+    ]);
+
+    $stat->update($validated);
+
+    return redirect()->back()->with('success', 'Actividad actualizada correctamente.');
+}
 
    public function allStats()
     {

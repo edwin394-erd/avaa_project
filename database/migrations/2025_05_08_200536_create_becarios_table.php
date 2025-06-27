@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('becarios', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->string('fotoperfil')->nullable();
             $table->string('nombre');
             $table->string('apellido');
             $table->string('cedula')->unique();

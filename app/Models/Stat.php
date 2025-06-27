@@ -17,6 +17,8 @@ class Stat extends Model
         'fecha',
         'becario_id',
         'estado',
+        'facilitador',
+        'lugar',
         'observacion',
         'anulado',
     ];
