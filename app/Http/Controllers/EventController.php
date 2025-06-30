@@ -11,6 +11,16 @@ class EventController extends Controller
 
     $query = Event::query();
 
+    $query->where(function($q) {
+        $q->where('status', '!=', 'finalizado')
+          ->orWhereNull('status');
+    });
+
+    // Actualizar eventos pendientes cuya fecha y hora ya pasaron
+    Event::where('status', 'pendiente')
+        ->whereRaw("CONCAT(fecha, ' ', hora_inicio) < ?", [now()])
+        ->update(['status' => 'completada']);
+
     // Filtro por búsqueda
     if ($request->filled('search')) {
         $search = $request->input('search');

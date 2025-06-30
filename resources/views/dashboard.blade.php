@@ -149,6 +149,18 @@ Inicio
                                     <p class="text-sm md:text-base text-gray-500 dark:text-gray-300 mt-1 line-clamp-2">
                                         Facilitador: {{ $actividad->facilitador ?? 'No aplica' }}
                                     </p>
+                                    <p class="text-sm md:text-base text-gray-500 dark:text-gray-300 mt-1 line-clamp-2">
+                                        Quorum:
+                                          @if(!is_null($actividad->quorum_minimo) && !is_null($actividad->quorum_maximo))
+                                                {{ $actividad->quorum_minimo }} Mín - {{ $actividad->quorum_maximo }} Máx
+                                            @elseif(!is_null($actividad->quorum_minimo))
+                                                {{ $actividad->quorum_minimo }} Mín
+                                            @elseif(!is_null($actividad->quorum_maximo))
+                                                {{ $actividad->quorum_maximo }} Máx
+                                            @else
+                                                No definido
+                                            @endif
+                                    </p>
                                 </div>
                                 <div class="text-right ml-4 flex flex-col items-end">
                                     <span class="block text-xs md:text-sm text-gray-400 dark:text-gray-300 font-medium">

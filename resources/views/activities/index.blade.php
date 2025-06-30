@@ -241,7 +241,7 @@
                                         {{ $tipo['label'] }}
                                     </span>
                                 </td>
-                                <td class="px-3 py-2">{{ \Carbon\Carbon::parse($actividad->date)->format('d/m/Y') }} - {{ \Carbon\Carbon::createFromFormat('H:i:s', $actividad->hora_inicio)->format('h:i A') }}</td>
+                                <td class="px-3 py-2">{{ \Carbon\Carbon::parse($actividad->fecha)->format('d/m/Y') }} - {{ \Carbon\Carbon::createFromFormat('H:i:s', $actividad->hora_inicio)->format('h:i A') }}</td>
                                 <td class="px-3 py-2">
                                     @php
                                         $status = strtolower($actividad->status);
@@ -381,6 +381,7 @@
                                                         class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                                         Actividad
                                                     </label>
+
                                                     <style>
                                                     /* Opciones del select en modo claro */
                                                     select option {
@@ -566,8 +567,7 @@ function generarReporte() {
             startY: 50,
             styles: { font: 'helvetica', fontSize: 10 }
         });
-        const pdfUrl = doc.output('bloburl');
-        window.open(pdfUrl, '_blank');
+        doc.save('reporte_eventos.pdf');
     });
 }
 </script>
