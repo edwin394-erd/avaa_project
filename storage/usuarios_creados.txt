@@ -36,3 +36,12 @@ Tipo: Becario | Email: elias@gmail.com | Contraseña: 83ajVZ8WZD | Fecha de crea
 Tipo: Becario | Email: alejandro@gmail.com | Contraseña: xsBkWUVcE6 | Fecha de creación: 2025-06-23 12:46:31
 Tipo: Personal | Email: ana@gmail.com | Contraseña: aIz09m3Md0 | Fecha de creación: 2025-06-23 12:48:38
 Tipo: Becario | Email: moisesserd.394@gmail.com | Contraseña: vfKGGlLbrF | Fecha de creación: 2025-06-27 16:20:24
+Tipo: Becario | Email: edwinerd.394@gmail.com | Contraseña: A5FbuFyCjx | Fecha de creación: 2025-06-27 19:27:53
+Tipo: Becario | Email: luis.soto@ujgh.edu.ve | Contraseña: rf5GvTx0uo | Fecha de creación: 2025-06-29 15:50:25
+Tipo: Becario | Email: jose@gmail.com | Contraseña: bw6OXrTM42 | Fecha de creación: 2025-07-11 22:03:44
+Tipo: Becario | Email: edwinerd.394@gmail.com | Contraseña: S6wQslnxgv | Fecha de creación: 2025-07-11 22:04:59
+Tipo: Personal | Email: anacabrera@gmail.com | Contraseña: fQHu4VTe9d | Fecha de creación: 2025-07-11 22:21:04
+Tipo: Becario | Email: lourdes@gmail.com | Contraseña: sKF1QqrnTJ | Fecha de creación: 2025-07-11 22:22:21
+Tipo: Becario | Email: edwinerd.394@gmail.com | Contraseña: sPCPvO4teN | Fecha de creación: 2025-07-11 22:23:32
+Tipo: Becario | Email: edwinerd.394@gmail.com | Contraseña: JmsiDkr2m3 | Fecha de creación: 2025-07-11 22:27:18
+Tipo: Becario | Email: edwinerd.394@gmail.com | Contraseña: rChj3LRylU | Fecha de creación: 2025-07-12 18:28:41

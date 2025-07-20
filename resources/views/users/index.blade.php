@@ -27,7 +27,7 @@
                                 <input type="text" name="becario_nombre" id="becario_nombre"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('becario_nombre') border-red-500 @enderror"
                                     placeholder=" " required value="{{ old('becario_nombre') }}"
-                                    oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')">
+                                    oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '') " autocomplete="off">
                                 <label for="becario_nombre" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                     Nombre
                                 </label>
@@ -41,7 +41,7 @@
                                 <input type="text" name="becario_apellido" id="becario_apellido"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('becario_apellido') border-red-500 @enderror"
                                     placeholder=" " required value="{{ old('becario_apellido') }}"
-                                    oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')">
+                                    oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')" autocomplete="off">
                                 <label for="becario_apellido" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                     Apellido
                                 </label>
@@ -54,7 +54,7 @@
                     <div class="relative z-0 w-full mb-5 group">
                         <input type="email" name="becario_email" id="becario_email"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('becario_email') border-red-500 @enderror"
-                            placeholder=" " required value="{{ old('becario_email') }}">
+                            placeholder=" " required value="{{ old('becario_email') }}" autocomplete="off">
                         <label for="becario_email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                             Correo
                         </label>
@@ -67,7 +67,7 @@
                             <div class="relative z-0 w-full mb-5 group">
                                 <input type="text" name="becario_telefono" id="becario_telefono"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('becario_telefono') border-red-500 @enderror"
-                                    placeholder=" " value="{{ old('becario_telefono') }}">
+                                    placeholder=" " value="{{ old('becario_telefono') }}" autocomplete="off">
                                 <label for="becario_telefono" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                     Teléfono
                                 </label>
@@ -81,7 +81,7 @@
                                 <input type="text" name="becario_cedula" id="becario_cedula" maxlength="8" minlength="7"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('becario_cedula') border-red-500 @enderror"
                                     placeholder=" " required value="{{ old('becario_cedula') }}"
-                                    oninput="this.value = this.value.replace(/[^0-9\-]/g, '')">
+                                    oninput="this.value = this.value.replace(/[^0-9\-]/g, '')" autocomplete="off" >
                                 <label for="becario_cedula" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                     Cédula
                                 </label>
@@ -97,7 +97,7 @@
                             <div class="relative z-0 w-full mb-5 group">
                                 <input type="text" name="becario_carrera" id="becario_carrera"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('becario_carrera') border-red-500 @enderror"
-                                    placeholder=" " value="{{ old('becario_carrera') }}">
+                                    placeholder=" " value="{{ old('becario_carrera') }}" autocomplete="off">
                                 <label for="becario_carrera" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                     Carrera
                                 </label>
@@ -133,7 +133,7 @@
                         <div class="relative z-0 w-full mb-5 group">
                             <input type="text" name="becario_direccion" id="becario_direccion"
                                 class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('becario_direccion') border-red-500 @enderror"
-                                placeholder=" " value="{{ old('becario_direccion') }}">
+                                placeholder=" " value="{{ old('becario_direccion') }}" autocomplete="off">
                             <label for="becario_direccion" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                 Dirección
                             </label>
@@ -144,7 +144,8 @@
                        <div class="relative z-0 w-full mb-5 group">
                         <input type="date" name="becario_fecha_nacimiento" id="becario_fecha_nacimiento"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 dark:text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('personal_fecha_nacimiento') border-red-500 @enderror"
-                            placeholder=" " value="{{ old('becario_fecha_nacimiento') }}">
+                            placeholder=" " value="{{ old('becario_fecha_nacimiento') }}" autocomplete="off"
+                            max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                         <label for="becario_fecha_nacimiento" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                             Fecha de Nacimiento
                         </label>
