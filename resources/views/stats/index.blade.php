@@ -44,7 +44,7 @@
                         <div class="mb-2 flex flex-col md:flex-row gap-2">
                             <div class="flex-1">
                                 <div class="flex">
-                                    <label for="actividad" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Actividad</label>
+                                    <label for="actividad" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Tipo de Actividad</label>
                                     @error('actividad')
                                         <p class="block text-sm font-medium text-red-600 mb-2">- {{ $message }}</p>
                                     @enderror

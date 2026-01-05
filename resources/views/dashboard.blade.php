@@ -135,7 +135,13 @@ Inicio
                         <img src="{{ asset('imgs/icon-actprox.png') }}" alt="icono" class="w-12 h-12 block dark:hidden">
                         <img src="{{ asset('imgs/icon-actprox_blanco.png') }}" alt="icono" class="w-12 h-12 hidden dark:block">
                         <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 ml-2">Actividades Próximas</h3>
+
+                         <div class="flex items-center text-right ml-auto text-md font-bold hover:underline text-gray-500 dark:text-gray-300">
+                            <a href="{{ route('activities.index') }}">Ver todas -></a>
+                        </div>
+
                     </div>
+                   
                     <hr class="dark:border-slate-700">
                     <br>
                     <!-- Lista de actividades -->

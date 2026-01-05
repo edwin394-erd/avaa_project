@@ -129,17 +129,16 @@
     <div class="w-auto flex items-center" id="navbar-default">
       <ul class="font-medium flex flex-row items-center p-0 mt-0 border-0 rounded-lg space-x-4 md:space-x-8 rtl:space-x-reverse bg-gray-100 dark:bg-slate-900 mr-2 md:mr-0">
 
-        @if(auth()->user()->role == 'admin')
-          <li class="flex flex-col items-center">
+            <li class="flex flex-col items-center">
             <a href="{{route('home')}}" title="Inicio"
               class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100  dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative">
-              <span class="flex items-center justify-center">
-                <svg fill="#0f172a" class="transition-colors duration-200 group-hover:fill-green-800 dark:fill-white w-[20px] h-[20px] xl:w-[25px] xl:h-[25px] " width="25px" height="25px" viewBox="0 0 495.398 495.398" stroke="#0f172a"><g><g><g><path d="M487.083,225.514l-75.08-75.08V63.704c0-15.682-12.708-28.391-28.413-28.391c-15.669,0-28.377,12.709-28.377,28.391 v29.941L299.31,37.74c-27.639-27.624-75.694-27.575-103.27,0.05L8.312,225.514c-11.082,11.104-11.082,29.071,0,40.158 c11.087,11.101,29.089,11.101,40.172,0l187.71-187.729c6.115-6.083,16.893-6.083,22.976-0.018l187.742,187.747 c5.567,5.551,12.825,8.312,20.081,8.312c7.271,0,14.541-2.764,20.091-8.312C498.17,254.586,498.17,236.619,487.083,225.514z"></path><path d="M257.561,131.836c-5.454-5.451-14.285-5.451-19.723,0L72.712,296.913c-2.607,2.606-4.085,6.164-4.085,9.877v120.401 c0,28.253,22.908,51.16,51.16,51.16h81.754v-126.61h92.299v126.61h81.755c28.251,0,51.159-22.907,51.159-51.159V306.79 c0-3.713-1.465-7.271-4.085-9.877L257.561,131.836z"></path></g></g></g></svg>
+             <span class="flex items-center justify-center">
+                <svg fill="#0f172a" class="transition-colors duration-200 group-hover:fill-green-800 dark:fill-white w-[20px] h-[20px] xl:w-[25px] xl:h-[25px]" width="25px" height="25px" viewBox="0 0 495.398 495.398" stroke="#0f172a"><g><g><g><path d="M487.083,225.514l-75.08-75.08V63.704c0-15.682-12.708-28.391-28.413-28.391c-15.669,0-28.377,12.709-28.377,28.391 v29.941L299.31,37.74c-27.639-27.624-75.694-27.575-103.27,0.05L8.312,225.514c-11.082,11.104-11.082,29.071,0,40.158 c11.087,11.101,29.089,11.101,40.172,0l187.71-187.729c6.115-6.083,16.893-6.083,22.976-0.018l187.742,187.747 c5.567,5.551,12.825,8.312,20.081,8.312c7.271,0,14.541-2.764,20.091-8.312C498.17,254.586,498.17,236.619,487.083,225.514z"></path><path d="M257.561,131.836c-5.454-5.451-14.285-5.451-19.723,0L72.712,296.913c-2.607,2.606-4.085,6.164-4.085,9.877v120.401 c0,28.253,22.908,51.16,51.16,51.16h81.754v-126.61h92.299v126.61h81.755c28.251,0,51.159-22.907,51.159-51.159V306.79 c0-3.713-1.465-7.271-4.085-9.877L257.561,131.836z"></path></g></g></g></svg>
               </span>
               <span class="block w-full h-1 rounded-t mt-1 transition-all duration-200 {{ $currentRoute == 'home' ? 'bg-green-600' : 'invisible' }}"></span>
             </a>
           </li>
-          <li class="flex flex-col items-center relative group">
+           <li class="flex flex-col items-center relative group">
             <button type="button"
               class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100  dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative focus:outline-none"
               id="adminDropdownBtn"
@@ -155,9 +154,32 @@
                 <span class="mr-2">
                 <svg fill="#4b5563" width="18px" height="18px" viewBox="0 0 16 16" class="dark:fill-white"><path d="M37.5,0h-11A2.5,2.5,0,0,0,24,2.5v11A2.5,2.5,0,0,0,26.5,16h11A2.5,2.5,0,0,0,40,13.5V2.5A2.5,2.5,0,0,0,37.5,0Zm-11,1h11A1.5,1.5,0,0,1,39,2.5V4H25V2.5A1.5,1.5,0,0,1,26.5,1ZM25,13.5V5h4V15H26.5A1.5,1.5,0,0,1,25,13.5ZM37.5,15H30V5h9v8.5A1.5,1.5,0,0,1,37.5,15ZM26,6.5a.5.5,0,0,1,.5-.5h1a.5.5,0,0,1,0,1h-1A.5.5,0,0,1,26,6.5Zm2,3a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1,0-1h1A.5.5,0,0,1,28,9.5Zm0,3a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1,0-1h1A.5.5,0,0,1,28,12.5Zm10-6a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,6.5Zm0,3a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,9.5Zm0,3a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,12.5Z" transform="translate(-24)"></path></svg>
                 </span>
-                Gestionar Actividades
+                Gestionar Estadisticas
               </a>
-              <a href="{{ route('activities.index') }}" class="flex items-center px-4 py-2 text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-slate-700">
+              @if(auth()->user()->role == 'admin')
+                       <a href="{{ route('activities.index2') }}" class="flex items-center px-4 py-2 text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-t-md">
+                      <span class="mr-2">
+                      <svg fill="#4b5563" width="18px" height="18px" viewBox="0 0 16 16" class="dark:fill-white"><path d="M37.5,0h-11A2.5,2.5,0,0,0,24,2.5v11A2.5,2.5,0,0,0,26.5,16h11A2.5,2.5,0,0,0,40,13.5V2.5A2.5,2.5,0,0,0,37.5,0Zm-11,1h11A1.5,1.5,0,0,1,39,2.5V4H25V2.5A1.5,1.5,0,0,1,26.5,1ZM25,13.5V5h4V15H26.5A1.5,1.5,0,0,1,25,13.5ZM37.5,15H30V5h9v8.5A1.5,1.5,0,0,1,37.5,15ZM26,6.5a.5.5,0,0,1,.5-.5h1a.5.5,0,0,1,0,1h-1A.5.5,0,0,1,26,6.5Zm2,3a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1,0-1h1A.5.5,0,0,1,28,9.5Zm0,3a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1,0-1h1A.5.5,0,0,1,28,12.5Zm10-6a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,6.5Zm0,3a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,9.5Zm0,3a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,12.5Z" transform="translate(-24)"></path></svg>
+                      </span>
+                      Gestionar Eventos
+                      </a>
+              @endif
+             
+                @if(auth()->user()->role == 'admin')
+                <a href="{{ route('users.index') }}" class="flex items-center px-4 py-2 text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-slate-700 ">
+                <span class="mr-2">
+                <svg width="18px" height="18px" viewBox="-0.96 -0.96 25.92 25.92" fill="none" xmlns="http://www.w3.org/2000/svg" :class="{'dark:fill-white': true}" stroke="#4b5563">
+                  <path d="M1.5 6.5C1.5 3.46243 3.96243 1 7 1C10.0376 1 12.5 3.46243 12.5 6.5C12.5 9.53757 10.0376 12 7 12C3.96243 12 1.5 9.53757 1.5 6.5Z" class="fill-[#4b5563] dark:fill-white"></path>
+                  <path d="M14.4999 6.5C14.4999 8.00034 14.0593 9.39779 13.3005 10.57C14.2774 11.4585 15.5754 12 16.9999 12C20.0375 12 22.4999 9.53757 22.4999 6.5C22.4999 3.46243 20.0375 1 16.9999 1C15.5754 1 14.2774 1.54153 13.3005 2.42996C14.0593 3.60221 14.4999 4.99966 14.4999 6.5Z" class="fill-[#4b5563] dark:fill-white"></path>
+                  <path d="M0 18C0 15.7909 1.79086 14 4 14H10C12.2091 14 14 15.7909 14 18V22C14 22.5523 13.5523 23 13 23H1C0.447716 23 0 22.5523 0 22V18Z" class="fill-[#4b5563] dark:fill-white"></path>
+                  <path d="M16 18V23H23C23.5522 23 24 22.5523 24 22V18C24 15.7909 22.2091 14 20 14H14.4722C15.4222 15.0615 16 16.4633 16 18Z" class="fill-[#4b5563] dark:fill-white"></path>
+                </svg>
+                </span>
+                Ver Usuarios
+                </a>
+                @endif
+
+                 <a href="{{ route('activities.index') }}" class="flex items-center px-4 py-2 text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-b-md">
                 <span class="mr-2">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 900.000000 900.000000" preserveAspectRatio="xMidYMid meet" class="scale-[1.8] translate-y-0.5 dark:fill-white fill-[#4b5563]">
                     <g transform="translate(0.000000,900.000000) scale(0.100000,-0.100000)" stroke="none">
@@ -174,39 +196,8 @@
                 </span>
                 Actividades Próximas
               </a>
-              <a href="{{ route('users.index') }}" class="flex items-center px-4 py-2 text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-b-md">
-                <span class="mr-2">
-                <svg width="18px" height="18px" viewBox="-0.96 -0.96 25.92 25.92" fill="none" xmlns="http://www.w3.org/2000/svg" :class="{'dark:fill-white': true}" stroke="#4b5563">
-                    <path d="M1.5 6.5C1.5 3.46243 3.96243 1 7 1C10.0376 1 12.5 3.46243 12.5 6.5C12.5 9.53757 10.0376 12 7 12C3.96243 12 1.5 9.53757 1.5 6.5Z" class="fill-[#4b5563] dark:fill-white"></path>
-                    <path d="M14.4999 6.5C14.4999 8.00034 14.0593 9.39779 13.3005 10.57C14.2774 11.4585 15.5754 12 16.9999 12C20.0375 12 22.4999 9.53757 22.4999 6.5C22.4999 3.46243 20.0375 1 16.9999 1C15.5754 1 14.2774 1.54153 13.3005 2.42996C14.0593 3.60221 14.4999 4.99966 14.4999 6.5Z" class="fill-[#4b5563] dark:fill-white"></path>
-                    <path d="M0 18C0 15.7909 1.79086 14 4 14H10C12.2091 14 14 15.7909 14 18V22C14 22.5523 13.5523 23 13 23H1C0.447716 23 0 22.5523 0 22V18Z" class="fill-[#4b5563] dark:fill-white"></path>
-                    <path d="M16 18V23H23C23.5522 23 24 22.5523 24 22V18C24 15.7909 22.2091 14 20 14H14.4722C15.4222 15.0615 16 16.4633 16 18Z" class="fill-[#4b5563] dark:fill-white"></path>
-                </svg>
-                </span>
-                Ver Usuarios
-              </a>
             </div>
           </li>
-        @else
-          <li class="flex flex-col items-center">
-            <a href="{{route('home')}}" title="Inicio"
-              class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100  dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative">
-             <span class="flex items-center justify-center">
-                <svg fill="#0f172a" class="transition-colors duration-200 group-hover:fill-green-800 dark:fill-white w-[20px] h-[20px] xl:w-[25px] xl:h-[25px]" width="25px" height="25px" viewBox="0 0 495.398 495.398" stroke="#0f172a"><g><g><g><path d="M487.083,225.514l-75.08-75.08V63.704c0-15.682-12.708-28.391-28.413-28.391c-15.669,0-28.377,12.709-28.377,28.391 v29.941L299.31,37.74c-27.639-27.624-75.694-27.575-103.27,0.05L8.312,225.514c-11.082,11.104-11.082,29.071,0,40.158 c11.087,11.101,29.089,11.101,40.172,0l187.71-187.729c6.115-6.083,16.893-6.083,22.976-0.018l187.742,187.747 c5.567,5.551,12.825,8.312,20.081,8.312c7.271,0,14.541-2.764,20.091-8.312C498.17,254.586,498.17,236.619,487.083,225.514z"></path><path d="M257.561,131.836c-5.454-5.451-14.285-5.451-19.723,0L72.712,296.913c-2.607,2.606-4.085,6.164-4.085,9.877v120.401 c0,28.253,22.908,51.16,51.16,51.16h81.754v-126.61h92.299v126.61h81.755c28.251,0,51.159-22.907,51.159-51.159V306.79 c0-3.713-1.465-7.271-4.085-9.877L257.561,131.836z"></path></g></g></g></svg>
-              </span>
-              <span class="block w-full h-1 rounded-t mt-1 transition-all duration-200 {{ $currentRoute == 'home' ? 'bg-green-600' : 'invisible' }}"></span>
-            </a>
-          </li>
-          <li class="flex flex-col items-center">
-            <a href="{{route('stats.index')}}" title="Gestionar Actividades"
-              class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100  dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative">
-              <span class="flex items-center justify-center">
-               <svg fill="#0f172a" class="transition-colors duration-200 group-hover:fill-green-800 dark:fill-white w-[20px] h-[20px] xl:w-[25px] xl:h-[25px]" width="25px" height="25px" viewBox="0 0 16 16"><path d="M37.5,0h-11A2.5,2.5,0,0,0,24,2.5v11A2.5,2.5,0,0,0,26.5,16h11A2.5,2.5,0,0,0,40,13.5V2.5A2.5,2.5,0,0,0,37.5,0Zm-11,1h11A1.5,1.5,0,0,1,39,2.5V4H25V2.5A1.5,1.5,0,0,1,26.5,1ZM25,13.5V5h4V15H26.5A1.5,1.5,0,0,1,25,13.5ZM37.5,15H30V5h9v8.5A1.5,1.5,0,0,1,37.5,15ZM26,6.5a.5.5,0,0,1,.5-.5h1a.5.5,0,0,1,0,1h-1A.5.5,0,0,1,26,6.5Zm2,3a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1,0-1h1A.5.5,0,0,1,28,9.5Zm0,3a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1,0-1h1A.5.5,0,0,1,28,12.5Zm10-6a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,6.5Zm0,3a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,9.5Zm0,3a.5.5,0,0,1-.5.5h-6a.5.5,0,0,1,0-1h6A.5.5,0,0,1,38,12.5Z" transform="translate(-24)"></path></svg>
-              </span>
-              <span class="block w-full h-1 rounded-t mt-1 transition-all duration-200 {{ $currentRoute == 'stats.index' ? 'bg-green-600' : 'invisible' }}"></span>
-            </a>
-          </li>
-        @endif
         <li class="flex flex-col items-center relative group">
           <button type="button"
             class="flex flex-col items-center rounded md:border-0 md:p-0 text-white dark:text-gray-100  dark:hover:bg-slate-900 hover:text-white md:hover:bg-transparent group relative focus:outline-none "

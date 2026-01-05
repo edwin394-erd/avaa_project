@@ -35,4 +35,14 @@ class Becario extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function stats()
+    {
+        return $this->hasMany(Stat::class);
+    }
+
+    public function eventsAsistances()
+    {
+        return $this->hasMany(event_asistence::class, 'becario_id');
+    }
 }

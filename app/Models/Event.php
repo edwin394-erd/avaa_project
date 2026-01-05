@@ -18,6 +18,12 @@ class Event extends Model
         'fecha',
         'status',
         'quorum_minimo',
-        'quorum_maximo'
+        'quorum_maximo',
+        'flyer',
     ];
+
+    public function asistences()
+    {
+        return $this->hasMany(event_asistence::class, 'event_id');
+    }
 }

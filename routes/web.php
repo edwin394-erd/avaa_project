@@ -67,19 +67,30 @@ Route::post('/Perfil/configuracion-usuario', [PerfilController::class, 'update']
 Route::post('/Perfil/datos-usuario', [PerfilController::class, 'datosuserupdate'])->name('datosuser.update');
 
 
-Route::get('/Usuarios',[UserController::class, 'index'])->name('users.index');
-Route::post('/Usuarios',[UserController::class, 'store'])->name('users.store');
-Route::put('/Usuarios/{id}', [UserController::class, 'update'])->name('users.update');
-Route::post('/usuarios/{id}/activar', [UserController::class, 'activar'])->name('users.activar');
-Route::post('/usuarios/{id}/desactivar', [UserController::class, 'desactivar'])->name('users.desactivar');
-Route::get('/Usuarios/Becario/{id}', [UserController::class, 'showbecario'])->middleware('auth')->name('users.showbecario');
+Route::middleware(['auth', 'admin'])->group(function () {
+    // Ejemplo: solo admins pueden acceder a estas rutas
+    Route::get('/Usuarios',[UserController::class, 'index'])->name('users.index');
+    Route::post('/Usuarios',[UserController::class, 'store'])->name('users.store');
+    Route::put('/Usuarios/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::post('/usuarios/{id}/activar', [UserController::class, 'activar'])->name('users.activar');
+    Route::post('/usuarios/{id}/desactivar', [UserController::class, 'desactivar'])->name('users.desactivar');
+    Route::get('/Usuarios/Becario/{id}', [UserController::class, 'showbecario'])->middleware('auth')->name('users.showbecario');
 
-Route::get('/Eventos/all', [EventController::class, 'allEvents'])->middleware('auth')->name('events.all');
+    Route::get('/Eventos/all', [EventController::class, 'allEvents'])->middleware('auth')->name('events.all');
+    Route::get('/Eventos-Dashboard',[EventController::class, 'index2'])->name('activities.index2');
+
+    Route::post('/Eventos', [EventController::class, 'store'])->name('activities.store');
+    Route::post('/Eventos/{id}/cancelar', [EventController::class, 'cancelar'])->name('activities.cancelar');
+    Route::post('/Eventos/{id}/restaurar', [EventController::class, 'restaurar'])->name('activities.restaurar');
+    Route::put('/Eventos/{id}', [EventController::class, 'update'])->name('activities.update');
+});
+
 Route::get('/Eventos',[EventController::class, 'index'])->name('activities.index');
-Route::post('/Eventos', [EventController::class, 'store'])->name('activities.store');
-Route::post('/Eventos/{id}/cancelar', [EventController::class, 'cancelar'])->name('activities.cancelar');
-Route::post('/Eventos/{id}/restaurar', [EventController::class, 'restaurar'])->name('activities.restaurar');
-Route::put('/Eventos/{id}', [EventController::class, 'update'])->name('activities.update');
+Route::post('/Eventos/asistencias/{event}/{becario}', [EventController::class, 'asistencia'])->name('activities.asistencia');
+Route::delete('/Eventos/asistencias-cancelar/{event}/{becario}', [EventController::class, 'asistenciaCancelar'])->name('activities.asistencia.cancelar');
+
+
+
 
 Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
